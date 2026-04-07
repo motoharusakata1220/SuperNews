@@ -1,0 +1,88 @@
+{
+  "channels": [
+    {
+      "id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+      "name": "両学長 リベラルアーツ大学",
+      "language": "ja",
+      "genre": "資産形成全般・NISA/iDeCo",
+      "note": "登録者380万超。情報商材なし、中立的な金融教育"
+    },
+    {
+      "id": "UCQPPXy9LCznUQHHG_kh6Bpg",
+      "name": "バフェット太郎の投資チャンネル",
+      "language": "ja",
+      "genre": "米国株・長期投資",
+      "note": "投資哲学・思考プロセスを丁寧に解説"
+    },
+    {
+      "id": "UCFXl12dZUPs7MLy_dMkMZYw",
+      "name": "高橋ダン",
+      "language": "ja",
+      "genre": "グローバル投資・マルチアセット",
+      "note": "元ウォール街。株・債券・コモディティ横断分析"
+    },
+    {
+      "id": "UCeLeyHAaZJb4tm0cAMxc60Q",
+      "name": "後藤達也・経済チャンネル",
+      "language": "ja",
+      "genre": "マクロ経済・金融市場",
+      "note": "元日経新聞記者。FOMC・日銀ライブ解説"
+    },
+    {
+      "id": "UCXhiUvJK_0uyLY1YvaSa0AQ",
+      "name": "馬渕磨理子の株式クラブ",
+      "language": "ja",
+      "genre": "個別株・ファンダメンタルズ",
+      "note": "証券アナリスト資格保有。決算分析が強み"
+    },
+    {
+      "id": "UCASM0cgfkJxQ1ICmRilfHLw",
+      "name": "Patrick Boyle",
+      "language": "en",
+      "genre": "Macro analysis / Derivatives / Financial history",
+      "note": "元ヘッジファンドマネージャー兼大学教授。100万登録"
+    },
+    {
+      "id": "UCZ4AMrDcNrfy3X6nsU8-rPg",
+      "name": "Economics Explained",
+      "language": "en",
+      "genre": "Global economics education",
+      "note": "284万登録。各国経済をアニメーションで解説"
+    },
+    {
+      "id": "UCFCEuCsyWP0YkP3CZ3Mr01Q",
+      "name": "The Plain Bagel",
+      "language": "en",
+      "genre": "Investment strategy / ETF / Valuation",
+      "note": "110万登録。カナダ発、煽りゼロの体系的金融教育"
+    },
+    {
+      "id": "UCV6KDgJskWaEckne5aPA0aQ",
+      "name": "Graham Stephan",
+      "language": "en",
+      "genre": "US market / Real estate / Personal finance",
+      "note": "510万登録。米国最大級の個人投資チャンネル"
+    },
+    {
+      "id": "UCoUxsWakJucWg46KW5RsvPw",
+      "name": "Financial Times",
+      "language": "en",
+      "genre": "Global business / Geopolitics / Macro",
+      "note": "世界三大経済紙。欧州・新興国視点のマクロ一次情報"
+    },
+    {
+      "id": "UCkCGANrihzExmu9QiqZpPlQ",
+      "name": "How Money Works",
+      "language": "en",
+      "genre": "Financial systems / Economic history",
+      "note": "167万登録。金融システムの構造を図解で深掘り"
+    },
+    {
+      "id": "UCT3EznhW_CNFcfOlyDNTLLw",
+      "name": "Minority Mindset",
+      "language": "en",
+      "genre": "US economy / Wealth building / Stock analysis",
+      "note": "238万登録。多様な視点からの投資リテラシー向上"
+    }
+  ]
+}

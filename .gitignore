@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Generated output (large files)
+output/*.mp4
+output/*.wav
+output/*.mp3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# Secrets
+*.pem
+*.key
+credentials.json
+.aidesigner/*
+!.aidesigner/.gitkeep

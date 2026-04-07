@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperNews ダッシュボード</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; background: #0a0e1a; color: #e0e6f0; }
+.header { background: linear-gradient(135deg, #1a1f35, #0d1117); padding: 16px 24px; border-bottom: 1px solid #2a3050; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 20px; color: #7eb8ff; letter-spacing: 1px; }
+.header .meta { font-size: 12px; color: #6a7590; }
+.main { display: flex; height: calc(100vh - 56px); }
+.map-panel { flex: 1; min-width: 0; position: relative; }
+#world-map { width: 100%; height: 100%; }
+.side-panel { width: 420px; background: #111827; border-left: 1px solid #2a3050; overflow-y: auto; display: flex; flex-direction: column; }
+.tabs { display: flex; border-bottom: 1px solid #2a3050; flex-shrink: 0; }
+.tab { flex: 1; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 13px; color: #6a7590; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab:hover { color: #a0b4d0; }
+.tab.active { color: #7eb8ff; border-bottom-color: #7eb8ff; }
+.tab-content { display: none; padding: 16px; flex: 1; overflow-y: auto; }
+.tab-content.active { display: block; }
+.country-header { padding: 16px; border-bottom: 1px solid #1e2940; flex-shrink: 0; }
+.country-header h2 { font-size: 18px; color: #7eb8ff; }
+.country-header .region { font-size: 12px; color: #6a7590; margin-top: 4px; }
+.no-selection { padding: 40px 16px; text-align: center; color: #4a5568; font-size: 14px; }
+.indicator-card { background: #1a2035; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+.indicator-card .name { font-size: 12px; color: #6a7590; margin-bottom: 4px; }
+.indicator-card .value { font-size: 20px; font-weight: 700; color: #e0e6f0; }
+.indicator-card .detail { font-size: 11px; color: #4a5568; margin-top: 4px; }
+.indicator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.corp-card, .invest-card { background: #1a2035; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+.corp-card .company { font-size: 15px; font-weight: 600; color: #e0e6f0; }
+.corp-card .code { font-size: 12px; color: #6a7590; }
+.corp-card .docs { font-size: 12px; color: #4a8; margin-top: 4px; }
+.invest-card .title { font-size: 14px; color: #e0e6f0; }
+.invest-card .date { font-size: 12px; color: #6a7590; margin-top: 4px; }
+.invest-card a { color: #7eb8ff; text-decoration: none; }
+.invest-card a:hover { text-decoration: underline; }
+svg .country { fill: #1e2940; stroke: #2a3858; stroke-width: 0.5; transition: fill 0.2s; }
+svg .country.target { fill: #1a3a5c; cursor: pointer; }
+svg .country.target:hover { fill: #2a5a8c; }
+svg .country.selected { fill: #3a7abf; }
+svg .country-label { font-size: 10px; fill: #7eb8ff; pointer-events: none; text-anchor: middle; font-weight: 600; }
+.legend { position: absolute; bottom: 16px; left: 16px; background: rgba(17,24,39,0.9); border-radius: 8px; padding: 12px 16px; font-size: 11px; }
+.legend-item { display: flex; align-items: center; margin-bottom: 4px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+.summary-bar { display: flex; gap: 12px; padding: 12px 24px; background: #111827; border-bottom: 1px solid #2a3050; flex-wrap: wrap; }
+.summary-item { background: #1a2035; border-radius: 6px; padding: 8px 14px; font-size: 12px; }
+.summary-item .label { color: #6a7590; }
+.summary-item .val { color: #7eb8ff; font-weight: 700; font-size: 16px; }
+@media (max-width: 900px) {
+  .main { flex-direction: column; height: auto; }
+  .map-panel { height: 50vh; }
+  .side-panel { width: 100%; height: 50vh; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>SuperNews ダッシュボード</h1>
+  <div class="meta">生成日時: 2026-04-05T06:33:55.172Z</div>
+</div>
+<div class="summary-bar">
+  <div class="summary-item"><span class="label">対象国</span><br><span class="val">0</span></div>
+  <div class="summary-item"><span class="label">経済指標</span><br><span class="val">0</span></div>
+  <div class="summary-item"><span class="label">企業レポート</span><br><span class="val">0</span></div>
+  <div class="summary-item"><span class="label">投資記事</span><br><span class="val">0</span></div>
+  <div class="summary-item"><span class="label">世界情勢</span><br><span class="val">0</span></div>
+</div>
+<div class="main">
+  <div class="map-panel">
+    <svg id="world-map"></svg>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#3a7abf"></div>選択中</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a3a5c"></div>データあり</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1e2940"></div>データなし</div>
+    </div>
+  </div>
+  <div class="side-panel">
+    <div id="country-header" class="country-header" style="display:none">
+      <h2 id="country-name"></h2>
+      <div id="country-region" class="region"></div>
+    </div>
+    <div id="no-selection" class="no-selection">
+      地図上の国をクリックして<br>経済指標を表示
+    </div>
+    <div class="tabs">
+      <div class="tab active" data-tab="indicators">経済指標</div>
+      <div class="tab" data-tab="corporate">企業情報</div>
+      <div class="tab" data-tab="investment">投資</div>
+      <div class="tab" data-tab="worldnews">世界情勢</div>
+    </div>
+    <div id="tab-indicators" class="tab-content active"></div>
+    <div id="tab-corporate" class="tab-content">
+
+      <div class="no-selection">企業情報データなし</div>
+    </div>
+    <div id="tab-investment" class="tab-content">
+
+      <div class="no-selection">投資記事データなし</div>
+    </div>
+    <div id="tab-worldnews" class="tab-content">
+
+      <div class="no-selection">世界情勢データなし</div>
+    </div>
+  </div>
+</div>
+<script>
+const COUNTRY_INFO = {"USA":{"nameJa":"アメリカ","nameEn":"United States","lat":37.09,"lng":-95.71,"region":"北米","alpha2":"US"},"JPN":{"nameJa":"日本","nameEn":"Japan","lat":36.2,"lng":138.25,"region":"アジア","alpha2":"JP"},"DEU":{"nameJa":"ドイツ","nameEn":"Germany","lat":51.17,"lng":10.45,"region":"ヨーロッパ","alpha2":"DE"},"GBR":{"nameJa":"イギリス","nameEn":"United Kingdom","lat":55.38,"lng":-3.44,"region":"ヨーロッパ","alpha2":"GB"},"FRA":{"nameJa":"フランス","nameEn":"France","lat":46.23,"lng":2.21,"region":"ヨーロッパ","alpha2":"FR"},"CHN":{"nameJa":"中国","nameEn":"China","lat":35.86,"lng":104.2,"region":"アジア","alpha2":"CN"},"IND":{"nameJa":"インド","nameEn":"India","lat":20.59,"lng":78.96,"region":"アジア","alpha2":"IN"},"BRA":{"nameJa":"ブラジル","nameEn":"Brazil","lat":-14.24,"lng":-51.93,"region":"南米","alpha2":"BR"},"KOR":{"nameJa":"韓国","nameEn":"South Korea","lat":35.91,"lng":127.77,"region":"アジア","alpha2":"KR"},"AUS":{"nameJa":"オーストラリア","nameEn":"Australia","lat":-25.27,"lng":133.78,"region":"オセアニア","alpha2":"AU"},"CAN":{"nameJa":"カナダ","nameEn":"Canada","lat":56.13,"lng":-106.35,"region":"北米","alpha2":"CA"},"ITA":{"nameJa":"イタリア","nameEn":"Italy","lat":41.87,"lng":12.57,"region":"ヨーロッパ","alpha2":"IT"},"MEX":{"nameJa":"メキシコ","nameEn":"Mexico","lat":23.63,"lng":-102.55,"region":"北米","alpha2":"MX"},"IDN":{"nameJa":"インドネシア","nameEn":"Indonesia","lat":-0.79,"lng":113.92,"region":"アジア","alpha2":"ID"},"TUR":{"nameJa":"トルコ","nameEn":"Turkey","lat":38.96,"lng":35.24,"region":"中東","alpha2":"TR"},"EU":{"nameJa":"EU","nameEn":"European Union","lat":50.85,"lng":4.35,"region":"ヨーロッパ","alpha2":"EU"}};
+const DASHBOARD = {"generatedAt":"2026-04-05T06:33:55.172Z","countries":{},"corporateReports":[],"investmentArticles":[],"worldNews":[]};
+
+const TARGET_CODES_3 = Object.keys(COUNTRY_INFO);
+const ALPHA3_TO_ALPHA2 = {};
+const ALPHA2_TO_ALPHA3 = {};
+for (const [a3, info] of Object.entries(COUNTRY_INFO)) {
+  ALPHA3_TO_ALPHA2[a3] = info.alpha2;
+  ALPHA2_TO_ALPHA3[info.alpha2] = a3;
+}
+
+// world-atlas countries-110m.json uses ISO 3166-1 numeric IDs
+const NUMERIC_TO_ALPHA3 = {
+  '840':'USA','392':'JPN','276':'DEU','826':'GBR','250':'FRA',
+  '156':'CHN','356':'IND','076':'BRA','410':'KOR','036':'AUS',
+  '124':'CAN','380':'ITA','484':'MEX','360':'IDN','792':'TUR'
+};
+
+function toAlpha3(id) {
+  if (COUNTRY_INFO[id]) return id;
+  if (ALPHA2_TO_ALPHA3[id]) return ALPHA2_TO_ALPHA3[id];
+  if (NUMERIC_TO_ALPHA3[String(id)]) return NUMERIC_TO_ALPHA3[String(id)];
+  return id;
+}
+
+function isTargetCountry(id) {
+  return !!COUNTRY_INFO[toAlpha3(id)];
+}
+
+// --- タブ切り替え ---
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// --- 数値フォーマット ---
+function fmtValue(val, unit) {
+  if (val === null || val === undefined) return 'N/A';
+  if (unit === 'USドル' || unit === '百万USドル') {
+    if (Math.abs(val) >= 1e12) return (val / 1e12).toFixed(2) + '兆USD';
+    if (Math.abs(val) >= 1e9) return (val / 1e9).toFixed(1) + '億USD';
+    if (Math.abs(val) >= 1e6) return (val / 1e6).toFixed(1) + '百万USD';
+    return val.toLocaleString() + ' USD';
+  }
+  if (unit === '人') {
+    if (Math.abs(val) >= 1e9) return (val / 1e9).toFixed(2) + '0億人';
+    if (Math.abs(val) >= 1e6) return (val / 1e6).toFixed(1) + '万人';
+    return val.toLocaleString() + '人';
+  }
+  if (unit === '%') return val.toFixed(1) + '%';
+  return val.toLocaleString() + ' ' + unit;
+}
+
+// --- 国選択時の指標表示 ---
+let selectedCode = null;
+
+function selectCountry(alpha3) {
+  selectedCode = alpha3;
+  const info = COUNTRY_INFO[alpha3];
+  if (!info) return;
+
+  document.getElementById('no-selection').style.display = 'none';
+  const header = document.getElementById('country-header');
+  header.style.display = 'block';
+  document.getElementById('country-name').textContent = info.nameJa + ' (' + alpha3 + ')';
+  document.getElementById('country-region').textContent = info.region;
+
+  // ハイライト更新
+  d3.selectAll('.country').classed('selected', false);
+  d3.selectAll('.country').each(function(d) {
+    const id = d && d.properties ? (d.properties.ISO_A3 || d.properties.iso_a3 || d.id) : '';
+    if (toAlpha3(id) === alpha3) d3.select(this).classed('selected', true);
+  });
+
+  // 指標タブ
+  const panel = document.getElementById('tab-indicators');
+  const cd = DASHBOARD.countries[alpha3];
+  if (!cd || cd.indicators.length === 0) {
+    panel.innerHTML = '<div class="no-selection">この国の経済指標データはまだありません</div>';
+    return;
+  }
+
+  // カテゴリ分類
+  const categories = {};
+  cd.indicators.forEach(ind => {
+    const cat = categorize(ind.indicator);
+    if (!categories[cat]) categories[cat] = [];
+    categories[cat].push(ind);
+  });
+
+  let html = '';
+  for (const [cat, inds] of Object.entries(categories)) {
+    html += '<h3 style="color:#6a7590;font-size:12px;margin:12px 0 8px;text-transform:uppercase">' + cat + '</h3>';
+    html += '<div class="indicator-grid">';
+    inds.forEach(ind => {
+      html += '<div class="indicator-card">';
+      html += '<div class="name">' + ind.indicator + '</div>';
+      html += '<div class="value">' + fmtValue(ind.value, ind.unit) + '</div>';
+      html += '<div class="detail">' + ind.date + ' / ' + ind.source + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  panel.innerHTML = html;
+
+  // 経済指標タブをアクティブに
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+  document.querySelector('[data-tab="indicators"]').classList.add('active');
+  document.getElementById('tab-indicators').classList.add('active');
+}
+
+function categorize(name) {
+  if (/GDP|成長率|インフレ|経常|債務|歳入|輸出|輸入/.test(name)) return 'マクロ経済';
+  if (/失業|雇用|労働|就業|NEET|賃金|自営/.test(name)) return '雇用・労働';
+  if (/人口|寿命|出生|都市/.test(name)) return '人口・社会';
+  if (/エネルギー|CO2|再生可能|温室|排出/.test(name)) return 'エネルギー・環境';
+  if (/貿易|FDI|送金|関税|輸出額|輸入額/.test(name)) return '貿易・投資';
+  if (/金利|マネー|信用|為替/.test(name)) return '金融';
+  if (/医療|健康|死亡|肥満|喫煙|アルコール|自殺|衛生|医師|看護|ヘルス/.test(name)) return '健康・医療';
+  if (/教育|識字|高等/.test(name)) return '教育';
+  if (/ジニ|貧困|所得|満足|幸福|安全|投票|水質/.test(name)) return '幸福度・格差';
+  if (/食料|穀物|農/.test(name)) return '食料・農業';
+  return 'その他';
+}
+
+// --- 世界地図描画 ---
+const svg = d3.select('#world-map');
+const container = svg.node().parentElement;
+
+function render() {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  svg.attr('viewBox', '0 0 ' + w + ' ' + h);
+
+  const projection = d3.geoNaturalEarth1()
+    .fitSize([w - 20, h - 20], { type: 'Sphere' })
+    .translate([w / 2, h / 2]);
+  const path = d3.geoPath().projection(projection);
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+    const countries = topojson.feature(world, world.objects.countries);
+
+    svg.selectAll('*').remove();
+    svg.append('g').selectAll('path')
+      .data(countries.features)
+      .enter().append('path')
+      .attr('d', path)
+      .attr('class', d => {
+        const id = d.id || d.properties.ISO_A3 || '';
+        const a3 = toAlpha3(id);
+        let cls = 'country';
+        if (isTargetCountry(id) || DASHBOARD.countries[a3]) cls += ' target';
+        if (a3 === selectedCode) cls += ' selected';
+        return cls;
+      })
+      .on('click', (event, d) => {
+        const id = d.id || d.properties.ISO_A3 || '';
+        const a3 = toAlpha3(id);
+        if (COUNTRY_INFO[a3]) selectCountry(a3);
+      });
+
+    // 国ラベル
+    const targetFeatures = countries.features.filter(d => {
+      const id = d.id || d.properties.ISO_A3 || '';
+      return isTargetCountry(id) || DASHBOARD.countries[toAlpha3(id)];
+    });
+
+    // ラベルは COUNTRY_INFO の座標を使う（centroidより正確）
+    for (const [a3, info] of Object.entries(COUNTRY_INFO)) {
+      const pt = projection([info.lng, info.lat]);
+      if (pt) {
+        svg.append('text')
+          .attr('class', 'country-label')
+          .attr('x', pt[0])
+          .attr('y', pt[1])
+          .text(info.nameJa);
+      }
+    }
+  });
+}
+
+render();
+window.addEventListener('resize', render);
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "investment-video-summarizer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "YouTube動画の投資関連情報を要約するツール",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "list": "node get-transcript.js --channel",
+    "fetch": "node get-transcript.js --channel --fetch",
+    "view": "node view.js",
+    "report": "node generate-report.js"
+  },
+  "dependencies": {
+    "youtube-transcript": "^1.2.1"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.2"
+  }
+}

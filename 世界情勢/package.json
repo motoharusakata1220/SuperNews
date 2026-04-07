@@ -1,0 +1,23 @@
+{
+  "name": "world-news",
+  "version": "1.0.0",
+  "description": "世界情勢・経済ニュースをRSSフィードから自動収集",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "collect": "tsc && node dist/index.js",
+    "test": "jest --config jest.config.js",
+    "test:watch": "jest --config jest.config.js --watch",
+    "test:coverage": "jest --config jest.config.js --coverage"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.3.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}

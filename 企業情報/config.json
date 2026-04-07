@@ -1,0 +1,19 @@
+{
+  "edinet": {
+    "baseUrl": "https://api.edinet-fsa.go.jp/api/v2",
+    "docTypes": ["120", "130", "140"],
+    "docTypeNames": {
+      "120": "有価証券報告書",
+      "130": "四半期報告書",
+      "140": "半期報告書"
+    }
+  },
+  "stockPrice": {
+    "source": "stooq",
+    "shortMaPeriod": 5,
+    "longMaPeriod": 25
+  },
+  "analysis": {
+    "command": "claude --print"
+  }
+}

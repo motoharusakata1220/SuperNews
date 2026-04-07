@@ -1,0 +1,16 @@
+{
+  "name": "corporate-info-aggregator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "企業の決算書・四季報情報を集約するツール",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "collect": "node collect.js",
+    "report": "node report-generator.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vitest": "^4.1.2"
+  }
+}

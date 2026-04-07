@@ -1,0 +1,120 @@
+{
+  "newsRelations": [
+    {
+      "sourceId": "https://www.dw.com/en/eu-ai-act-enforcement/a-20260404",
+      "targetId": "https://www.dw.com/en/ukraine-eu-accession-talks/a-20260404",
+      "relationType": "関連",
+      "description": "共通キーワード: EU・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www.dw.com/en/eu-ai-act-enforcement/a-20260404",
+      "targetId": "https://www.ft.com/content/eu-digital-tax-2026",
+      "relationType": "関連",
+      "description": "共通キーワード: EU",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www.theguardian.com/world/2026/apr/05/nato-summit-eastern-europe",
+      "targetId": "https://www.theguardian.com/world/2026/apr/05/ukraine-energy-strikes",
+      "relationType": "対立",
+      "description": "共通キーワード: Russia・AI",
+      "confidence": 0.8
+    },
+    {
+      "sourceId": "https://www.scmp.com/news/asia/southeast-asia/south-china-sea-island",
+      "targetId": "https://www.scmp.com/economy/china-pmi-march-2026",
+      "relationType": "関連",
+      "description": "共通キーワード: China",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www3.nhk.or.jp/news/html/20260404/india-election.html",
+      "targetId": "https://www.aljazeera.com/economy/2026/4/4/india-gdp-imf-forecast",
+      "relationType": "対立",
+      "description": "共通キーワード: India・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www.dw.com/en/ukraine-eu-accession-talks/a-20260404",
+      "targetId": "https://www.theguardian.com/world/2026/apr/05/ukraine-energy-strikes",
+      "relationType": "関連",
+      "description": "共通キーワード: Ukraine・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www.dw.com/en/ukraine-eu-accession-talks/a-20260404",
+      "targetId": "https://www.ft.com/content/eu-digital-tax-2026",
+      "relationType": "関連",
+      "description": "共通キーワード: EU",
+      "confidence": 0.6666666666666666
+    },
+    {
+      "sourceId": "https://search.cnbc.com/2026/04/05/fed-holds-rates",
+      "targetId": "https://asia.nikkei.com/Economy/BOJ-rate-hike-july-2026",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://search.cnbc.com/2026/04/05/fed-holds-rates",
+      "targetId": "https://www.dw.com/en/ecb-rate-cut-april-2026/a-20260404",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://search.cnbc.com/2026/04/05/fed-holds-rates",
+      "targetId": "https://www.reuters.com/markets/turkey-central-bank-hold-rates",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://asia.nikkei.com/Economy/BOJ-rate-hike-july-2026",
+      "targetId": "https://www.dw.com/en/ecb-rate-cut-april-2026/a-20260404",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://asia.nikkei.com/Economy/BOJ-rate-hike-july-2026",
+      "targetId": "https://www.reuters.com/markets/turkey-central-bank-hold-rates",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    },
+    {
+      "sourceId": "https://www.dw.com/en/ecb-rate-cut-april-2026/a-20260404",
+      "targetId": "https://www.reuters.com/markets/turkey-central-bank-hold-rates",
+      "relationType": "関連",
+      "description": "共通キーワード: inflation・AI",
+      "confidence": 1
+    }
+  ],
+  "countryRelations": [
+    {
+      "countryA": "BRA",
+      "countryB": "IDN",
+      "relationType": "貿易",
+      "strength": 0.5,
+      "context": "Brazil and Indonesia sign landmark trade agreement on critical minerals",
+      "sourceArticleIds": [
+        "https://www.reuters.com/world/brazil-indonesia-critical-minerals"
+      ],
+      "updatedAt": "2026-04-05T07:21:41.975Z"
+    },
+    {
+      "countryA": "RUS",
+      "countryB": "UKR",
+      "relationType": "紛争",
+      "strength": -0.9,
+      "context": "Ukraine reports intensified Russian missile strikes on energy infrastructure",
+      "sourceArticleIds": [
+        "https://www.theguardian.com/world/2026/apr/05/ukraine-energy-strikes"
+      ],
+      "updatedAt": "2026-04-05T07:21:41.975Z"
+    }
+  ],
+  "generatedAt": "2026-04-05T07:21:41.976Z"
+}
