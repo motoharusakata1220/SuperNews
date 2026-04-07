@@ -96,6 +96,16 @@ const countryJa = {
 };
 function ja(name) { return countryJa[name] || name; }
 
+// 指標名の日本語化
+const indicatorJa = {
+  'GDP':'GDP(名目)','GDP growth rate':'GDP成長率','Inflation rate':'インフレ率',
+  'Unemployment rate':'失業率','Population':'人口','Current account':'経常収支',
+  'Interest rate':'政策金利','CPI':'消費者物価指数','PPI':'生産者物価指数',
+  'Trade balance':'貿易収支','FDI':'対内直接投資','Real GDP growth':'実質GDP成長率',
+  'EUR/USD':'ユーロ/ドル','EUR/JPY':'ユーロ/円','EUR/GBP':'ユーロ/ポンド',
+};
+function jaInd(name) { return indicatorJa[name] || name; }
+
 // ===== ニュース記事HTML =====
 function renderArticles(articles) {
   return articles.map(a => `
