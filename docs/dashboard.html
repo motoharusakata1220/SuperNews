@@ -1,0 +1,2587 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperNews — 全情報ダッシュボード</title>
+<style>
+:root{--bg:#0f1117;--s:#1a1d27;--s2:#232738;--bd:#2d3148;--tx:#e4e6f0;--mt:#8b8fa8;--ac:#6c5ce7;--ac2:#a29bfe;--r:#ff6b6b;--o:#ffa94d;--g:#51cf66;--b:#339af0;--cy:#22b8cf;--pk:#f06595;--y:#ffd43b}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',-apple-system,sans-serif;line-height:1.6}.ct{max-width:1440px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,#1a1d27,#2d1b69);border-radius:16px;padding:32px;margin-bottom:24px;border:1px solid var(--bd)}
+header h1{font-size:28px;background:linear-gradient(90deg,#a29bfe,#6c5ce7,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}header p{color:var(--mt);margin-top:4px}
+.sr{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}.sc{background:rgba(108,92,231,.15);border:1px solid rgba(108,92,231,.3);border-radius:12px;padding:14px 18px;flex:1;min-width:120px}.sc .n{font-size:26px;font-weight:700;color:var(--ac2)}.sc .l{font-size:11px;color:var(--mt);text-transform:uppercase;letter-spacing:1px}
+.nav{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;position:sticky;top:0;z-index:10;background:var(--bg);padding:8px 0}
+.nav button{background:var(--s);border:1px solid var(--bd);color:var(--mt);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;transition:.2s}.nav button:hover{border-color:var(--ac);color:var(--tx)}.nav button.active{background:var(--ac);border-color:var(--ac);color:#fff}
+.sb{width:100%;padding:10px 14px;background:var(--s);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-size:14px;margin-bottom:16px;outline:none}.sb:focus{border-color:var(--ac)}
+.pn{display:none}.pn.active{display:block}
+.cd{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:14px;transition:.2s}.cd:hover{border-color:var(--ac)}.cd h2{font-size:17px;margin-bottom:10px}.cd h3{font-size:14px;color:var(--ac2);margin:14px 0 6px}
+.tg{display:inline-block;padding:2px 8px;border-radius:16px;font-size:10px;font-weight:600;margin:2px}
+.t-i{background:rgba(51,154,240,.2);color:var(--b)}.t-w{background:rgba(255,107,107,.2);color:var(--r)}.t-c{background:rgba(81,207,102,.2);color:var(--g)}.t-e{background:rgba(255,169,77,.2);color:var(--o)}.t-k{background:rgba(162,155,254,.2);color:var(--ac2)}.t-t{background:rgba(34,184,207,.2);color:var(--cy)}.t-p{background:rgba(240,101,149,.2);color:var(--pk)}
+table{width:100%;border-collapse:collapse;margin-top:8px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);font-size:12px}th{color:var(--mt);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:1px}tr:hover{background:rgba(108,92,231,.05)}
+.ar{padding:12px 0;border-bottom:1px solid var(--bd)}.ar:last-child{border-bottom:none}.ar-t{font-weight:600;font-size:13px}.ar-m{font-size:11px;color:var(--mt);margin-top:3px}.ar-d{font-size:12px;color:var(--mt);margin-top:4px;line-height:1.4}
+.rl{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px;flex-wrap:wrap}
+.rt{padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;min-width:50px;text-align:center}
+.r-関連{background:rgba(51,154,240,.2);color:var(--b)}.r-対立{background:rgba(255,107,107,.2);color:var(--r)}.r-連鎖{background:rgba(81,207,102,.2);color:var(--g)}.r-貿易{background:rgba(255,169,77,.2);color:var(--o)}.r-紛争{background:rgba(240,101,149,.2);color:var(--pk)}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.cc{background:var(--s2);border-radius:10px;padding:16px;border:1px solid var(--bd)}.cc-code{font-size:22px;font-weight:800;color:var(--ac)}.cc-eco{font-size:11px;color:var(--mt);line-height:1.4;margin:6px 0}
+.sub-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}.sub-tabs button{background:var(--s2);border:1px solid var(--bd);color:var(--mt);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px}.sub-tabs button.active{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sub-pn{display:none}.sub-pn.active{display:block}
+.update-badge{background:rgba(81,207,102,.2);color:var(--g);padding:4px 12px;border-radius:8px;font-size:11px;font-weight:600}
+@media(max-width:768px){.ct{padding:10px}.sr{flex-direction:column}.cg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="ct">
+<header>
+<h1>SuperNews — 全情報ダッシュボード</h1>
+<p>自動更新: 毎日 JST 0:00 | 最終更新: <span class="update-badge">2026/4/8 7:40:06</span></p>
+<div class="sr">
+  <div class="sc"><div class="n">173</div><div class="l">ニュース記事</div></div>
+  <div class="sc"><div class="n">350</div><div class="l">経済指標</div></div>
+  <div class="sc"><div class="n">15</div><div class="l">国の背景知識</div></div>
+  <div class="sc"><div class="n">12</div><div class="l">投資チャンネル</div></div>
+  <div class="sc"><div class="n">15</div><div class="l">関係性</div></div>
+  <div class="sc"><div class="n">13</div><div class="l">テーマ・経済史</div></div>
+</div>
+</header>
+
+<div class="nav" id="nav"></div>
+<input type="text" class="sb" id="search" placeholder="記事・指標・国名・企業名で検索...">
+
+<div class="pn active" id="p-world"><div class="sub-tabs"><button class="active" onclick="subTab(this,'wp')">その他 (34)</button><button class="" onclick="subTab(this,'wp')">テクノロジー (52)</button><button class="" onclick="subTab(this,'wp')">世界情勢 (6)</button><button class="" onclick="subTab(this,'wp')">地域紛争 (59)</button><button class="" onclick="subTab(this,'wp')">経済ニュース (22)</button></div>
+    <div class="sub-pn active" data-group="wp">
+      <div class="cd"><h2>その他 (34件)</h2>
+    <div class="ar">
+      <div class="ar-t">アースセットと日食：NASAが月フライバイの最初の画像を公開</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">最初の2枚の画像には「アースライズ（地球の出）」と宇宙飛行士たちが目撃した日食が収められている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">音楽大手ユニバーサルに640億ドルの買収提案</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">テイラー・スウィフトやサブリナ・カーペンターを擁する音楽界の巨人が、ビル・アックマン率いるパーシング・スクエアから買収提案を受けた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">川崎 製鉄所でクレーン解体作業中に足場崩れる 2人の死亡確認</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">7日午後、川崎市にある製鉄所でクレーンの解体作業中に高さおよそ40メートルの足場が崩れて5人が転落した事故で、2人の死亡が確認されました。また、1人は行方不明となっていて、警察などが8日以降、捜索を再開することにしています。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">蘇生処置の写真投稿で解雇された香港の医師、医事委員会の審査へ</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">香港の病院管理局は、公立病院での蘇生処置の写真をSNSに投稿した医師が行動規範に違反したと認定し、事案を医事委員会に送付した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">NASAがアルテミス乗組員撮影の「アースセット」写真を公開</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">NASAは火曜日、月の地平線に沈む地球の姿を捉えた歴史的な「アースセット」画像を公開した。アポロ8号の宇宙飛行士が「アースライズ」を撮影してから57年以上が経過しており、アルテミス2号の乗組員が月最接近飛行中の月曜日に撮影した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ラゴスがカーニバルの熱狂に包まれる——アフロ・ブラジルの文化遺産を祝う</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">数百年の歴史を持つファンティ・カーニバルが月曜日、華やかな色彩と壮観なパフォーマンスとともにナイジェリアに戻ってきた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">自由意志：私たちは本当に自分の運命を切り拓けるのか？</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">私たちの行動を密かに左右している力が存在するのだろうか？</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ワールドカップ開幕近づく中、ICEがカナダでの銃携行はないと説明</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">カナダのワールドカップ会場にICE（米移民・関税執行局）が展開するとの懸念が高まる中、同機関は担当者が逮捕も銃携行も行わないと説明した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">参院与野党トップ NW９広内キャスターが直撃 審議の舞台裏は…</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">今年度予算が7日、成立しました。成立が年度のかわったあとにずれ込んだのは2015年以来です。今回の「異例」の予算審議。その舞台裏で何が起きていたのか、ニュースウオッチ9の広内キャスターが参議院の与野党トップを直撃しました。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「イラン人は米国が安定をもたらすという考えを拒否している」</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">「イラン人は米国が安定をもたらすという考えを拒否している」</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">コンゴ民主共和国：軍とM23反乱勢力の戦闘で市民が限界に</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">コンゴ民主共和国東部のフィジ地区では、地元武装勢力の支援を受けたコンゴ軍とルワンダの支援を受けているとされるM23反乱勢力との戦闘が激化し、市民が戦火に巻き込まれている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">19世紀のネイティブアメリカン虐殺をカリフォルニアで「設計」——「殺戮の大部分を米政府が資金提供した」</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">UCLAの歴史学教授で『アメリカのジェノサイド』の著者ベンジャミン・マドレーが、19世紀カリフォルニアでのネイティブアメリカン虐殺の実態と米政府の関与について語る。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ピノチェット政権時代の拉致罪に問われたチリ人女性、オーストラリア裁判所が本国引き渡しを決定</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">アドリアナ・リバスは1970年代にチリからオーストラリアに移住し、ナニーや清掃員として働いていた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">なぜバゲットはフランスの宝と見なされているのか？</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">アントル・ヌーの今回の特集では、フランスの最も象徴的な伝統のひとつであるパン屋（ブーランジェリー）、そしてバゲットに迫る。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">バルセロナ対アトレティコ・マドリード：チャンピオンズリーグ——チームニュース・試合開始・スターメンバー</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">バルセロナがカンプ・ノウでアトレティコ・マドリードを迎え、チャンピオンズリーグ準々決勝の第1戦を行う。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イスタンブールのイスラエル領事館近くでの銃撃をビデオが捉える</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">トルコのイスタンブールでイスラエル領事館近くで発生した銃撃事件の様子を捉えた動画に銃声が記録されている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ラッパーのオフセット、フロリダで銃撃被害——報道</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">元ミーゴスのメンバーは「安定した」状態にあると伝えられている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">パレスチナ週間まとめ：死刑法成立後のヨルダン川西岸での抗議活動</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">イスラエルによるガザへの攻撃が激化し、子どもを含む負傷者や密集地での市民の死者が増加している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">アルテミス2号の乗組員、歴史的な月フライバイを終えて帰路に</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">アルテミス2号の宇宙飛行士たちは火曜日に月フライバイを終えて地球への帰路につき、未知の月面クレーター、皆既日食、流星衝突などの貴重な天文観測データを持ち帰った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">急騰するディーゼル燃料価格にフランスのドライバーが悲鳴</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">フランスでディーゼル燃料価格が急騰し、ドライバーに特に深刻な影響を与えている。1970〜80年代の経済政策でフランスはディーゼル依存度が高い国となったが、国内精製量の減少により、ガソリン以上の価格高騰が起きている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「米国とイスラエルは地域の安全保障でロシアンルーレットをしている」</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">「米国とイスラエルは地域の安全保障でロシアンルーレットをしている」</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トルコのイスタンブールでイスラエル領事館近くの銃撃で3人死亡</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">イスラエル領事館近くでの銃撃事件で警察官2人も負傷した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">京都 南丹 男児不明 自宅近くの山中を捜索 手がかり見つからず</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">京都府南丹市で先月から行方が分からなくなっている11歳の男子児童について、警察は7日朝から児童の自宅近くにある山中を捜索しました。警察によりますと、有力な手がかりは見つからず、7日の捜索は終了したということで、警察は引き続き、このエリアを含む市内全域で捜索することにしています。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">香港ノーザン・メトロポリスに独立したフェンシング場と水泳施設を建設</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">香港のノーザン・メトロポリス大規模開発に世界水準のフェンシング場と独立型の水泳施設を建設することが当局より発表された。専門家からは優秀な競技者のための良好な交通網とサービスの整備が必要と指摘されている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">アジア太平洋での本当の海洋競争は衛星監視をめぐる戦い</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">海の支配はアジア太平洋における長年の権力の定義だった。しかし、より静かな競争が展開されている——それは衛星監視、デジタル追跡、高度分析による海洋情報をめぐる戦いだ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ガザでイスラエルの空爆とハマスと民兵組織の衝突で10人死亡——現地情報</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">イスラエルの空爆はマガジキャンプ近くでイスラエル支援の民兵組織と衝突した後のハマス治安要員を標的にしたと伝えられている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「今は娘を愛しています」：支援が少ない国で子どもの自閉症と向き合う母親</div>
+      <div class="ar-m">BBC World — 2026-04-05</div>
+      <div class="ar-d">マラウイのマーサ・オングワネは娘の自閉症に打ちひしがれていたが、珍しいサポートグループに出会った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">アルテミスが撮った息をのむ月の写真——科学的記録か、それとも休暇の記念写真か？</div>
+      <div class="ar-m">BBC World — 2026-04-05</div>
+      <div class="ar-d">アルテミス2号の宇宙飛行士たちが地球に送信してきた美しい写真の背景にある物語。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「まさに壮観だ」：アルテミス2号の乗組員が月の裏側を初めて目撃</div>
+      <div class="ar-m">BBC World — 2026-04-05</div>
+      <div class="ar-d">アルテミス2号のミッションの宇宙飛行士たちは月の裏側を回る旅の3日目を迎えた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米3月の雇用者数が予想を上回る17万8000人増、失業率は4.3%</div>
+      <div class="ar-m">CNBC Economy — 2026-04-03</div>
+      <div class="ar-d">3月の非農業部門雇用者数は5万9000人増の予想に対し、失業率は4.4%から4.3%への改善とともに17万8000人増と大幅に上回った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ADPが発表した3月の民間雇用は6万2000人増、予想を上回る</div>
+      <div class="ar-m">CNBC Economy — 2026-04-01</div>
+      <div class="ar-d">民間雇用は増加を維持したが、ほぼ全ての伸びを医療と建設業が牽引した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">新手数料と便数削減——高い燃料費がガソリンスタンド以外でも家計を直撃</div>
+      <div class="ar-m">CNBC Economy — 2026-03-30</div>
+      <div class="ar-d">企業の方針変更に伴い、米国人はガソリンスタンド以外でも原油価格上昇の影響を家計で感じることになる。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米国の財政赤字が2月末時点で1兆ドルを超えるも、前年同期比では改善</div>
+      <div class="ar-m">CNBC Economy — 2026-03-12</div>
+      <div class="ar-d">今会計年度の累計赤字額は1兆40億ドルで、2025年の同時期と比べて約12%低い水準となっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">2月の消費者物価は予想通り前年比2.4%の上昇</div>
+      <div class="ar-m">CNBC Economy — 2026-03-11</div>
+      <div class="ar-d">ダウジョーンズのコンセンサスによると、2月の消費者物価指数は前年比2.4%の上昇が見込まれていた。</div>
+    </div></div>
+    </div>
+    <div class="sub-pn " data-group="wp">
+      <div class="cd"><h2>テクノロジー (52件)</h2>
+    <div class="ar">
+      <div class="ar-t">ダチョウが動物カフェを脱走、タイのハイウェイを全速力で疾走</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ペットのダチョウが火曜日にタイの幹線道路を猛スピードで走り抜け、その後無事に動物テーマカフェの囲いに戻された。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">バングラデシュ、タミム・イクバルを史上最年少のクリケット連盟会長に任命</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">前バングラデシュ代表主将が、前執行部の解散を受けて新会長に就任した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領の合意期限迫る中、米・イランが緊張の瀬戸際に</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領がテヘランに和平合意を求めた期限を数時間後に控え、米国とイランは火曜日、大規模な緊張激化の瀬戸際に立たされていた。ワシントンが脅威を強め、パキスタンが仲介努力を再開している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「Oh Great」がパリで新作グラフィックノベル『スモーク』を初披露</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">「エア・ギア」の生みの親として知られる日本の漫画家・大暮維人（Oh Great）が今シーズンのパリで注目を集めている。パリ・ブック・フェスティバルで初のグラフィックノベル「スモーク」を発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">台湾野党指導者が「平和の旅」として中国に到着</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">台湾野党の鄭麗文指導者が火曜日、習近平国家主席の招待で中国を訪問。「平和の旅」と位置づけているが、北京は台湾を自国の管轄下に置こうとしている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">フランスのガソリンスタンド5軒に1軒で燃料不足が発生</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">世界的な原油価格の高騰がガソリン価格を押し上げるなか、フランス全土の約5軒に1軒のガソリンスタンドで燃料不足が発生している。政府は物流の逼迫と割引店舗への需要集中が原因と説明しているが、道路封鎖も起き始め、家計と企業双方でエネルギーコスト上昇への懸念が高まっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">英政府がカニエ・ウェストの入国禁止、フェスティバルも中止に</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">かつてカニエ・ウェストとして知られていたラッパーのイェが反ユダヤ的発言の歴史を理由に火曜日、英国への入国を禁止された。7月にワイヤレス・フェスティバルのヘッドライナーを務める予定だったが、主催者はチケットの払い戻しを発表して同フェスを中止した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「自由の身となりフランスへ向かっている」：イランがセシル・コーレーとジャック・パリを釈放——マクロン大統領が発表</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">フランス国民のセシル・コーレーとジャック・パリが「3年半のイランでの拘束を経て、自由の身となりフランスへ向かっている」とマクロン大統領がX（旧ツイッター）に投稿した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">フランスのサルコジ元大統領、リビア資金疑惑の控訴審で無実を主張</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">フランスのニコラ・サルコジ元大統領は火曜日の控訴審で、2007年の大統領選挙資金としてリビアの故ムアンマル・カダフィ元指導者から違法な資金提供を受けたとする疑惑に対して無実を主張した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">悪天候への対応をめぐり香港コーヒーフェスティバルへの批判が高まる</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">泥と雨がイースターの週末に香港西九龍文化地区で開催された注目の野外コーヒーフェスティバルを混乱させ、出店者から60%の売上減との声も上がった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「イラン人は米国が安定をもたらすという考えを拒否している」</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">「イラン人は米国が安定をもたらすという考えを拒否している」</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ヴァンス副大統領、オルバンの再選支援のためハンガリーを訪問</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">ジェイディー・ヴァンス米副大統領がブダペストを訪問し、多くの世論調査でオルバン首相が不利とされる選挙前にヴィクトル・オルバンの選挙運動を後押しした。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イースター前半4日間、香港イーストダムに1日1400人が訪問</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">悪天候にもかかわらず、イースター休暇前半の4日間に香港のイーストダムには1日あたり約1400人の訪問者が訪れたと自然保護当局が発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">シンガー・アクセル・ボーウェルと画家リー・シュヴァリエとともにパリを文化散歩</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">今週のパリ・デ・ザール：アクセル・ボーウェルが伝説の「Cargo」から40年以上を経て「Grand Huit」で復帰。ガヴァン・セールスが「Boulevard de l'Enfance」で語る。そして、詩的かつ哲学的な画家リー・シュヴァリエの作品にもスポットライトを当てる。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">サルコジ元フランス大統領、リビア資金疑惑の控訴審で無実を主張</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">フランスのニコラ・サルコジ元大統領は火曜日の控訴審で、2007年の大統領選挙資金としてリビアの故ムアンマル・カダフィ元指導者から違法な資金提供を受けたとする疑惑に対して無実を主張した。2025年9月の一審ではフランスの現代史上初めて収監された元大統領となっていた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">フランスで時速159kmの列車がトラックと衝突、運転士1人死亡</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">フランス北部で起きた衝突でTGVの運転士が死亡し、トラックの運転手は身柄を拘束された。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「大統領はあなたを愛している」：ヴァンス副大統領、オルバン再選支援のためハンガリーを訪問</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ジェイディー・ヴァンス米副大統領は火曜日にブダペストを訪問し、ハンガリーとオルバン首相を称賛。多くの世論調査でオルバン氏不利が伝えられる選挙に向け選挙運動を後押しした。オルバン氏は2010年以来のユーロ懐疑的な民族主義者で、今回の選挙は政治人生最大の試練となっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">台湾野党指導者が習近平と会談へ——外交手腕が問われる試練</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">国民党の鄭麗文主席の訪中は、来たる選挙に向けた党の展望を左右しうる重大な局面となっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ガーナ・タウンで、ガンビア生まれ育ちの数百人が「無国籍」の未来に直面</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">数十年前にガーナ人漁師たちによって築かれたガンビアの小さな村では、その子孫たちが身分証明書もなく困窮した生活を送っている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">マンリオ・グラツィアーノ：「ヨーロッパはまだ米国を必要としているが、もはやアメリカ人を信頼できないことも知っている」</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">フランソワ・ピカールが地政学の教授で著述家のマンリオ・グラツィアーノを迎える。グラツィアーノ氏は新たな世界秩序の始まりを論じており、米国は依然として超大国であるが「自由世界のリーダー」としての機能を失ったと主張している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">世界的エネルギー危機の中、中国が過酷な環境下でのソーラープラント建設に着手</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中国がチベットの標高4550メートルの地点で50メガワットの集光型太陽熱発電所の建設に着手した。世界最高地点のパラボリックトラフ式太陽熱施設となる。400メガワットの太陽光発電システムも組み込まれており、2027年の本格稼働を目指している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ヴィニシウスが反イスラムのファンチャントを非難したラミン・ヤマルを称賛</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">「一緒に戦い続ければ、将来の選手たちはこんな経験をしなくて済む」とレアル・マドリードの選手は語った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「渇きで死にそう」：ガザのアル・マワシ地区で水不足が深刻化</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">ガザの住民たちが水不足の悪化による日々の苦しみを訴えており、清潔な飲料水を求めて家族が必死になっている状況を語った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランとの合意期限が迫る。そしてアルテミス2号の乗組員が帰路へ</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">昨夜の記者会見でトランプ大統領は、イランが今夜8時（米東部時間）までに合意を受け入れなければ攻撃すると改めて脅迫した。一方、NASAのアルテミス2号の乗組員は地球へと帰路についている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イスタンブールのイスラエル領事館外での銃撃で、1人死亡・2人負傷</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">火曜日にイスタンブールのイスラエル領事館外での銃撃で、1人が死亡し2人が負傷した。事件当時、領事館には外交官はいなかった。内務省は死亡した銃撃者が「テロ組織」に所属していたと発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">性別論争のあった台湾のボクサー・林がアジア選手権で銅メダル</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">林郁婷が、性別適格性論争でオリンピックでの勝利が影を潜めて以来初の競技試合でメダルを獲得した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">理工系博士から中国の道士へ——張高成が新世代を鼓舞</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">伝統的な道士の衣を纏い三つ折りスマートフォンを持つ中国の道士がSNSで注目を集めている。74歳の張高成は中国道教協会の副会長で、若い世代の共感を呼ぶ人生哲学が話題になっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">台湾野党指導者が「平和の旅」として訪中</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">今回の訪問は、来月予定されているトランプ大統領と習近平国家主席の首脳会談に先駆けたもので、台湾問題が主要議題に上がると見られている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">期限が近づくにつれトランプ大統領がイランへの脅しを強化</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領は、イランが要求（ホルムズ海峡の開放を含む）を受け入れなければ「4時間以内に」イランの全ての橋と発電所を破壊すると記者団に述べた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">仮免許プレートの車で高速道路を逆走した70歳のドライバーが起訴</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">香港警察は、黒いメルセデス・ベンツで高速道路を逆走する様子が捉えられた動画が拡散した後、70歳の男性を危険運転で起訴した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">台湾野党指導者が習近平との会談を目的として訪中</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">鄭麗文氏は習近平の招待を「喜んで受け入れた」とし、「平和の橋渡し役」になることへの希望を語った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">マレーシアの「オペレーション・ゴッドファーザー」捜査がダイムの娘にも、アスニダは無罪を主張</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">マレーシアの故ダイム・ザイヌディン元財務相の娘が火曜日、クアラルンプールの裁判所で汚職捜査当局への持ち株未申告の疑いで起訴された。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">台湾野党の鄭麗文指導者が上海で「平和の旅」をスタート</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">台湾野党の鄭麗文主席は上海へ出発するにあたり、台湾海峡を「安全な」場所にし、世界で「最も危険な場所」の一つでなくしたいと語った。習近平との会談が計画されているとされるが、台北では与党の議員から批判の声が上がっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ワン・フック・コートの説明会、決定前に住民に回答へ——大臣が約束</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">香港の民政局長は、火災で被害を受けたワン・フック・コートの住民の懸念に、管理組合総会の前に開く説明会で対応すると約束した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国がリードするAI競争と米国がリードする競争——どちらが先に抜け出すかは未定</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">双方ともライバルに優位を許したくない。そして競争はさらなる変容を遂げる可能性がある。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">香港・珠海・マカオ大橋の香港側で車利用が最多記録、飲食業は連休の痛手</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">イースター休暇前半の4日間で出発旅行者数が200万人を超え、月曜日には香港珠海マカオ大橋の香港側のゲートで自動車利用者が1日最多記録を更新した一方、香港市内の飲食業は連休中に大きな打撃を受けた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">覆面捜査員に85香港ドルの「高速料金」を要求したタクシー運転手を逮捕</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">香港警察は不正行為取り締まりの一環で、乗客に扮した捜査官から約85香港ドルの「高速料金」を請求した31歳のタクシー運転手を逮捕した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「抜本的なリセット」：Upliftyアプリが大学生のオフラインでの繋がりを後押し</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">近年、若者主導の運動が世界中を席巻してきた。しかし米国の約1万人の大学生でテスト済みの新しいアプリがそのアプローチに挑戦している。Uplifty AIは暗号化されており、創設者はアルゴリズムがユーザーデータを収集しないと語っている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">セブでK-POPスターのスビンをぼったくったフィリピンのタクシー運転手が営業停止処分</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">K-POPグループTXTのメンバーに過剰請求しようとしたフィリピンのタクシー運転手が営業停止処分を受けた。チェ・スビン（スビン）がセブで料金詐欺の被害に遭ったことがSNSで拡散し、韓国とフィリピンの両国で反響を呼んだ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">日本、イランで拘束されていた2人目の日本人市民の釈放を確認</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">イランが1月から拘束していた日本人市民を解放したと東京は火曜日に発表したが、共同通信は当該人物がイスラム共和国から出国を許可されていないと報じた。政府筋によれば、NHKテヘラン支局長と見られている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">シンガポールのシャンムガム大臣、名誉毀損公判でブルームバーグの「悪意ある」メールを批判</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">シンガポールの閣僚シャンムガムとタン・シー・レンがブルームバーグに対して起こした名誉毀損訴訟が、2人の個人的な不動産取引について言及した記事をめぐる激しい応酬で幕を開けた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプのイラン期限が迫るが突破口の気配なし</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">イランがホルムズ海峡を開放するよう求めた火曜日の期限の最終時間が刻まれる中、トランプ大統領は政治的に微妙な立場に置かれている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">リル・ナズ・Xの暴行事件、メンタルヘルスプログラム修了で起訴を取り下げへ</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">裁判官は、ミュージシャンが昨年LAで逮捕された際の行動は「通常の行動から逸脱したもの」だったと述べた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランの僻地で行われた米空軍兵士の救出作戦の全容</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">敵対地域での地上からの救出作戦は非常に複雑で、複数の米政府機関が関与していた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">インドでコロナ禁止令違反拘束死事件、警察官9人に死刑判決</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">2020年にコロナのロックダウン規則違反で逮捕された後、父と息子が拘置所で死亡した事件に関連した裁判。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領が元英国政治顧問のスティーブ・ヒルトンのカリフォルニア知事選を支持</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">かつて首相のアドバイザーを務めてFoxニュースのショーを司会していたスティーブ・ヒルトンが共和党候補として出馬している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">エリトリアの選手7人が国際試合後に帰国せず</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">過去にも複数の選手が人権団体から「抑圧的な政府」と呼ばれる国家に戻らず、国外に脱出している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「どんどん沈んでいく」：トランプの期限が近づく中、イラン人がインフラ攻撃に備える</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">普通のイラン市民たちが、ホルムズ海峡を開放しなければ発電所と橋を破壊するというトランプ大統領の脅迫に反応した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプがイランの発電所・橋を脅かす。そしてアルテミス2号が月フライバイに備える</div>
+      <div class="ar-m">NPR World — 2026-04-06</div>
+      <div class="ar-d">トランプ大統領はイランがホルムズ海峡を開放しなければ発電所と橋を爆撃すると脅した。一方NASAのアルテミス2号の乗組員が月への最接近に備えている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「私たちは戦場の縁にいる」：BBCがホルムズ海峡付近から報告</div>
+      <div class="ar-m">BBC World — 2026-04-05</div>
+      <div class="ar-d">BBCのオーラ・ゲリン記者がイランが封鎖している重要な水路の縁まで赴いた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米国がホルムズ海峡再開への協力を中国に求める中、トランプ大統領が北京首脳会談の延期を示唆</div>
+      <div class="ar-m">CNBC Economy — 2026-03-16</div>
+      <div class="ar-d">スコット・ベッセント財務長官がパリで中国側の何立峰氏と会談し、3月下旬に予定されていた首脳会談への道筋を整えている際に出た発言だ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ガソリン価格が21か月ぶりの高値、ギグワーカーが直撃を受ける</div>
+      <div class="ar-m">CNBC Economy — 2026-03-15</div>
+      <div class="ar-d">配達やライドシェアなどのサービスを提供する数百万人の米国人ネットワークが、ガソリン価格上昇の影響を直接受けている。</div>
+    </div></div>
+    </div>
+    <div class="sub-pn " data-group="wp">
+      <div class="cd"><h2>世界情勢 (6件)</h2>
+    <div class="ar">
+      <div class="ar-t">イスタンブールのイスラエル領事館で銃撃事件、犯人1人死亡・2人負傷</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">現在トルコにはイスラエルの外交官は在籍しておらず、イスタンブール領事館は過去2年半にわたり無人の状態が続いていた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランへのトランプ発言：「今夜、文明がまるごと滅びる」</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">怒りを強めるトランプ大統領がイランへの脅しをエスカレートさせる中、民主党の対立候補らは「病的」「ジェノサイド的」と批判した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ベトナムのトー・ラム指導者が全会一致の議会採決で権力強化</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">ベトナムの共産党書記長が国家主席も兼任することになり、異例の権力集中が実現した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ジェイディー・ヴァンス、オルバンの再選支援のためハンガリーに到着</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">米副大統領の訪問は、ハンガリー指導者に対するホワイトハウスの最新の支持表明となった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ヴァンス副大統領、選挙前に首相支援のためハンガリーを訪問</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">ジェイディー・ヴァンス副大統領がハンガリーの選挙に向けてブダペストを訪れ、現職のヴィクトル・オルバン首相の選挙集会に参加した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トー・ラムが大統領に選出され、ベトナムの「最高指導者」として台頭</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ベトナム共産党書記長のトー・ラムが火曜日、国会により国家主席に選出され、権力集中への取り組みを完結させた。2年足らずでライバルを退け、省の統合と官僚機構の削減という積極的な改革を断行してきた。</div>
+    </div></div>
+    </div>
+    <div class="sub-pn " data-group="wp">
+      <div class="cd"><h2>地域紛争 (59件)</h2>
+    <div class="ar">
+      <div class="ar-t">NY原油 WTI先物価格 一時1バレル＝117ドル台まで上昇</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">7日のニューヨーク原油市場では国際的な取り引きの指標となるWTIの先物価格が一時、1バレル＝117ドル台まで上昇しました。これは、先月上旬以来、およそ1か月ぶりの高値水準です。アメリカのトランプ大統領がSNSに「今夜、文明がまるごと滅び、二度とよみがえることはないだろう」などと投稿したことで、投資家の間ではアメリカがイランのエネルギー施設などの攻撃に踏み切るのではないかとの懸念が強まりました。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イラン、フランス人元被拘束者2人の出国を許可</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">イランがフランス人元被拘束者のセシル・コーレーとジャック・パリの出国を許可したと、フランスのエマニュエル・マクロン大統領が火曜日に発表した。両名はイランのフランス大使館施設に滞在していた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">レバノンで自宅が爆撃されたと語る双子の母、BBCのインタビューに応じる</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">イスラエルが地上作戦を拡大するなか、戦争開始以来レバノンでは100万人以上が避難を余儀なくされている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">フランスのサルコジ元大統領、リビア資金疑惑裁判で「無実」を主張</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">フランスのニコラ・サルコジ元大統領は火曜日の控訴審裁判で「無実だ」と述べ、2007年の大統領選のためにリビアから資金を得た疑惑を全面否定した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「張り子の虎」：トランプ大統領が再びグリーンランド脅迫を行った背景とは</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">アメリカがイランとの戦争に深く関与している状況下でのグリーンランド奪取再発言は、ワシントンと欧州同盟国との亀裂をさらに深めるだけだとアナリストたちは分析している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領：「今夜、文明がまるごと滅びる」</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">火曜日にイランの橋2本と鉄道駅が空爆を受け、イラン当局者が若者たちに発電所を守る人間の鎖を作るよう呼びかける中、トランプ大統領はテヘランが最新の合意期限に応じなければ「今夜、文明がまるごと滅びる」と警告した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領“今夜 文明がまるごと滅びるだろう”SNSに投稿</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">アメリカのトランプ大統領は、アメリカ東部時間の7日午前8時ごろ、みずからのSNSに投稿しました。文章の前半でトランプ氏は「今夜、文明がまるごと滅び、二度とよみがえることはないだろう。そんなことは望まないが、おそらくそうなってしまう」と激しい攻撃を示唆しました。続いて後半には「今や完全な体制転換が実現しこれまでとは違い、賢く、過激ではない人々が優位になったことで、革命的に素晴らしいことが起こるかもしれない。どうなる？今夜明らかになる。世界の長く複雑な歴史でも、最も重要な瞬間の1つだ」とつづり、イランとの合意に至る期待感も隠しませんでした。投稿は「偉大なイランの人々に神のご加護を！」と締めくくられています。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ氏 “期限過ぎれば即座に攻撃” 国際法違反の指摘も</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">アメリカのトランプ大統領は、イランに対して日本時間の8日午前9時までにホルムズ海峡の開放などに応じるよう迫っていて、応じなければ、エネルギー施設などのインフラを攻撃するとしています。こうした施設への攻撃が国際法違反にあたるおそれも指摘されるなか、イラン側は反発を強めていて事態のさらなる深刻化が懸念されています。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">オーストラリアとIPLの偉大なクリケット選手デビッド・ウォーナー、飲酒運転で起訴</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">2024年に国際クリケットから引退した39歳は、T20フランチャイズクリケットにはまだ出場している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イスラエルのレバノン南部侵攻が人道危機を生み出した経緯</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">過去1か月で、レバノン全人口の約5分の1にあたる120万人が自宅からの避難を強いられている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">オーストラリア、元兵士をアフガニスタンでの5件の戦争犯罪殺人で起訴</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">ロバーツ・スミスはアフガニスタン戦役の退役軍人として戦争犯罪で起訴された2人目のオーストラリア人となった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イスタンブールのイスラエル領事館入居ビルに武装集団が攻撃</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">3人の襲撃者が火曜日、イスタンブールのイスラエル領事館が入居するビルの外で警官隊に発砲し、銃撃戦の末に1人が死亡したとトルコ当局者が発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">絵を描いたことで亡命を余儀なくされたロシアの父と娘——プーチンに立ち向かった2人</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">2022年3月、12歳のマリア・モスカレワはロシア西部の小さな町でウクライナへの侵攻に抗議する絵を学校で描いた。直後にFSBが介入して父親は収監された。釈放後、2人はロシアを脱出してフランスのストラスブールに難民として暮らしている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランが若者に発電所を守る人間の鎖の形成を呼びかけ</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">火曜日にテヘランが空爆を受ける中、イラン当局者はトランプ大統領の最新期限の数時間前に、若者たちが発電所の周りに人間の鎖を作るよう呼びかけた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">なぜトランプ大統領は今、「永遠の戦争」を必要としているのか</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ホルムズ海峡を開放しなければ発電所と橋を全て破壊するというトランプ大統領の過激な発言の背景にある政治的意図を分析する。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプが「不十分」と言うイランの10項目和平案とは？</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領の期限が迫る中、停戦の見通しは薄い状況が続いている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国大使館が半導体研究者・王丹昊の死亡を確認</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中国人半導体研究者の王丹昊が先月、米連邦法執行機関による事情聴取の直後にミシガン大学で亡くなった。中国大使館の報道官がSCMPへの電子メールで自殺と認めた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">期限が迫る中、トランプ大統領がイランを「一夜で壊滅させる」と脅迫</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領は月曜日、「戦争犯罪を犯すことは全く懸念していない」と述べ、テヘランが火曜日午後8時（米東部時間）の期限までにホルムズ海峡の開放要求に応じなければ、イランの橋と発電所を全て破壊すると再び脅迫した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米・イスラエルのイラン攻撃は「明白かつ明確な戦争犯罪」</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">「今、私たちはモンスターの時代にいる。私たちはジャングルの法則へと向かっている」</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イラン戦争の混乱の中、インドでモディ首相率いるBJPの重要州選挙が始まる</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">米国とイスラエルのイランへの戦争が、インドの州選挙に例外的に大きな影を落としている。エネルギーショックへの不安と、中東に住む数百万人の出稼ぎ労働者に対する新たな不確実性が高まっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">アフリカはイラン戦争による石油ショックに対処できるか？</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">イラン戦争が中東からの供給を混乱させる中、アフリカ諸国は石油と天然ガスの確保に躍起になっている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ガザについてNGO：「私たちは同じ停戦の定義を共有していない」</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">ガザ中部での空爆でさらに10人が死亡する中、NGOがフランス24にパレスチナ人の壊滅的な状況について語った。停戦が成立したとされるにもかかわらず、ガザ地区とヨルダン川西岸の数百万人のパレスチナ人には依然として基本的な支援が必要な状況が続いている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米国とイスラエルがイランの文化・教育に対して戦争を仕掛けている方法</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">イランの当局者たちはアルジャジーラに対し、米国とイスラエルの攻撃がイランのアイデンティティを消し去ることを目指していると語った。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イスタンブールのイスラエル領事館外での銃撃で、攻撃者1人が死亡</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">3人の襲撃者が火曜日、イスタンブールのイスラエル領事館のビル外で警官に発砲し、銃撃戦の末に1人の攻撃者が死亡したとトルコ当局は発表した。残り2人の襲撃者は負傷して拘束された。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領の期限が近づく中、イラン指導部は強気の姿勢を崩さず</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">イランがホルムズ海峡を開放するよう求めたトランプ大統領の火曜日午後8時（米東部時間）の期限を数時間後に控える中も、ペルシャ湾での攻撃が続き、合意の見通しは立っていない。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ケープタウンの母親たちが暴力の急増に対抗して街頭パトロール</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">南アフリカ政府がギャングや組織犯罪に対抗するために5州に2200人の兵士を警察と共に1年間展開する中、ケープタウンでは地元の母親たちが自治会の見張り活動を組織して地域を守っている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランのミサイル攻撃がイスラエルの車と道路に損害</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">動画はイランのミサイルがイスラエルのラマト・ハシャロンに着弾し、歩道が損傷して車が横転した現場の様子を捉えている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領がイランへの脅迫をエスカレート——「今夜、文明がまるごと滅びる」と警告</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領が和平合意を求めてイランへの脅迫を強化する中、信頼の欠如、仲介者の不在、イスラエルの役割などをめぐり両者は大きく隔たったままだ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">シンガポール、世界的エネルギー危機の打撃に備え対策を発表</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">シンガポールの経済は近隣諸国と比べ対応力が高いとはいえ、世界的なエネルギー不足の打撃を受けることは避けられないとアナリストは指摘する。シンガポール政府は家計と企業を支援するための一連の対策を発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ウクライナとロシアが報復攻撃で双方の市民を死傷させる</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">ゼレンスキー大統領がイースター停戦の提案を改めて行った翌日、ウクライナで少なくとも7人、ロシアで3人の市民が死亡した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ビール缶、ヘリウム風船、住宅ローン——戦争が意外な形で影響を与えているもの</div>
+      <div class="ar-m">NPR World — 2026-04-07</div>
+      <div class="ar-d">イラン戦争の影響を受けているのは石油と天然ガスだけではない。人々の日常生活に影響を与えるさまざまな品不足や価格高騰が起き始めている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米・イスラエルの空爆がイラン北部の建物を破壊</div>
+      <div class="ar-m">Al Jazeera — 2026-04-07</div>
+      <div class="ar-d">動画はイラン北部パルディスの広範な破壊の様子を捉えている。イスラエル軍は4月7日にイランを爆撃したと発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">フランスの高速列車がトラックに激突し、運転士が死亡</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">火曜日にフランス北部で高速列車が軍用機材を搭載したトラックと衝突し、TGVの運転士が死亡、2人が重傷を負った。243人を乗せてダンケルクからパリへ向かっていた列車が踏切でトラックと衝突した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米国はイラン戦争のためにミサイルを太平洋から移動させることで同盟国に何を伝えているのか？</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ワシントンはイランとの戦争に際し、太平洋から長射程巡航ミサイルのほぼ全てを中東に再配備している。アナリストたちはこれが供給上の制約を示しており、インド太平洋の「友人も敵も」米国の優先事項が他にあることを伝えていると指摘している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">バス路線削減案の否決は「氷山の一角」——燃料費高騰で香港の議員が警告</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">燃料費の上昇が業界全体での路線削減を迫る中、香港の議員たちはあるバス事業者の路線削減案が否決されたことが問題の「氷山の一角」に過ぎないと警告し、政府が速やかに石油価格高騰への対策を講じるよう求めた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米国の期限前にイランが発電所周囲への「人間の鎖」形成を呼びかけ</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">トランプ大統領のホルムズ海峡再開を求める期限が急速に迫る中、イランは若者に発電所の周りに人間の鎖を作るよう呼びかけ、大統領は1400万人が義勇兵に名乗り出たと発表した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ASEAN諸国の多数が調査でパートナーとして米国より中国を選択、トランプ最大の懸念として浮上</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">選択を迫られれば東南アジア人の大多数が戦略的パートナーとして米国より中国を選ぶとの調査結果が出た。ただしアナリストたちは、ASEANが多極化する世界でパートナーの多様化を求めているとして、ゼロサム的な解釈に警鐘を鳴らしている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">燃料費高騰で収穫コストが増大、フィリピンの農家が作物を腐らせるまま放置</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中東の紛争に連動した石油価格高騰が収穫・労働・輸送コストを押し上げる中、フィリピンの農家は赤字での販売を避けるため野菜を畑で腐らせるしかない状況に追い込まれている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">オーストラリアの最多勲章を持つ現役兵士が戦争犯罪の疑いで起訴</div>
+      <div class="ar-m">BBC World — 2026-04-07</div>
+      <div class="ar-d">全ての不正行為を否定するベン・ロバーツ・スミスは、以前に当該殺人疑惑をめぐる名誉毀損訴訟で敗訴している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">勲章を持つオーストラリア兵士がアフガン戦争犯罪捜査で5件の殺人罪に問われる</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">オーストラリアで最多勲章を持つ兵士の一人が火曜日、アフガニスタン勤務中に武装解除された捕虜を殺害したとして逮捕された。現地メディアはヴィクトリア十字勲章受章者のベン・ロバーツ・スミスと報じている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「首つり運動」が中国の若者の間でトレンドに——医師が脊髄損傷リスクを警告</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">病院の頸椎牽引療法を模倣しようとする「首つり運動」が中国の若者の間で広まっている。頭を木に引っかけてぶら下がることで頸椎症を和らげようとする行為で、医師から脊髄損傷の危険性に対する警告が相次いでいる。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプのイラン警告にも動じず、香港の新築マンション販売が好調</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中東情勢の緊張が高まる中、将軍澳のラ・ミラベル1プロジェクトの第2次販売に香港の住宅購入者が集まった。168戸のうち152戸が売れ、総収益は11億香港ドルを超えた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">南北朝鮮が友好的なメッセージを交わした背景に何があるのか</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">最近の南北朝鮮間の間接的なメッセージ交換が、世界の各地で紛争が起きる中で朝鮮半島での緊張緩和への期待を高めている。金与正氏が韓国のイ・ジェミョン大統領のドローン侵入を惜しむ発言を「非常に幸運で賢明な動き」と歓迎した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">UAEがイランに報復、バリ島の相次ぐ殺人事件——アジアの注目7ニュース</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">先週1週間のアジア報道から、読者の反響が大きかった7つの記事を紹介する。UAEのイランへの報復、ネパールの不可触民への謝罪、バリ島での連続殺人など。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国が軍用赤外線チップのコストをわずか数十ドル台まで削減</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中国の大学の研究チームが、高性能赤外線チップを従来の高価な材料を使わずに通常の製造技術で作る方法を開発した。スマートフォンカメラや自動運転車の性能向上にも貢献する可能性がある。年内に量産が始まる予定だ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">偽オーストラリア・中国・ブラジル警察署——BBCが押収された詐欺拠点の内部に潜入</div>
+      <div class="ar-m">BBC World — 2026-04-06</div>
+      <div class="ar-d">タイ軍が12月に接収するまで、ロイヤル・ヒル・カジノについてはほとんど知られていなかった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領、イランに取り残された米空軍兵士の劇的な救出作戦の詳細を明かす</div>
+      <div class="ar-m">NPR World — 2026-04-06</div>
+      <div class="ar-d">トランプ大統領は、イラン深部で撃墜された戦闘機の乗員2人を救出するために米軍がどのように動いたか、その劇的な詳細の多くを明らかにした。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領、イランの発電所と橋への爆撃脅迫を改めて強調</div>
+      <div class="ar-m">NPR World — 2026-04-06</div>
+      <div class="ar-d">大統領は米国・イスラエル主導のイランでの戦争がいつどのように終わるかについて、一貫性のないメッセージを発してきた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランが米国の停戦案を拒否、トランプ大統領が再びインフラ爆撃を脅迫</div>
+      <div class="ar-m">NPR World — 2026-04-06</div>
+      <div class="ar-d">イランの最高指導部が米国の停戦案とホルムズ海峡開放を求めるトランプ大統領の期限に反発し、双方がミサイル攻撃を続ける中で強硬な姿勢を示した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランで行方不明になった米空軍兵士の捜索——これまでに判明していること</div>
+      <div class="ar-m">BBC World — 2026-04-04</div>
+      <div class="ar-d">米軍の戦闘機が撃墜された後、米軍とイラン軍が行方不明の米軍乗組員を捜索している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国のサプライヤーがホルムズ海峡封鎖による米国向け価格上昇を警告</div>
+      <div class="ar-m">CNBC Economy — 2026-03-30</div>
+      <div class="ar-d">イラン戦争によるホルムズ海峡経由の石油・石油製品の輸送停滞が、中国メーカーにサプライチェーン混乱への懸念を生じさせている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">欧州中央銀行が金利を据え置き、見通しは「著しく不確実」と警告</div>
+      <div class="ar-m">CNBC Economy — 2026-03-25</div>
+      <div class="ar-d">イラン戦争がエネルギー供給、経済成長、消費者物価の見通しを脅かし、欧州の経済均衡を崩している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">英国の戦前のインフレ指標に惑わされるな——「激烈な」急騰が来る可能性</div>
+      <div class="ar-m">CNBC Economy — 2026-03-25</div>
+      <div class="ar-d">国家統計局（ONS）の最新データによると英国のインフレ率は2月に3%で安定していた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ホワイトハウスがトタルエナジーに10億ドルを支払い、東海岸の洋上風力発電プロジェクトを中止させる</div>
+      <div class="ar-m">CNBC Economy — 2026-03-24</div>
+      <div class="ar-d">イラン戦争が世界の石油・天然ガスの供給を混乱させ、米国のLNG資源開発の緊急性が増す中での発表となった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">エリザベス・ウォーレン上院議員、「違法で無謀な戦争」のコストと経済的影響への説明を要求</div>
+      <div class="ar-m">CNBC Economy — 2026-03-21</div>
+      <div class="ar-d">リベラル派の民主党の闘士は、「米国を違法で無謀な戦争に引きずり込んだ」としてトランプ大統領を激しく批判した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イラン戦争による石油ショックが1970年代型スタグフレーションへの懸念を高める——今回が異なる理由</div>
+      <div class="ar-m">CNBC Economy — 2026-03-13</div>
+      <div class="ar-d">一部の投資家が2026年の市場の行方を読もうと1970年代との比較を試みているが、今回は注目すべきいくつかの重要な相違点がある。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">イランが戦争で海峡が詰まる中も、ホルムズ海峡経由で中国へ数百万バレルの石油を輸送</div>
+      <div class="ar-m">CNBC Economy — 2026-03-11</div>
+      <div class="ar-d">イランは米国・イスラエルとの戦争がホルムズ海峡経由の広範なエネルギー供給を妨げている中も、中国へ引き続き原油を輸送している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ケビン・ウォーシュがFRB議長就任を待つ間、経済の「完全な嵐」に直面</div>
+      <div class="ar-m">CNBC Economy — 2026-03-10</div>
+      <div class="ar-d">ウォーシュはインフレとの戦いと労働市場の支援という究極の選択、いわばホブソンのジレンマに直面しうる。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">米・イラン戦争でガソリンが1ガロン3.50ドルを超え2024年以来の高値</div>
+      <div class="ar-m">CNBC Economy — 2026-03-10</div>
+      <div class="ar-d">米・イラン戦争で原油市場が混乱し、価格は1か月前から21%上昇している。</div>
+    </div></div>
+    </div>
+    <div class="sub-pn " data-group="wp">
+      <div class="cd"><h2>経済ニュース (22件)</h2>
+    <div class="ar">
+      <div class="ar-t">【再放送】ヴァンスとオルバンがハンガリー選挙前に共同記者会見</div>
+      <div class="ar-m">France 24 — 2026-04-07</div>
+      <div class="ar-d">ジェイディー・ヴァンス米副大統領は火曜日、EU「ブリュッセルの官僚たち」がハンガリーの経済とエネルギー自立を妨害しようとしていると述べ、今月の接戦となっている再選選挙を前にオルバン首相への支持を表明した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国のメモリー大手、低価格と生産拡大でシェア拡大へ——アナリスト分析</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">AI需要に牽引された前例のない「スーパーサイクル」が続く世界のメモリー産業において、中国の主要メモリーチップメーカーが低価格戦略と生産拡大でより大きな市場シェアを獲得しようとしているとアナリストたちが分析した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">今年度予算成立 高市首相「強い経済と財政の持続可能性両立」</div>
+      <div class="ar-m">NHK World — 2026-04-07</div>
+      <div class="ar-d">一般会計の総額が過去最大の122兆円余りとなる今年度予算は参議院本会議で採決が行われ、自民・維新両党などの賛成多数で可決・成立しました。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">「イランは友人を忘れない」——選択的なアクセス管理の中でマレーシア船がホルムズ海峡を通過</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">マレーシアに関連する船舶のホルムズ海峡通過を認めたテヘランの決定は、戦略的水路へのアクセスを政治的なてことして活用するイランの姿勢を浮き彫りにしたとアナリストたちが指摘した。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ロシア産石油に加え、中国がウクライナ産小麦粉の輸入も拡大</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中国がウクライナとの農業貿易を拡大し、小麦粉市場をさらに開放した。ロシアからのエネルギー輸入を増やす一方で、ウクライナとも農業貿易を深める現実主義的な外交姿勢の表れだ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">湾岸諸国にとって、地理的条件は恵みであり裏切り者でもある</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">ホルムズ海峡の封鎖は世界中に影響を及ぼしている。世界がガソリン高騰に苦しむ一方、主要エネルギー輸出国のUAEやカタールは深刻な経済的打撃に直面している。航空ハブとして発展した湾岸諸国も、石油富の枯渇リスクと向き合っている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">キューバで新世代のカストロ一族が台頭——「カストロ」の名は依然として影響力を持つ</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">キューバで新世代のカストロ一族が台頭している。孫と大甥が権力の回廊を歩む一方、別の一人はキューバ人が資本主義を望んでいると主張する風変わりなインスタグラムのインフルエンサーとなっている。トランプ政権がキューバへの圧力を強めているが、カストロ王朝は依然として共産主義の島に影響力を持ち続けている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">工商銀行と建設銀行が主導——中国6大銀行が610億ドルの配当を実施</div>
+      <div class="ar-m">SCMP — 2026-04-07</div>
+      <div class="ar-d">中国の6大国有銀行は2025年分として4200億元（約610億ドル）以上の配当を行う見通しで、低金利下で防衛的資産への資金シフトが進む中、高配当の魅力を示している。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">3月の雇用統計は金曜日に発表予定——見通しはこうだ</div>
+      <div class="ar-m">CNBC Economy — 2026-04-02</div>
+      <div class="ar-d">米国経済は3月に5万9000人の雇用増が見込まれており、失業率は4.4%に据え置かれる見通しだ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">なぜ1ガロン4ドルのガソリン価格がFRBの利上げを引き起こさないのか——むしろ利下げにつながる可能性も</div>
+      <div class="ar-m">CNBC Economy — 2026-03-31</div>
+      <div class="ar-d">金利の方向性についての不確実性は依然として大きいが、ウォール街のコメントは再び利下げ期待へとシフトしている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">インフレ懸念が高まる中、市場はFRBの次の動きが利上げになる可能性を視野に</div>
+      <div class="ar-m">CNBC Economy — 2026-03-27</div>
+      <div class="ar-d">先物市場のトレーダーは金曜日の朝に2026年末までの利上げ確率を52%に引き上げた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">中国の工業利益が年初に15%急増——しかし原油価格ショックが先行きを脅かす</div>
+      <div class="ar-m">CNBC Economy — 2026-03-27</div>
+      <div class="ar-d">中国は巨大な石油備蓄と代替エネルギー源を持つため、エネルギー価格の急騰による経済への影響は他の大半の国より小さいと予想されている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">国際予測機関、今年の米国インフレ率を4.2%と予測——FRBの見込みを大幅に上回る</div>
+      <div class="ar-m">CNBC Economy — 2026-03-26</div>
+      <div class="ar-d">予測値は従来の2.8%から大幅に引き上げられた。さらに連邦準備制度の当局者が見込んでいた2.7%をも大きく超えている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">ウォール街で景気後退の確率が上昇——水面下で経済に亀裂が見える</div>
+      <div class="ar-m">CNBC Economy — 2026-03-25</div>
+      <div class="ar-d">地政学的リスクの不確実性の高まりと労働市場の低迷を受け、エコノミストたちが景気後退リスクの評価を引き上げている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">FRBの決定後、今年の利下げを見込むトレーダーはほぼいなくなった</div>
+      <div class="ar-m">CNBC Economy — 2026-03-19</div>
+      <div class="ar-d">今週のFRB会合で出たポジティブな経済に関するコメントの全てが、投資家にネガティブな影響を与えた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">2月の卸売物価が予想を大幅に上回る0.7%上昇、前年比では3.4%増</div>
+      <div class="ar-m">CNBC Economy — 2026-03-18</div>
+      <div class="ar-d">2月の卸売物価が急上昇し、エネルギー価格の上昇を除いてもインフレが続いていることを示すもう一つの兆候となった。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">財務省は石油商品市場に介入しておらず介入する権限もない——ベッセント財務長官</div>
+      <div class="ar-m">CNBC Economy — 2026-03-16</div>
+      <div class="ar-d">ベッセント長官は、財務省や政府の他の部門が石油価格を下げるために介入するかもしれないという噂に対してコメントした。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">第4四半期GDPが0.7%成長に下方修正、1月のコアインフレは3.1%</div>
+      <div class="ar-m">CNBC Economy — 2026-03-13</div>
+      <div class="ar-d">1月のPCE物価指数はヘッドラインインフレが2.9%、コアが3.1%と予想されていた。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">石油が100ドル台に急騰し1970年代型スタグフレーションへの懸念が浮上——どれほどの脅威か？</div>
+      <div class="ar-m">CNBC Economy — 2026-03-12</div>
+      <div class="ar-d">高インフレと低成長が二重の脅威をなしており、利下げや政府支出などの措置がインフレをさらに悪化させるだけという状況だ。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプ大統領が北京首脳会談の数週間前に301条貿易調査で中国への圧力を強化</div>
+      <div class="ar-m">CNBC Economy — 2026-03-12</div>
+      <div class="ar-d">トランプ大統領が北京首脳会談を前にセクション301調査で中国への圧力を高めている。</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">セクション301調査が重要な理由——トランプの関税にとって何を意味するのか</div>
+      <div class="ar-m">CNBC Economy — 2026-03-12</div>
+      <div class="ar-d"></div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">トランプの主権侵害発言から1年、カナダ人は「肘を上げた」ままで</div>
+      <div class="ar-m">CNBC Economy — 2026-03-09</div>
+      <div class="ar-d">昨年のトランプの脅しと関税への対抗から高まった異例のカナダ愛国心の盛り上がりが、新たな社会的・経済的秩序へと発展した。</div>
+    </div></div>
+    </div></div>
+<div class="pn" id="p-economy">
+    <div class="sub-tabs">
+      <button class="active" onclick="subTab(this,'ec')">日次 (0)</button>
+      <button onclick="subTab(this,'ec')">月次 (100)</button>
+      <button onclick="subTab(this,'ec')">四半期 (50)</button>
+      <button onclick="subTab(this,'ec')">年次 (200)</button>
+    </div>
+    <div class="sub-pn active" data-group="ec"><div class="cd"><h2>日次指標</h2><table><tr><th>国</th><th>指標</th><th>値</th><th>単位</th><th>日付</th><th>ソース</th></tr></table></div></div>
+    <div class="sub-pn" data-group="ec"><div class="cd"><h2>月次指標</h2><table><tr><th>国</th><th>指標</th><th>値</th><th>単位</th><th>日付</th><th>ソース</th></tr>
+    <tr><td>カナダ</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>ドイツ</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インド</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>日本</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>中国</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>フランス</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インドネシア</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>イタリア</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Republic of Korea</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>メキシコ</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Türkiye</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United Kingdom of Great Britain and Northern Ireland</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United States of America</td><td>食料価格指数（SDG 2）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">352</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,838</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">128</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,606</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,494</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,387</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">443</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">316</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">349</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">312</td>
+    <td>%</td><td>2026-02</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">358</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,858</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">129</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,552</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,559</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,258</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">437</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">292</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">334</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">295</td>
+    <td>%</td><td>2026-01</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">355</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,651</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">131</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,442</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,523</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,441</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">388</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">276</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">327</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">277</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.2</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.7</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">0.7</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.2</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.7</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3.8</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.4</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.7</td>
+    <td>%</td><td>2025-12</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">347</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,703</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">124</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,455</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,551</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,363</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">386</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">269</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">326</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">276</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.6</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.6</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3.1</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3.2</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">0.8</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.1</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.6</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">4</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.1</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.5</td>
+    <td>%</td><td>2025-11</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">354</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,615</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">130</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,534</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,589</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,406</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">408</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">265</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">334</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">276</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.5</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.3</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2.8</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3.2</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">0.8</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.3</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">3</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Austria</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">4</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Portugal</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">2</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Finland</td><td>EU消費者物価上昇率（HICP）</td>
+    <td style="font-weight:700;color:var(--ac2)">1.4</td>
+    <td>%</td><td>2025-10</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Belgium</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">356</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>ドイツ</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,791</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Ireland</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">142</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Spain</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,617</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>フランス</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2,523</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>イタリア</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">1,514</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr>
+    <tr><td>Netherlands</td><td>EU失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">431</td>
+    <td>%</td><td>2025-09</td>
+    <td style="color:var(--mt)">Eurostat</td></tr></table></div></div>
+    <div class="sub-pn" data-group="ec"><div class="cd"><h2>四半期指標</h2><table><tr><th>国</th><th>指標</th><th>値</th><th>単位</th><th>日付</th></tr>
+    <tr><td>Belgium</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">114.314</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>ドイツ</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">105.23</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Ireland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">142.962</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Spain</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">124.985</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>フランス</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">114.39</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>イタリア</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">116.485</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Netherlands</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">115.423</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Austria</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">109.52</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Portugal</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">120.52</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Finland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">104.014</td>
+    <td>百万ユーロ</td><td>2025</td>
+    </tr>
+    <tr><td>Belgium</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">113.259</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>ドイツ</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">105.14</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Ireland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">127.318</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Spain</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">121.169</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>フランス</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">113.621</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>イタリア</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">116.014</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Netherlands</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">113.346</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Austria</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">109.063</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Portugal</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">118.469</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Finland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">103.803</td>
+    <td>百万ユーロ</td><td>2024</td>
+    </tr>
+    <tr><td>Belgium</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">112.18</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>ドイツ</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">105.75</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Ireland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">124.075</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Spain</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">116.612</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>フランス</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">111.9</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>イタリア</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">115.409</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Netherlands</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">112.117</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Austria</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">110.114</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Portugal</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">116.07</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Finland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">103.524</td>
+    <td>百万ユーロ</td><td>2023</td>
+    </tr>
+    <tr><td>Belgium</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">110.212</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>ドイツ</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">106.32</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Ireland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">126.709</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Spain</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">113.628</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>フランス</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">109.712</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>イタリア</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">114.348</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Netherlands</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">112.744</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Austria</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">111.262</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Portugal</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">112.597</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Finland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">103.857</td>
+    <td>百万ユーロ</td><td>2022</td>
+    </tr>
+    <tr><td>Belgium</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">105.693</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>ドイツ</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">104.06</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Ireland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">116.478</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Spain</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">106.283</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>フランス</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">106.543</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>イタリア</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">108.965</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Netherlands</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">106.685</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Austria</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">104.497</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Portugal</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">105.315</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr>
+    <tr><td>Finland</td><td>EU GDP（詳細）</td>
+    <td style="font-weight:700;color:var(--ac2)">102.752</td>
+    <td>百万ユーロ</td><td>2021</td>
+    </tr></table></div></div>
+    <div class="sub-pn" data-group="ec"><div class="cd"><h2>年次指標</h2><table><tr><th>国</th><th>指標</th><th>値</th><th>単位</th><th>日付</th><th>ソース</th></tr>
+    <tr><td>カナダ</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>ドイツ</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>中国</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インド</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>日本</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>フランス</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インドネシア</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>イタリア</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Republic of Korea</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>メキシコ</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Türkiye</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United Kingdom of Great Britain and Northern Ireland</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United States of America</td><td>意図的殺人率（10万人当たり）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>人/10万人</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>カナダ</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>中国</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>フランス</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インドネシア</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>イタリア</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Republic of Korea</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>メキシコ</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Türkiye</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United Kingdom of Great Britain and Northern Ireland</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United States of America</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>ドイツ</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インド</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>日本</td><td>女性国会議員比率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>カナダ</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>ドイツ</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インド</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>日本</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>中国</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>フランス</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インドネシア</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>イタリア</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Republic of Korea</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>メキシコ</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Türkiye</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United Kingdom of Great Britain and Northern Ireland</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United States of America</td><td>極度の貧困率（SDG 1.1.1）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>カナダ</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>ドイツ</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インド</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>日本</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>フランス</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>インドネシア</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>イタリア</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Republic of Korea</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>メキシコ</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>Türkiye</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United Kingdom of Great Britain and Northern Ireland</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>United States of America</td><td>ICTスキルジェンダー格差（SDG 4）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>指数</td><td>undefined</td>
+    <td style="color:var(--mt)">UNData</td></tr>
+    <tr><td>オーストラリア</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>GDP（名目、USドル）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>GDP成長率</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>一人当たりGDP</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>インフレ率（CPI）</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>経常収支</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>USドル</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>政府債務対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>政府歳入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>輸出対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>アメリカ</td><td>輸入対GDP比</td>
+    <td style="font-weight:700;color:var(--ac2)">-</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>オーストラリア</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">4.09</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ブラジル</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">5.97</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>カナダ</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">6.907</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>中国</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">4.615</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>ドイツ</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">3.711</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>フランス</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">7.542</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イギリス</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">4.746</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インドネシア</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">3.237</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>インド</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">4.219</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>イタリア</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">6.391</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>日本</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2.451</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Korea, Rep.</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2.683</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>メキシコ</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">2.673</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr>
+    <tr><td>Turkiye</td><td>失業率</td>
+    <td style="font-weight:700;color:var(--ac2)">8.52</td>
+    <td>%</td><td>2025</td>
+    <td style="color:var(--mt)">WorldBank</td></tr></table></div></div>
+  </div>
+<div class="pn" id="p-invest">
+    <div class="cd"><h2>監視チャンネル (12件)</h2><table><tr><th>チャンネル</th><th>言語</th><th>ジャンル</th><th>備考</th></tr>
+    <tr><td style="font-weight:600">両学長 リベラルアーツ大学</td><td><span class="tg t-w">ja</span></td><td>資産形成全般・NISA/iDeCo</td><td style="color:var(--mt);font-size:11px">登録者380万超。情報商材なし、中立的な金融教育</td></tr><tr><td style="font-weight:600">バフェット太郎の投資チャンネル</td><td><span class="tg t-w">ja</span></td><td>米国株・長期投資</td><td style="color:var(--mt);font-size:11px">投資哲学・思考プロセスを丁寧に解説</td></tr><tr><td style="font-weight:600">高橋ダン</td><td><span class="tg t-w">ja</span></td><td>グローバル投資・マルチアセット</td><td style="color:var(--mt);font-size:11px">元ウォール街。株・債券・コモディティ横断分析</td></tr><tr><td style="font-weight:600">後藤達也・経済チャンネル</td><td><span class="tg t-w">ja</span></td><td>マクロ経済・金融市場</td><td style="color:var(--mt);font-size:11px">元日経新聞記者。FOMC・日銀ライブ解説</td></tr><tr><td style="font-weight:600">馬渕磨理子の株式クラブ</td><td><span class="tg t-w">ja</span></td><td>個別株・ファンダメンタルズ</td><td style="color:var(--mt);font-size:11px">証券アナリスト資格保有。決算分析が強み</td></tr><tr><td style="font-weight:600">Patrick Boyle</td><td><span class="tg t-t">en</span></td><td>Macro analysis / Derivatives / Financial history</td><td style="color:var(--mt);font-size:11px">元ヘッジファンドマネージャー兼大学教授。100万登録</td></tr><tr><td style="font-weight:600">Economics Explained</td><td><span class="tg t-t">en</span></td><td>Global economics education</td><td style="color:var(--mt);font-size:11px">284万登録。各国経済をアニメーションで解説</td></tr><tr><td style="font-weight:600">The Plain Bagel</td><td><span class="tg t-t">en</span></td><td>Investment strategy / ETF / Valuation</td><td style="color:var(--mt);font-size:11px">110万登録。カナダ発、煽りゼロの体系的金融教育</td></tr><tr><td style="font-weight:600">Graham Stephan</td><td><span class="tg t-t">en</span></td><td>US market / Real estate / Personal finance</td><td style="color:var(--mt);font-size:11px">510万登録。米国最大級の個人投資チャンネル</td></tr><tr><td style="font-weight:600">Financial Times</td><td><span class="tg t-t">en</span></td><td>Global business / Geopolitics / Macro</td><td style="color:var(--mt);font-size:11px">世界三大経済紙。欧州・新興国視点のマクロ一次情報</td></tr><tr><td style="font-weight:600">How Money Works</td><td><span class="tg t-t">en</span></td><td>Financial systems / Economic history</td><td style="color:var(--mt);font-size:11px">167万登録。金融システムの構造を図解で深掘り</td></tr><tr><td style="font-weight:600">Minority Mindset</td><td><span class="tg t-t">en</span></td><td>US economy / Wealth building / Stock analysis</td><td style="color:var(--mt);font-size:11px">238万登録。多様な視点からの投資リテラシー向上</td></tr></table></div>
+    <div class="cd"><h2>動画サマリー (7件)</h2>
+    <div class="ar">
+      <div class="ar-t">【2026年4月】新NISAで今買うべき投資信託ランキングTOP5</div>
+      <div class="ar-m">2026-04-03</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">Why the Fed Can't Cut Rates Yet (And What It Means for Markets)</div>
+      <div class="ar-m">2026-04-02</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">日銀利上げで銀行株はまだ買えるか？メガバンク3社を徹底比較</div>
+      <div class="ar-m">2026-04-01</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">India's Economy Is About to Overtake Japan - Here's Why</div>
+      <div class="ar-m">2026-03-30</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">【FRB利下げ観測】2026年後半の米国市場展望と投資戦略</div>
+      <div class="ar-m">2026-03-28</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">Bond Market 101: Why Every Investor Needs to Understand Bonds in 2026</div>
+      <div class="ar-m">2026-03-27</div>
+    </div>
+    <div class="ar">
+      <div class="ar-t">半導体株バブルは終わったのか？エヌビディア決算から読み解く</div>
+      <div class="ar-m">2026-03-25</div>
+    </div></div>
+  </div>
+<div class="pn" id="p-knowledge">
+    <div class="cg">
+    <div class="cc">
+      <div class="cc-code">AUS <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・連邦議会制（英連邦王国、二院制、二大政党制が基本</span></div>
+      <div class="cc-eco">世界第13位の経済大国。GDP約1.7兆ドル。鉄鉱石・石炭・天然ガスなどの資源輸出が経済の柱。農畜産業、金融サービス、観光・教育も重要。中国が最大の貿易相手国であり、資源依存の経済構造が地政学リスクを内包する。</div>
+      <div style="margin-top:6px"><span class="tg t-i">AUKUS（創設メンバー）</span><span class="tg t-i">Five Eyes（創設メンバー）</span><span class="tg t-i">ANZUS条約</span><span class="tg t-i">クワッド（Quad）</span><span class="tg t-i">G20</span><span class="tg t-i">CPTPP</span><span class="tg t-i">英連邦</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">中国との安全保障上の脅威認識と経済的相互依存の矛盾</li><li style="font-size:11px;color:var(--mt)">南太平洋島嶼国への中国の影響力拡大（ソロモン諸島問題等）</li><li style="font-size:11px;color:var(--mt)">気候変動政策（石炭輸出国としての国際圧力）</li><li style="font-size:11px;color:var(--mt)">アボリジニ・先住民族の権利問題</li><li style="font-size:11px;color:var(--mt)">移民・難民政策と人権団体からの批判</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">BRA <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制連邦共和国（多党制、議会との連立が必要な「連合大統領</span></div>
+      <div class="cc-eco">世界第8位・南米最大の経済大国。GDP約2.1兆ドル。農業（大豆・トウモロコシ・牛肉の世界的輸出国）、資源（鉄鉱石・石油）、製造業、サービス業が主柱。高い所得格差（ジニ係数）と財政赤字が慢性的課題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">MERCOSUR（中心メンバー）</span><span class="tg t-i">BRICS（創設メンバー）</span><span class="tg t-i">G20</span><span class="tg t-i">CELAC（中南米カリブ海諸国共同体）</span><span class="tg t-i">UNASUR</span><span class="tg t-i">国連平和維持活動への積極参加</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">国内政治の深刻な分極化（ルーラ対ボルソナーロ支持層）</li><li style="font-size:11px;color:var(--mt)">財政赤字拡大と経済改革の停滞</li><li style="font-size:11px;color:var(--mt)">アマゾン森林破壊と環境政策をめぐる国際圧力</li><li style="font-size:11px;color:var(--mt)">麻薬組織・犯罪組織による治安悪化</li><li style="font-size:11px;color:var(--mt)">中国への資源輸出依存と米国との関係バランス</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">CAN <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・連邦議会制（英連邦王国、小選挙区制、三大政党制）</span></div>
+      <div class="cc-eco">世界第9位の経済大国。GDP約2.1兆ドル。天然資源（石油・天然ガス・木材・鉱物）、金融サービス、製造業、農業が主要産業。米国との貿易依存度が約75%と極めて高く、USMCA（旧NAFTA）が経済の枠組みを規定する。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">Five Eyes（創設メンバー）</span><span class="tg t-i">USMCA</span><span class="tg t-i">G7（創設メンバー）</span><span class="tg t-i">英連邦</span><span class="tg t-i">CPTPP</span><span class="tg t-i">NORAD（対空防衛）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">トランプ政権による関税・主権侵害的発言と米加関係の緊張</li><li style="font-size:11px;color:var(--mt)">ケベック独立問題と国内の言語・文化的分断</li><li style="font-size:11px;color:var(--mt)">先住民族（ファースト・ネーション）の権利と和解プロセス</li><li style="font-size:11px;color:var(--mt)">住宅価格高騰と生活費危機による政治不満の高まり</li><li style="font-size:11px;color:var(--mt)">中国によるカナダ国内政治介入疑惑</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">CHN <span style="font-size:13px;font-weight:400;color:var(--mt)">一党独裁制（中国共産党による権威主義的支配、習近平の終身的権</span></div>
+      <div class="cc-eco">世界第2位（購買力平価ベースでは最大）の経済大国。GDP約18.5兆ドル。製造業・輸出・不動産・ハイテク産業が主柱。「世界の工場」からイノベーション大国への転換を目指す。不動産バブル崩壊と若年失業率の高止まりが深刻な課題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">上海協力機構（SCO）</span><span class="tg t-i">BRICS（中心的推進国）</span><span class="tg t-i">一帯一路（BRI）参加国ネットワーク</span><span class="tg t-i">国連安保理常任理事国</span><span class="tg t-i">RCEP</span><span class="tg t-i">ロシアとの「無制限パートナーシップ」</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">米中覇権競争（半導体・AI・宇宙・軍事）</li><li style="font-size:11px;color:var(--mt)">台湾問題（武力統一の可能性）</li><li style="font-size:11px;color:var(--mt)">南シナ海の領有権主張と周辺国との摩擦</li><li style="font-size:11px;color:var(--mt)">新疆ウイグル・チベット・香港における人権問題</li><li style="font-size:11px;color:var(--mt)">不動産バブル崩壊と経済デフレ圧力</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">DEU <span style="font-size:13px;font-weight:400;color:var(--mt)">連邦議会制共和国（多党制、比例代表制、連立政権が常態）</span></div>
+      <div class="cc-eco">欧州最大・世界第3位の経済大国。GDP約4.4兆ドル。自動車・機械・化学産業が主柱の輸出主導型経済。中小企業「ミッテルシュタント」が経済の根幹を形成。エネルギー転換（Energiewende）と脱原発政策で高コスト構造が課題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">EU（中核メンバー）</span><span class="tg t-i">G7</span><span class="tg t-i">OECD</span><span class="tg t-i">ユーロ圏</span><span class="tg t-i">シェンゲン協定</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">ロシアのウクライナ侵攻とエネルギー安全保障</li><li style="font-size:11px;color:var(--mt)">中国依存の経済リスクと脱リスク政策</li><li style="font-size:11px;color:var(--mt)">極右政党AfDの台頭と国内政治の不安定化</li><li style="font-size:11px;color:var(--mt)">NATOの防衛費目標（GDP2%）達成の遅れ</li><li style="font-size:11px;color:var(--mt)">EU内での財政・移民政策をめぐる南欧・東欧諸国との対立</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">FRA <span style="font-size:13px;font-weight:400;color:var(--mt)">半大統領制共和国（強力な大統領権限と議院内閣制の複合型）</span></div>
+      <div class="cc-eco">世界第7位の経済大国。GDP約3.0兆ドル。航空宇宙・防衛・原子力・ファッション・農業が主要産業。国有企業の比率が高く政府関与が強い「コルポラティスム」的経済。観光業も重要で世界最多の観光客を誇る。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">EU（中核メンバー）</span><span class="tg t-i">G7</span><span class="tg t-i">国連安保理常任理事国</span><span class="tg t-i">ユーロ圏</span><span class="tg t-i">フランコフォニー国際機関</span><span class="tg t-i">AUKUS（オブザーバー的関与）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">アフリカのフランス語圏諸国でのプレゼンス低下（マリ・ブルキナファソなどクーデター国家との関係悪化）</li><li style="font-size:11px;color:var(--mt)">移民・イスラム過激主義と国内テロリスクの高止まり</li><li style="font-size:11px;color:var(--mt)">国内政治の断片化と極右・極左の台頭（マリーヌ・ルペンの影響力）</li><li style="font-size:11px;color:var(--mt)">EU内でのドイツとの主導権競争と財政ルール交渉</li><li style="font-size:11px;color:var(--mt)">ロシアのウクライナ侵攻とNATO東方強化への対応</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">GBR <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・議院内閣制（二大政党制、小選挙区制）</span></div>
+      <div class="cc-eco">世界第6位の経済大国。GDP約3.1兆ドル。金融サービス（シティ・オブ・ロンドン）が経済の中核。Brexit後の貿易構造再編が進行中。製造業の空洞化と高い財政赤字が課題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">Five Eyes</span><span class="tg t-i">AUKUS（創設メンバー）</span><span class="tg t-i">G7</span><span class="tg t-i">英連邦（Commonwealth）</span><span class="tg t-i">国連安保理常任理事国</span><span class="tg t-i">CPTPP</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">Brexit後の経済的打撃とEUとの関係再構築</li><li style="font-size:11px;color:var(--mt)">スコットランド独立運動と連合王国の維持</li><li style="font-size:11px;color:var(--mt)">北アイルランド問題（ウィンザー枠組み）</li><li style="font-size:11px;color:var(--mt)">ロシアのウクライナ侵攻への対応とエネルギー安全保障</li><li style="font-size:11px;color:var(--mt)">移民・難民問題と国内の政治的分断</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">IDN <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制共和国（多党制、直接選挙制、世界最大のムスリム人口を</span></div>
+      <div class="cc-eco">世界第16位・東南アジア最大の経済大国。GDP約1.4兆ドル。資源（石炭・ニッケル・パーム油・天然ガス）、農業、製造業、デジタルサービスが主要産業。若い人口構造（中間層の拡大）を背景に成長ポテンシャルが高い。</div>
+      <div style="margin-top:6px"><span class="tg t-i">ASEAN（創設メンバー）</span><span class="tg t-i">G20</span><span class="tg t-i">OIC（イスラム協力機構）</span><span class="tg t-i">RCEP</span><span class="tg t-i">クワッド（オブザーバー的関与）</span><span class="tg t-i">一帯一路参加国</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">南シナ海での中国との領有権問題（北ナトゥナ海）</li><li style="font-size:11px;color:var(--mt)">パプア・西パプア州での独立運動と人権問題</li><li style="font-size:11px;color:var(--mt)">イスラム保守主義の政治的影響力拡大と宗教的少数派への圧力</li><li style="font-size:11px;color:var(--mt)">米中対立の狭間での「戦略的自律」の維持</li><li style="font-size:11px;color:var(--mt)">ニッケル加工義務化をめぐるEUとの貿易紛争</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">IND <span style="font-size:13px;font-weight:400;color:var(--mt)">連邦議会制共和国（多党制、下院（ロク・サバ）中心の民主主義、</span></div>
+      <div class="cc-eco">世界第5位（購買力平価ベースでは第3位）の経済大国。GDP約3.7兆ドル。IT・ソフトウェアサービス、製薬、農業、製造業が主要産業。若年人口が豊富で「人口ボーナス」期にある。格差拡大とインフラ整備の遅れが課題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">クワッド（Quad）</span><span class="tg t-i">SCO（上海協力機構）</span><span class="tg t-i">BRICS</span><span class="tg t-i">G20（2023年議長国）</span><span class="tg t-i">英連邦</span><span class="tg t-i">ロシアとの伝統的軍事・エネルギー関係</span><span class="tg t-i">非同盟運動（歴史的リーダー）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">カシミール問題とパキスタンとの恒常的緊張</li><li style="font-size:11px;color:var(--mt)">中印国境紛争（ラダック地方）</li><li style="font-size:11px;color:var(--mt)">ヒンドゥーナショナリズム台頭による国内宗教的少数派（ムスリム）への圧力</li><li style="font-size:11px;color:var(--mt)">格差拡大と農業従事者の経済的困窮</li><li style="font-size:11px;color:var(--mt)">ロシアからの武器輸入と米国との関係バランス</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">ITA <span style="font-size:13px;font-weight:400;color:var(--mt)">議会制共和国（二院制、多党制・連立政権が常態、政権交代が頻繁</span></div>
+      <div class="cc-eco">世界第8位・EU第3位の経済大国。GDP約2.2兆ドル。製造業（ファッション・食品・機械・自動車）、観光業が主柱。北部と南部の経済格差（「南北問題」）が慢性的課題。高い政府債務残高（GDP比約140%）と低成長が構造的問題。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">EU（創設メンバー）</span><span class="tg t-i">G7（創設メンバー）</span><span class="tg t-i">ユーロ圏</span><span class="tg t-i">シェンゲン協定</span><span class="tg t-i">一帯一路（2019年参加、2023年離脱）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">地中海からの移民・難民流入と欧州内の負担分担問題</li><li style="font-size:11px;color:var(--mt)">高い国債残高とEU財政ルールとの緊張</li><li style="font-size:11px;color:var(--mt)">メローニ政権の極右的政策とEU・リベラル派との摩擦</li><li style="font-size:11px;color:var(--mt)">北部独立運動（パダニア）と南北格差</li><li style="font-size:11px;color:var(--mt)">ロシアのウクライナ侵攻への対応と親露的世論</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">JPN <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・議院内閣制（象徴天皇制、自民党長期政権）</span></div>
+      <div class="cc-eco">世界第4位の経済大国。GDP約4.2兆ドル。自動車・電機・精密機器などの製造業と金融サービスが主柱。少子高齢化と長期デフレからの脱却が課題。円安進行と輸出依存型経済の構造的問題を抱える。</div>
+      <div style="margin-top:6px"><span class="tg t-i">日米同盟（日米安保条約）</span><span class="tg t-i">クワッド（Quad）</span><span class="tg t-i">Five Eyes（準メンバー）</span><span class="tg t-i">AUKUS（第2の柱）</span><span class="tg t-i">G7</span><span class="tg t-i">RCEP</span><span class="tg t-i">日EU経済連携協定（EPA）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">中国との領土問題（尖閣諸島）と安全保障上の脅威認識</li><li style="font-size:11px;color:var(--mt)">北朝鮮の核・ミサイル開発と拉致問題</li><li style="font-size:11px;color:var(--mt)">ロシアとの北方領土問題</li><li style="font-size:11px;color:var(--mt)">韓国との歴史認識問題（慰安婦・徴用工）</li><li style="font-size:11px;color:var(--mt)">少子高齢化による人口減少と経済停滞</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">KOR <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制単一共和国（5年単任制大統領、与野党が激しく競合する</span></div>
+      <div class="cc-eco">世界第13位の経済大国。GDP約1.7兆ドル。半導体（サムスン・SKハイニックス）、自動車（現代・起亜）、造船、電子機器が主要産業。財閥（チェボル）中心の経済構造と輸出依存度の高さが特徴。</div>
+      <div style="margin-top:6px"><span class="tg t-i">米韓相互防衛条約</span><span class="tg t-i">クワッド（対話パートナー）</span><span class="tg t-i">G20</span><span class="tg t-i">RCEP</span><span class="tg t-i">CPTPP（加盟申請中）</span><span class="tg t-i">Five Eyes（情報共有の一部参加）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">北朝鮮の核・ミサイル開発と軍事挑発</li><li style="font-size:11px;color:var(--mt)">中国との関係（THAAD問題・経済報復）</li><li style="font-size:11px;color:var(--mt)">日本との歴史認識問題（徴用工・慰安婦・独島）</li><li style="font-size:11px;color:var(--mt)">国内政治の深刻な保守・進歩対立と政治危機</li><li style="font-size:11px;color:var(--mt)">少子化・格差拡大・若年失業による社会的閉塞感</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">MEX <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制連邦共和国（MORENA党が主導する左派政権、歴史的</span></div>
+      <div class="cc-eco">世界第12位の経済大国。GDP約1.4兆ドル。製造業（自動車・電機）、石油、農業、観光業が主要産業。USMCAの枠組みで対米輸出が経済を牽引。米中対立による「ニアショアリング」（中国からメキシコへの製造拠点移転）の恩恵を受けつつある。</div>
+      <div style="margin-top:6px"><span class="tg t-i">USMCA（北米自由貿易）</span><span class="tg t-i">G20</span><span class="tg t-i">CELAC</span><span class="tg t-i">太平洋同盟</span><span class="tg t-i">OECD</span><span class="tg t-i">OAS（米州機構）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">麻薬カルテルによる治安悪化と国家機能の侵食</li><li style="font-size:11px;color:var(--mt)">米国からの移民・麻薬対策圧力とフェンタニル問題</li><li style="font-size:11px;color:var(--mt)">トランプ政権による関税・国境政策の圧力</li><li style="font-size:11px;color:var(--mt)">中国製品の迂回輸出問題と米国からの圧力</li><li style="font-size:11px;color:var(--mt)">エネルギー国有化政策と外国投資家との法的紛争</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">TUR <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制共和国（エルドアン大統領による権威主義的支配、201</span></div>
+      <div class="cc-eco">世界第17位の経済大国。GDP約1.1兆ドル。製造業（自動車・繊維）、建設、農業、観光業が主要産業。高インフレ（2023年に約85%のピーク）と通貨リラの急落が慢性的課題。地政学的位置を活かしたエネルギー・物流ハブ戦略を推進中。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（加盟国だが独自路線）</span><span class="tg t-i">G20</span><span class="tg t-i">OIC（イスラム協力機構）</span><span class="tg t-i">トルコ語圏諸国機構（OTS）</span><span class="tg t-i">上海協力機構（対話パートナー）</span><span class="tg t-i">一帯一路参加国</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">NATO内でのロシアとの二重関係（S-400購入・ウクライナ穀物合意仲介）</li><li style="font-size:11px;color:var(--mt)">クルド問題（PKK・シリアのSDF）と周辺国との摩擦</li><li style="font-size:11px;color:var(--mt)">EU加盟交渉の凍結とヨーロッパとの価値観対立</li><li style="font-size:11px;color:var(--mt)">ギリシャとのエーゲ海・キプロス領有権問題</li><li style="font-size:11px;color:var(--mt)">高インフレと通貨危機による経済的不安定</li></ul>
+    </div>
+    <div class="cc">
+      <div class="cc-code">USA <span style="font-size:13px;font-weight:400;color:var(--mt)">大統領制連邦共和国（二大政党制、三権分立）</span></div>
+      <div class="cc-eco">世界最大の経済大国。GDP約28.5兆ドル。サービス業がGDPの約80%。テック・金融・軍事産業が主力。ドルは基軸通貨として世界金融を支配。</div>
+      <div style="margin-top:6px"><span class="tg t-i">NATO（創設メンバー）</span><span class="tg t-i">日米同盟</span><span class="tg t-i">AUKUS</span><span class="tg t-i">Five Eyes</span><span class="tg t-i">USMCA</span><span class="tg t-i">米韓相互防衛条約</span><span class="tg t-i">クワッド（Quad）</span></div>
+      <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">米中覇権競争（技術・貿易・台湾問題）</li><li style="font-size:11px;color:var(--mt)">ロシアとの関係悪化（ウクライナ支援）</li><li style="font-size:11px;color:var(--mt)">イラン核問題</li><li style="font-size:11px;color:var(--mt)">国内政治の分極化とトランプ政権による多国間主義離脱</li><li style="font-size:11px;color:var(--mt)">中東情勢（イスラエル・パレスチナ問題）</li></ul>
+    </div></div>
+  </div>
+<div class="pn" id="p-relations">
+    <div class="cd"><h2>ニュース間の関係性 (13件)</h2><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: EU・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">eu-digital-tax-2026</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: EU (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-対立">対立</span>
+      <span style="font-weight:600;font-size:11px">nato-summit-eastern-europe</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">ukraine-energy-strikes</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: Russia・AI (80%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">south-china-sea-island</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">china-pmi-march-2026</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: China (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-対立">対立</span>
+      <span style="font-weight:600;font-size:11px">india-election.html</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">india-gdp-imf-forecast</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: India・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">ukraine-energy-strikes</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: Ukraine・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">eu-digital-tax-2026</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: EU (67%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">fed-holds-rates</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">BOJ-rate-hike-july-2026</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">fed-holds-rates</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">fed-holds-rates</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">turkey-central-bank-hold-rates</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">BOJ-rate-hike-july-2026</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">BOJ-rate-hike-july-2026</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">turkey-central-bank-hold-rates</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div><div class="rl">
+      <span class="rt r-関連">関連</span>
+      <span style="font-weight:600;font-size:11px">a-20260404</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:600;font-size:11px">turkey-central-bank-hold-rates</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">共通キーワード: inflation・AI (100%)</span>
+    </div></div>
+    <div class="cd"><h2>国家間の関係性 (2件)</h2><div class="rl">
+      <span class="rt r-貿易">貿易</span>
+      <span style="font-weight:700">BRA</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:700">IDN</span>
+      <span style="color:var(--g);font-weight:700;margin-left:8px">+0.5</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">Brazil and Indonesia sign landmark trade agreement on critical minerals</span>
+    </div><div class="rl">
+      <span class="rt r-紛争">紛争</span>
+      <span style="font-weight:700">RUS</span>
+      <span style="color:var(--mt)">↔</span>
+      <span style="font-weight:700">UKR</span>
+      <span style="color:var(--r);font-weight:700;margin-left:8px">-0.9</span>
+      <span style="color:var(--mt);font-size:10px;margin-left:auto">Ukraine reports intensified Russian missile strikes on energy infrastructure</span>
+    </div></div>
+  </div>
+</div>
+<script>
+function subTab(btn,group){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const panels=btn.closest('.pn').querySelectorAll('.sub-pn[data-group="'+group+'"]');
+  const idx=[...btn.parentElement.children].indexOf(btn);
+  panels.forEach((p,i)=>{p.classList.toggle('active',i===idx)});
+}
+const tabs=[
+  {id:'world',l:'世界情勢 (173)'},
+  {id:'economy',l:'経済指標 (350)'},
+  {id:'invest',l:'投資 (12ch/7本)'},
+  {id:'knowledge',l:'背景知識 (15国)'},
+  {id:'relations',l:'関係性 (15)'},
+];
+const nav=document.getElementById('nav');
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.l;b.className=i===0?'active':'';b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active')};nav.appendChild(b)});
+document.getElementById('search').addEventListener('input',function(e){const q=e.target.value.toLowerCase();document.querySelectorAll('.ar,.rl,tr:not(:first-child),.cc').forEach(el=>{el.style.display=!q||el.textContent.toLowerCase().includes(q)?'':'none'})});
+</script>
+</body>
+</html>
