@@ -1,11 +1,129 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=dashboard.html">
-<title>SuperNews</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="SuperNews - 情報ダッシュボード">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>SuperNews</title>
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
-<p><a href="dashboard.html">SuperNews ダッシュボードへ移動</a></p>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">S<span>uper</span>News</div>
+      <button class="sidebar-close" id="sidebar-close">&times;</button>
+    </div>
+    <nav class="nav-menu" id="nav-menu">
+      <button class="nav-item active" data-section="overview">
+        <span class="nav-icon">&#x1F4CA;</span>概要・ニュース
+      </button>
+      <button class="nav-item" data-section="market">
+        <span class="nav-icon">&#x1F4C8;</span>マーケット
+      </button>
+      <button class="nav-item" data-section="indicators">
+        <span class="nav-icon">&#x1F3AF;</span>経済指標
+      </button>
+      <button class="nav-item" data-section="earnings">
+        <span class="nav-icon">&#x1F4B0;</span>決算
+      </button>
+      <button class="nav-item" data-section="policy">
+        <span class="nav-icon">&#x1F3DB;</span>政策・レポート
+      </button>
+      <button class="nav-item" data-section="knowledge">
+        <span class="nav-icon">&#x1F4DA;</span>背景知識
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="update-label">最終更新</div>
+      <div class="update-time" id="update-time">--</div>
+    </div>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></button>
+      <div class="topbar-title" id="topbar-title">概要・ニュース</div>
+      <div class="topbar-actions">
+        <input type="search" id="search-input" class="search-input" placeholder="検索..." autocomplete="off">
+      </div>
+    </header>
+
+    <main class="main-content" id="main-content">
+
+      <!-- 概要・ニュース統合 -->
+      <section class="page" id="sec-overview">
+        <div class="box-row" id="overview-metrics"></div>
+        <div class="filter-row" id="overview-domain-filter"></div>
+        <div id="overview-categories"></div>
+      </section>
+
+      <!-- マーケット -->
+      <section class="page hidden" id="sec-market">
+        <h2 class="page-heading">株式指数</h2>
+        <div class="box-full" id="market-stocks"></div>
+        <div class="box-2col">
+          <div><h2 class="page-heading">為替</h2><div class="box-full" id="market-fx"></div></div>
+          <div><h2 class="page-heading">コモディティ</h2><div class="box-full" id="market-commodities"></div></div>
+        </div>
+        <h2 class="page-heading">暗号資産</h2>
+        <div class="box-full" id="market-crypto"></div>
+      </section>
+
+      <!-- 経済指標 -->
+      <section class="page hidden" id="sec-indicators">
+        <h2 class="page-heading">公式データソース</h2>
+        <div class="source-chips" id="source-chips"></div>
+        <h2 class="page-heading">経済指標一覧</h2>
+        <div class="filter-row" id="indicator-filters"></div>
+        <div class="box-full" id="indicators-table"></div>
+      </section>
+
+      <!-- 決算 -->
+      <section class="page hidden" id="sec-earnings">
+        <h2 class="page-heading">企業一覧・検索</h2>
+        <div class="filter-row" id="company-search-row">
+          <input type="search" id="company-search" class="search-input" placeholder="企業名・証券コードで検索..." style="width:300px">
+        </div>
+        <div class="box-full" id="company-list-table"></div>
+        <h2 class="page-heading">決算発表スケジュール</h2>
+        <div class="box-full" id="earnings-schedule"></div>
+        <h2 class="page-heading">直近の決算データ</h2>
+        <div class="filter-row" id="earnings-filters"></div>
+        <div class="accordion-list" id="earnings-list"></div>
+        <div class="box-full" style="margin-top:16px;padding:12px 16px">
+          <h3 style="font-size:.82em;font-weight:700;margin-bottom:8px">データ取得元（無料API）</h3>
+          <div class="source-chips">
+            <a class="source-chip" href="https://api.jquants.com/" target="_blank"><span class="source-chip-dot"></span>J-Quants API (JPX公式) - 財務・株価</a>
+            <a class="source-chip" href="https://disclosure2.edinet-fsa.go.jp/" target="_blank"><span class="source-chip-dot"></span>EDINET API (金融庁) - 決算書PDF</a>
+            <a class="source-chip" href="https://shikiho.toyokeizai.net/" target="_blank"><span class="source-chip-dot"></span>四季報オンライン - 企業分析</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 政策・レポート -->
+      <section class="page hidden" id="sec-policy">
+        <h2 class="page-heading">政府・公的機関の発表</h2>
+        <div class="filter-row" id="policy-filters"></div>
+        <div class="accordion-list" id="policy-list"></div>
+      </section>
+
+      <!-- 背景知識 -->
+      <section class="page hidden" id="sec-knowledge">
+        <h2 class="page-heading">背景知識データベース</h2>
+        <div class="filter-row" id="knowledge-filters"></div>
+        <div class="accordion-list" id="knowledge-list"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
 </body>
 </html>
