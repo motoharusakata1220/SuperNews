@@ -2564,6 +2564,35 @@ table{width:100%;border-collapse:collapse;margin-top:8px}th,td{text-align:left;p
     </div></div>
   </div>
 </div>
+<div class="pn" id="p-companies">
+  <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="text" id="co-search" class="sb" style="max-width:320px;margin:0" placeholder="企業名・コード・業種で検索...">
+    <select id="co-market" style="background:var(--s);border:1px solid var(--bd);color:var(--tx);padding:8px 12px;border-radius:8px;font-size:13px">
+      <option value="">全市場</option>
+      <option value="P">プライム</option>
+      <option value="S">スタンダード</option>
+      <option value="G">グロース</option>
+    </select>
+    <select id="co-sector" style="background:var(--s);border:1px solid var(--bd);color:var(--tx);padding:8px 12px;border-radius:8px;font-size:13px">
+      <option value="">全業種</option>
+    </select>
+    <span id="co-count" style="color:var(--mt);font-size:12px"></span>
+  </div>
+  <div id="co-table-wrap" class="cd" style="padding:0;overflow-x:auto">
+    <table id="co-table"><thead><tr><th>コード</th><th>企業名</th><th>市場</th><th>業種(33)</th><th>業種(17)</th></tr></thead><tbody id="co-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="pn" id="p-share">
+  <div id="share-container">
+    <div class="cd" style="text-align:center;padding:40px;color:var(--mt)">
+      <div style="font-size:32px;margin-bottom:12px">調査データ未取得</div>
+      <div style="font-size:14px">毎日1カテゴリーずつ調査が蓄積されます</div>
+      <div style="font-size:12px;margin-top:8px">次回調査: <span id="share-next">—</span></div>
+    </div>
+  </div>
+</div>
+
 <script>
 function subTab(btn,group){
   btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
@@ -2578,10 +2607,80 @@ const tabs=[
   {id:'invest',l:'投資 (12ch/7本)'},
   {id:'knowledge',l:'背景知識 (15国)'},
   {id:'relations',l:'関係性 (15)'},
+  {id:'companies',l:'企業一覧 (3,745社)'},
+  {id:'share',l:'シェア・統計'},
 ];
 const nav=document.getElementById('nav');
-tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.l;b.className=i===0?'active':'';b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active')};nav.appendChild(b)});
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.l;b.className=i===0?'active':'';b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active');if(t.id==='companies'&&!window._coLoaded)loadCompanies();if(t.id==='share'&&!window._shareLoaded)loadShare()};nav.appendChild(b)});
 document.getElementById('search').addEventListener('input',function(e){const q=e.target.value.toLowerCase();document.querySelectorAll('.ar,.rl,tr:not(:first-child),.cc').forEach(el=>{el.style.display=!q||el.textContent.toLowerCase().includes(q)?'':'none'})});
+
+// 企業一覧ロード
+let _allCo=[];
+function loadCompanies(){
+  window._coLoaded=true;
+  fetch('data/companies.json').then(r=>r.json()).then(d=>{
+    _allCo=d.企業一覧||[];
+    // 業種セレクト生成
+    const sectors=[...new Set(_allCo.map(c=>c.sector33).filter(Boolean))].sort();
+    const sel=document.getElementById('co-sector');
+    sectors.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o)});
+    renderCo();
+  }).catch(e=>{document.getElementById('co-tbody').innerHTML='<tr><td colspan="5" style="color:var(--r);padding:20px">データ読み込みエラー</td></tr>'});
+}
+function renderCo(){
+  const q=document.getElementById('co-search').value.toLowerCase();
+  const m=document.getElementById('co-market').value;
+  const s=document.getElementById('co-sector').value;
+  const filtered=_allCo.filter(c=>
+    (!m||c.market===m)&&
+    (!s||c.sector33===s)&&
+    (!q||c.name.toLowerCase().includes(q)||c.code.includes(q)||c.sector33.toLowerCase().includes(q))
+  );
+  document.getElementById('co-count').textContent=`${filtered.length}社`;
+  const mLabel={P:'プライム',S:'スタンダード',G:'グロース'};
+  const mColor={P:'var(--b)',S:'var(--g)',G:'var(--o)'};
+  const rows=filtered.slice(0,500).map(c=>`<tr><td style="font-weight:600;color:var(--ac2)">${c.code}</td><td>${c.name}</td><td><span style="color:${mColor[c.market]||'var(--tx)'};font-weight:600">${mLabel[c.market]||c.market}</span></td><td style="color:var(--mt);font-size:11px">${c.sector33||'—'}</td><td style="color:var(--mt);font-size:11px">${c.sector17||'—'}</td></tr>`).join('');
+  document.getElementById('co-tbody').innerHTML=rows+(filtered.length>500?`<tr><td colspan="5" style="color:var(--mt);text-align:center;padding:12px">…他${filtered.length-500}社（フィルターで絞り込んでください）</td></tr>`:'');
+}
+['co-search','co-market','co-sector'].forEach(id=>document.getElementById(id)?.addEventListener('input',renderCo));
+document.getElementById('co-market')?.addEventListener('change',renderCo);
+document.getElementById('co-sector')?.addEventListener('change',renderCo);
+
+// シェア・統計ロード
+function loadShare(){
+  window._shareLoaded=true;
+  fetch('data/market_share.json').then(r=>r.json()).then(d=>{
+    const next=d.調査ローテーション?.次回調査カテゴリー||'—';
+    document.getElementById('share-next').textContent=next;
+    const data=d.データ||{};
+    const cats=Object.keys(data);
+    if(cats.length===0)return;
+    const container=document.getElementById('share-container');
+    container.innerHTML='';
+    cats.forEach(cat=>{
+      const items=data[cat]||[];
+      const div=document.createElement('div');
+      div.className='cd';
+      div.innerHTML=`<h2>${cat}</h2><div style="margin-top:8px;color:var(--mt);font-size:11px">調査日: ${d.調査日時?.[cat]||'—'}</div>`+
+        items.map(item=>`
+          <div style="margin-top:16px;border-top:1px solid var(--bd);padding-top:12px">
+            <div style="font-size:13px;font-weight:600;color:var(--ac2)">${item.製品カテゴリー||item.category||''}</div>
+            <div style="font-size:11px;color:var(--mt);margin:4px 0 8px">${item.説明||''}</div>
+            ${(item.シェアデータ||[]).map(s=>`
+              <div style="display:flex;align-items:center;gap:8px;margin:4px 0">
+                <div style="width:140px;font-size:12px;color:var(--tx)">${s.企業名}</div>
+                <div style="flex:1;background:var(--bd);border-radius:4px;height:16px;position:relative">
+                  <div style="width:${Math.min(s.シェア||0,100)}%;background:var(--ac);height:100%;border-radius:4px"></div>
+                </div>
+                <div style="width:48px;font-size:12px;font-weight:600;color:var(--ac2);text-align:right">${s.シェア}%</div>
+                <div style="width:60px;font-size:10px;color:var(--mt)">${s.年度||''}</div>
+              </div>`).join('')}
+            <div style="font-size:10px;color:var(--mt);margin-top:6px">出典: ${item.出典||'—'}</div>
+          </div>`).join('');
+      container.appendChild(div);
+    });
+  });
+}
 </script>
 </body>
 </html>
