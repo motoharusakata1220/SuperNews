@@ -2564,6 +2564,17 @@ table{width:100%;border-collapse:collapse;margin-top:8px}th,td{text-align:left;p
     </div></div>
   </div>
 </div>
+<div class="pn" id="p-glossary">
+  <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="text" id="gl-search" class="sb" style="max-width:320px;margin:0" placeholder="用語・読み・説明で検索...">
+    <select id="gl-cat" style="background:var(--s);border:1px solid var(--bd);color:var(--tx);padding:8px 12px;border-radius:8px;font-size:13px">
+      <option value="">全カテゴリー</option>
+    </select>
+    <span id="gl-count" style="color:var(--mt);font-size:12px"></span>
+  </div>
+  <div id="gl-container"></div>
+</div>
+
 <div class="pn" id="p-companies">
   <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
     <input type="text" id="co-search" class="sb" style="max-width:320px;margin:0" placeholder="企業名・コード・業種で検索...">
@@ -2609,10 +2620,54 @@ const tabs=[
   {id:'relations',l:'関係性 (15)'},
   {id:'companies',l:'企業一覧 (3,745社)'},
   {id:'share',l:'シェア・統計'},
+  {id:'glossary',l:'用語集'},
 ];
 const nav=document.getElementById('nav');
-tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.l;b.className=i===0?'active':'';b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active');if(t.id==='companies'&&!window._coLoaded)loadCompanies();if(t.id==='share'&&!window._shareLoaded)loadShare()};nav.appendChild(b)});
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t.l;b.className=i===0?'active':'';b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pn').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active');if(t.id==='companies'&&!window._coLoaded)loadCompanies();if(t.id==='share'&&!window._shareLoaded)loadShare();if(t.id==='glossary'&&!window._glLoaded)loadGlossary()};nav.appendChild(b)});
 document.getElementById('search').addEventListener('input',function(e){const q=e.target.value.toLowerCase();document.querySelectorAll('.ar,.rl,tr:not(:first-child),.cc').forEach(el=>{el.style.display=!q||el.textContent.toLowerCase().includes(q)?'':'none'})});
+
+// 用語集ロード
+let _glData={};
+function loadGlossary(){
+  window._glLoaded=true;
+  fetch('data/glossary.json').then(r=>r.json()).then(d=>{
+    _glData=d.用語||{};
+    const cats=Object.keys(_glData);
+    const sel=document.getElementById('gl-cat');
+    cats.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o)});
+    renderGlossary();
+  });
+}
+function renderGlossary(){
+  const q=(document.getElementById('gl-search')?.value||'').toLowerCase();
+  const cat=document.getElementById('gl-cat')?.value||'';
+  const container=document.getElementById('gl-container');
+  let total=0;
+  container.innerHTML='';
+  const cats=cat?[cat]:Object.keys(_glData);
+  cats.forEach(c=>{
+    const terms=(_glData[c]||[]).filter(t=>!q||t.用語.toLowerCase().includes(q)||t.読み.includes(q)||t.説明.toLowerCase().includes(q)||(t.英語||'').toLowerCase().includes(q));
+    if(!terms.length)return;
+    total+=terms.length;
+    const div=document.createElement('div');
+    div.className='cd';
+    div.style.marginBottom='14px';
+    div.innerHTML=`<h2 style="margin-bottom:10px">${c} <span style="font-size:12px;color:var(--mt);font-weight:400">${terms.length}語</span></h2>`+
+      `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px">`+
+      terms.map(t=>`<div style="background:var(--s2);border-radius:8px;padding:12px;border:1px solid var(--bd)">
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+          <span style="font-weight:700;font-size:14px;color:var(--ac2)">${t.用語}</span>
+          <span style="font-size:11px;color:var(--mt)">${t.読み}</span>
+          ${t.英語?`<span style="font-size:10px;color:var(--mt);margin-left:auto">${t.英語}</span>`:''}
+        </div>
+        <div style="font-size:12px;line-height:1.6;color:var(--tx)">${t.説明}</div>
+      </div>`).join('')+`</div>`;
+    container.appendChild(div);
+  });
+  document.getElementById('gl-count').textContent=`${total}語`;
+}
+['gl-search'].forEach(id=>document.getElementById(id)?.addEventListener('input',renderGlossary));
+document.getElementById('gl-cat')?.addEventListener('change',renderGlossary);
 
 // 企業一覧ロード
 let _allCo=[];
