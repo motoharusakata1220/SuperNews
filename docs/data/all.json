@@ -47,7 +47,8 @@
         }
       ],
       "情報源": "https://www.iaea.org/newscenter/pressreleases/iaea-director-general-statement-on-bushehr-nuclear-power-plant-april-2026",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "中東"
     },
     {
       "カテゴリ": "地政学・安全保障",
@@ -78,7 +79,8 @@
         }
       ],
       "情報源": "https://www.nato.int/cps/en/natohq/news_226841.htm",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "ウクライナ"
     },
     {
       "カテゴリ": "地政学・安全保障",
@@ -109,7 +111,8 @@
         }
       ],
       "情報源": "https://www.indopacom.mil/Media/News/News-Article-View/Article/3987654/us-navy-freedom-of-navigation-taiwan-strait-april-2026/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "台湾海峡"
     },
     {
       "カテゴリ": "外交・国際関係",
@@ -238,7 +241,8 @@
         }
       ],
       "情報源": "https://www.bloomberg.com/jp/news/articles/2026-04-10/TDA2Y3GFA9Z400",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "金融政策"
     },
     {
       "カテゴリ": "マクロ経済",
@@ -295,7 +299,8 @@
         }
       ],
       "情報源": "https://www.bloomberg.com/jp/news/articles/2026-04-02/TCSQFOKJH6V600",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "金融政策"
     },
     {
       "カテゴリ": "金融市場",
@@ -329,7 +334,8 @@
         }
       ],
       "情報源": "https://www.nikkei.com/markets/kabu/nidxprice/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "株式"
     },
     {
       "カテゴリ": "金融市場",
@@ -362,7 +368,8 @@
         }
       ],
       "情報源": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "債券"
     },
     {
       "カテゴリ": "金融市場",
@@ -395,7 +402,8 @@
         }
       ],
       "情報源": "https://www.lbma.org.uk/prices-and-data/precious-metal-prices",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "コモディティ"
     },
     {
       "カテゴリ": "エネルギー",
@@ -426,7 +434,8 @@
         }
       ],
       "情報源": "https://www.cnbc.com/2026/03/01/opec-to-raise-oil-output-slightly-even-as-iran-war-disrupts-shipments.html",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "石油"
     },
     {
       "カテゴリ": "エネルギー",
@@ -457,7 +466,8 @@
         }
       ],
       "情報源": "https://www.aljazeera.com/economy/2026/3/2/why-qatarenergys-lng-production-halt-could-shake-up-global-gas-markets",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "LNG"
     },
     {
       "カテゴリ": "エネルギー",
@@ -489,7 +499,8 @@
         }
       ],
       "情報源": "https://www.irena.org/News/pressreleases/2026/Apr/Near-700-GW-Surge-in-2025-Proves-Renewable-Energy-Resilience",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "太陽光発電"
     },
     {
       "カテゴリ": "エネルギー",
@@ -515,7 +526,8 @@
         }
       ],
       "情報源": "https://news.un.org/en/story/2026/04/1167250",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "原子力"
     },
     {
       "カテゴリ": "半導体・電子部品",
@@ -539,7 +551,8 @@
         }
       ],
       "情報源": "https://www.wsj.com/tech/ai/memflation-dram-nand-prices-ai-datacenter-2026",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "DRAM"
     },
     {
       "カテゴリ": "半導体・電子部品",
@@ -564,7 +577,8 @@
         }
       ],
       "情報源": "https://www.reuters.com/technology/us-commerce-ai-chip-export-license-worldwide-2026-04",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "GPU"
     },
     {
       "カテゴリ": "半導体・電子部品",
@@ -589,7 +603,8 @@
         }
       ],
       "情報源": "https://www.nikkei.com/article/rapidus-2nm-first-wafer-tsmc-kumamoto-phase2-2026",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "ファウンドリ"
     },
     {
       "カテゴリ": "自動車・モビリティ",
@@ -619,7 +634,8 @@
         }
       ],
       "情報源": "https://www.reuters.com/business/autos-transportation/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "EV"
     },
     {
       "カテゴリ": "自動車・モビリティ",
@@ -650,7 +666,8 @@
         }
       ],
       "情報源": "https://global.toyota/jp/newsroom/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "EV"
     },
     {
       "カテゴリ": "自動車・モビリティ",
@@ -681,7 +698,8 @@
         }
       ],
       "情報源": "https://www.ft.com/content/rare-earths-china",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "車載半導体"
     },
     {
       "カテゴリ": "AI・テクノロジー",
@@ -711,7 +729,8 @@
         }
       ],
       "情報源": "https://www.anthropic.com/news/claude-opus-4-6",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "生成AI"
     },
     {
       "カテゴリ": "AI・テクノロジー",
@@ -736,7 +755,8 @@
         }
       ],
       "情報源": "https://worldreporter.com/eu-ai-act-august-2026-deadline-only-8-of-27-eu-states-ready-what-it-means-for-global-ai-compliance/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "半導体設計"
     },
     {
       "カテゴリ": "AI・テクノロジー",
@@ -768,7 +788,8 @@
         }
       ],
       "情報源": "https://www.gartner.com/en/newsroom/press-releases/2026-04-08-gartner-forecasts-worldwide-semiconductor-revenue-to-exceed-us-dollars-one-point-3-trillion-in-2026",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "クラウド"
     },
     {
       "カテゴリ": "製薬・ヘルスケア",
@@ -798,7 +819,8 @@
         }
       ],
       "情報源": "https://www.fiercepharma.com/pharma/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "後発品"
     },
     {
       "カテゴリ": "製薬・ヘルスケア",
@@ -828,7 +850,8 @@
         }
       ],
       "情報源": "https://www.fda.gov/drugs/drug-shortages",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "後発品"
     },
     {
       "カテゴリ": "製薬・ヘルスケア",
@@ -853,7 +876,8 @@
         }
       ],
       "情報源": "https://www.nature.com/articles/d41586-026-ai-drug-discovery",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "臨床試験"
     },
     {
       "カテゴリ": "農業・食料",
@@ -884,7 +908,8 @@
         }
       ],
       "情報源": "https://www.fao.org/worldfoodsituation/foodpricesindex/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "肥料"
     },
     {
       "カテゴリ": "農業・食料",
@@ -914,7 +939,8 @@
         }
       ],
       "情報源": "https://www.usda.gov/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "穀物"
     },
     {
       "カテゴリ": "農業・食料",
@@ -939,7 +965,8 @@
         }
       ],
       "情報源": "https://www.deere.com/en/news/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "農業テック"
     },
     {
       "カテゴリ": "物流・サプライチェーン",
@@ -969,7 +996,8 @@
         }
       ],
       "情報源": "https://www.freightwaves.com/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "海運"
     },
     {
       "カテゴリ": "物流・サプライチェーン",
@@ -1024,7 +1052,8 @@
         }
       ],
       "情報源": "https://www.aboutamazon.com/news/transportation/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "物流DX"
     },
     {
       "カテゴリ": "規制・法制度",
@@ -1054,7 +1083,8 @@
         }
       ],
       "情報源": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "環境規制"
     },
     {
       "カテゴリ": "規制・法制度",
@@ -1079,7 +1109,8 @@
         }
       ],
       "情報源": "https://www.sec.gov/news/",
-      "収集日": "2026-04-11"
+      "収集日": "2026-04-11",
+      "サブカテゴリー": "AI規制"
     },
     {
       "カテゴリ": "規制・法制度",

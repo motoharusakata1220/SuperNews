@@ -261,6 +261,7 @@ select.sb-input{cursor:pointer}
   <div class="ns">ニュース・情報</div>
   <div class="ni" id="ni-world" onclick="showPanel('world')"><span class="ni-icon">📰</span>世界情勢<span class="ni-badge" id="badge-world">173</span></div>
   <div class="ni" id="ni-countries" onclick="showPanel('countries')"><span class="ni-icon">🌍</span>世界の国々<span class="ni-badge">195</span></div>
+  <div class="ni" id="ni-announcements" onclick="showPanel('announcements')"><span class="ni-icon">📢</span>各国発表</div>
 
   <div class="ns">マーケット・経済</div>
   <div class="ni" id="ni-economy" onclick="showPanel('economy')"><span class="ni-icon">📊</span>経済指標<span class="ni-badge">350</span></div>
@@ -269,7 +270,8 @@ select.sb-input{cursor:pointer}
 
   <div class="ns">企業・決算</div>
   <div class="ni" id="ni-companies" onclick="showPanel('companies')"><span class="ni-icon">🏢</span>上場企業<span class="ni-badge">3,745</span></div>
-  <div class="ni soon" id="ni-financials"><span class="ni-icon">📋</span>決算書<span class="soon-tag">準備中</span></div>
+  <div class="ni" id="ni-financials" onclick="showPanel('financials')"><span class="ni-icon">📋</span>決算書</div>
+  <div class="ni" id="ni-schedules" onclick="showPanel('schedules')"><span class="ni-icon">📅</span>決算スケジュール</div>
   <div class="ni soon" id="ni-calendar"><span class="ni-icon">📅</span>決算スケジュール<span class="soon-tag">準備中</span></div>
 
   <div class="ns">ナレッジ</div>
@@ -2908,9 +2910,67 @@ select.sb-input{cursor:pointer}
 </div>
 </div>
 
+<!-- ANNOUNCEMENTS PANEL -->
+<div class="pn" id="p-announcements">
+  <div class="filter-row">
+    <select id="ann-country" class="sb-input" style="width:180px">
+      <option value="">国を選択...</option>
+      <option value="JP">🇯🇵 日本</option>
+      <option value="US">🇺🇸 アメリカ</option>
+      <option value="GB">🇬🇧 イギリス</option>
+      <option value="RU">🇷🇺 ロシア</option>
+      <option value="IN">🇮🇳 インド</option>
+      <option value="UN">🇺🇳 国際連合</option>
+      <option value="WTO">🌐 WTO</option>
+    </select>
+    <span id="ann-count" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
+  </div>
+  <div id="ann-list" style="max-height:calc(100vh - 140px);overflow-y:auto">
+    <div style="padding:20px;color:var(--mt);font-size:13px">国を選択すると最新の公式発表を表示します。<br><small>データ更新: python3 scripts/collect_country_announcements.py</small></div>
+  </div>
+</div>
+
+<!-- FINANCIALS PANEL -->
+<div class="pn" id="p-financials">
+  <div class="filter-row">
+    <input type="text" id="fin-search" class="sb-input" style="flex:1;max-width:300px" placeholder="🔍 証券コード・社名で検索...">
+    <span id="fin-status" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
+  </div>
+  <div class="cd" id="fin-result" style="padding:20px;color:var(--mt);font-size:14px">
+    証券コードまたは社名を入力して検索してください。<br><br>
+    <span style="font-size:12px">例: 7203（トヨタ）、9984（ソフトバンクG）、6758（ソニー）</span>
+  </div>
+</div>
+
+<!-- SCHEDULES PANEL -->
+<div class="pn" id="p-schedules">
+  <div class="filter-row">
+    <input type="text" id="sch-search" class="sb-input" style="flex:1;max-width:300px" placeholder="🔍 社名で絞り込み...">
+    <select id="sch-type" class="sb-input" style="width:160px">
+      <option value="">すべての種別</option>
+      <option value="有価証券報告書">有価証券報告書</option>
+      <option value="四半期報告書">四半期報告書</option>
+      <option value="半期報告書">半期報告書</option>
+    </select>
+    <span id="sch-count" style="color:var(--mt);font-size:12px;margin-left:4px"></span>
+  </div>
+  <div class="cd" style="padding:0;overflow:hidden">
+    <div style="display:grid;grid-template-columns:80px 1fr 140px 100px 110px;padding:7px 14px;background:var(--s2);border-bottom:1px solid var(--bd)">
+      <div style="font-size:10.5px;font-weight:700;color:var(--mt)">コード</div>
+      <div style="font-size:10.5px;font-weight:700;color:var(--mt)">社名</div>
+      <div style="font-size:10.5px;font-weight:700;color:var(--mt)">書類種別</div>
+      <div style="font-size:10.5px;font-weight:700;color:var(--mt);text-align:right">決算期末</div>
+      <div style="font-size:10.5px;font-weight:700;color:var(--mt);text-align:right">提出日</div>
+    </div>
+    <div id="sch-list" style="max-height:calc(100vh - 180px);overflow-y:auto">
+      <div class="loading">読み込み中...</div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== PANEL NAVIGATION =====
-const ALL_PANELS = ['world','economy','invest','knowledge','relations','glossary','companies','share','countries'];
+const ALL_PANELS = ['world','economy','invest','knowledge','relations','glossary','companies','share','countries','financials','schedules','announcements'];
 
 function showPanel(id) {
   ALL_PANELS.forEach(p => {
@@ -2923,6 +2983,7 @@ function showPanel(id) {
   if (id === 'companies' && !window._coLoaded) loadCompanies();
   if (id === 'share' && !window._shareLoaded) loadShare();
   if (id === 'countries' && !window._ctLoaded) loadCountries();
+  if (id === 'schedules' && !window._schLoaded) loadSchedules();
 }
 
 // Start on world
@@ -3170,6 +3231,128 @@ function showCountryList() {
   document.getElementById('country-detail').classList.remove('active');
   document.getElementById('country-detail-content').innerHTML = '';
 }
+
+// ===== FINANCIALS =====
+document.getElementById('fin-search').addEventListener('input', function() {
+  const q = this.value.trim();
+  if (q.length < 1) return;
+  const code = q.replace(/\D/g, '');
+  const path = code ? `data/financials/${code}.json` : null;
+  if (!path) return;
+  document.getElementById('fin-status').textContent = '検索中...';
+  fetch(path)
+    .then(r => r.ok ? r.json() : Promise.reject('not_found'))
+    .then(d => renderFinancials(d))
+    .catch(() => {
+      document.getElementById('fin-status').textContent = '';
+      document.getElementById('fin-result').innerHTML = `<div style="color:var(--r)">データがありません（コード: ${code}）<br><small>EDINET取得スクリプトを実行してください: python3 scripts/fetch_edinet_financials.py --code ${code}</small></div>`;
+    });
+});
+
+function renderFinancials(d) {
+  document.getElementById('fin-status').textContent = '';
+  const hist = d.決算履歴 || [];
+  if (!hist.length) {
+    document.getElementById('fin-result').innerHTML = '<div style="color:var(--mt)">決算データがまだありません</div>';
+    return;
+  }
+  const latest = hist[0];
+  const fmt = v => v != null ? (v / 1e8).toFixed(1) + '億' : '—';
+  const fmtSign = v => {
+    if (v == null) return '—';
+    const n = (v / 1e8).toFixed(1);
+    return v >= 0 ? `<span style="color:var(--g)">+${n}億</span>` : `<span style="color:var(--r)">${n}億</span>`;
+  };
+  document.getElementById('fin-result').innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="font-size:18px;font-weight:700">${d.社名} <span style="font-size:13px;color:var(--mt)">${d.証券コード}</span></div>
+      <div style="font-size:12px;color:var(--mt);margin-top:2px">決算期末: ${latest.決算期末} ／ ${latest.書類種別}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div class="cd" style="padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--ac);margin-bottom:10px;text-transform:uppercase">B/S 貸借対照表</div>
+        ${Object.entries(latest.BS||{}).map(([k,v]) => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span style="color:var(--mt)">${k}</span><span>${fmt(v)}</span></div>`).join('')}
+      </div>
+      <div class="cd" style="padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--ac);margin-bottom:10px;text-transform:uppercase">P/L 損益計算書</div>
+        ${Object.entries(latest.PL||{}).map(([k,v]) => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span style="color:var(--mt)">${k}</span><span>${fmt(v)}</span></div>`).join('')}
+      </div>
+      <div class="cd" style="padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--ac);margin-bottom:10px;text-transform:uppercase">CF キャッシュフロー</div>
+        ${Object.entries(latest.CF||{}).map(([k,v]) => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span style="color:var(--mt)">${k}</span><span>${fmtSign(v)}</span></div>`).join('')}
+      </div>
+    </div>
+    ${hist.length > 1 ? `<div style="font-size:12px;color:var(--mt)">過去 ${hist.length} 期分のデータあり</div>` : ''}
+  `;
+}
+
+// ===== SCHEDULES =====
+let _schData = [];
+function loadSchedules() {
+  window._schLoaded = true;
+  fetch('data/financials/schedules.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => {
+      _schData = d.スケジュール || [];
+      renderSchedules();
+    })
+    .catch(() => {
+      document.getElementById('sch-list').innerHTML = '<div style="padding:20px;color:var(--mt);font-size:13px">データがありません。python3 scripts/fetch_edinet_financials.py --today を実行してください。</div>';
+    });
+}
+
+function renderSchedules() {
+  const q = document.getElementById('sch-search').value.toLowerCase();
+  const t = document.getElementById('sch-type').value;
+  let rows = _schData.filter(e =>
+    (!q || e.社名.toLowerCase().includes(q) || (e.証券コード||'').includes(q)) &&
+    (!t || e.書類種別 === t)
+  );
+  document.getElementById('sch-count').textContent = `${rows.length}件`;
+  document.getElementById('sch-list').innerHTML = rows.slice(0, 500).map(e => `
+    <div style="display:grid;grid-template-columns:80px 1fr 140px 100px 110px;padding:8px 14px;border-bottom:1px solid var(--bd);font-size:12px;cursor:pointer"
+         onclick="document.getElementById('fin-search').value='${e.証券コード}';document.getElementById('fin-search').dispatchEvent(new Event('input'));showPanel('financials')">
+      <div style="color:var(--ac)">${e.証券コード||'—'}</div>
+      <div>${e.社名}</div>
+      <div style="color:var(--mt)">${e.書類種別}</div>
+      <div style="text-align:right;color:var(--mt)">${e.決算期末||'—'}</div>
+      <div style="text-align:right;color:var(--mt)">${e.提出日||'—'}</div>
+    </div>`).join('');
+}
+
+['sch-search','sch-type'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderSchedules);
+});
+
+// ===== ANNOUNCEMENTS =====
+document.getElementById('ann-country').addEventListener('change', function() {
+  const code = this.value;
+  if (!code) return;
+  document.getElementById('ann-count').textContent = '読み込み中...';
+  fetch(`data/country_announcements/${code}.json`)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => {
+      const items = d.発表 || [];
+      document.getElementById('ann-count').textContent = `${items.length}件 (${d.取得日時?.slice(0,10) || ''})`;
+      document.getElementById('ann-list').innerHTML = items.map(a => `
+        <div class="ar" style="padding:12px 16px;border-bottom:1px solid var(--bd)">
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;margin-bottom:3px">
+                ${a.url ? `<a href="${a.url}" target="_blank" style="color:var(--fg);text-decoration:none">${a.title}</a>` : a.title}
+              </div>
+              ${a.summary ? `<div style="font-size:11.5px;color:var(--mt);line-height:1.5">${a.summary.slice(0,200)}</div>` : ''}
+            </div>
+            <div style="font-size:10.5px;color:var(--mt);white-space:nowrap;min-width:70px;text-align:right">${(a.published||'').slice(0,16)}</div>
+          </div>
+          <div style="font-size:10.5px;color:var(--ac);margin-top:3px">${a.source||''}</div>
+        </div>`).join('');
+    })
+    .catch(() => {
+      document.getElementById('ann-count').textContent = '';
+      document.getElementById('ann-list').innerHTML = `<div style="padding:20px;color:var(--mt)">データがありません。<br><small>python3 scripts/collect_country_announcements.py --country ${code}</small></div>`;
+    });
+});
 </script>
 
 </body>
