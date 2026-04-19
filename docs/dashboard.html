@@ -343,7 +343,12 @@ select.sb-input{cursor:pointer}
     </div></div>
   </div>
 <div class="pn" id="p-knowledge">
-    <div class="cg">
+  <div class="filter-row">
+    <input type="text" id="kn-search" class="sb-input" style="flex:1;max-width:300px" placeholder="🔍 国名で検索...">
+    <span id="kn-count" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
+  </div>
+  <div id="kn-list" style="max-height:calc(100vh - 140px);overflow-y:auto"><div class="loading">読み込み中...</div></div>
+  <div style="display:none"><!-- old hardcoded -->
     <div class="cc">
       <div class="cc-code">AUS <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・連邦議会制（英連邦王国、二院制、二大政党制が基本</span></div>
       <div class="cc-eco">世界第13位の経済大国。GDP約1.7兆ドル。鉄鉱石・石炭・天然ガスなどの資源輸出が経済の柱。農畜産業、金融サービス、観光・教育も重要。中国が最大の貿易相手国であり、資源依存の経済構造が地政学リスクを内包する。</div>
@@ -435,7 +440,18 @@ select.sb-input{cursor:pointer}
       <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">米中覇権競争（技術・貿易・台湾問題）</li><li style="font-size:11px;color:var(--mt)">ロシアとの関係悪化（ウクライナ支援）</li><li style="font-size:11px;color:var(--mt)">イラン核問題</li><li style="font-size:11px;color:var(--mt)">国内政治の分極化とトランプ政権による多国間主義離脱</li><li style="font-size:11px;color:var(--mt)">中東情勢（イスラエル・パレスチナ問題）</li></ul>
     </div></div>
   </div>
+</div>
 <div class="pn" id="p-relations">
+  <div class="filter-row">
+    <select id="rel-type" class="sb-input" style="width:160px">
+      <option value="bilateral">二国間関係</option>
+      <option value="multilateral">多国間枠組み</option>
+    </select>
+    <input type="text" id="rel-search" class="sb-input" style="flex:1;max-width:280px" placeholder="🔍 国名・組織名で検索...">
+    <span id="rel-count" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
+  </div>
+  <div id="rel-list" style="max-height:calc(100vh - 140px);overflow-y:auto"><div class="loading">読み込み中...</div></div>
+  <div style="display:none"><!-- old hardcoded -->
     <div class="cd"><h2>ニュース間の関係性 (13件)</h2><div class="rl">
       <span class="rt r-関連">関連</span>
       <span style="font-weight:600;font-size:11px">a-20260404</span>
@@ -530,7 +546,7 @@ select.sb-input{cursor:pointer}
       <span style="color:var(--r);font-weight:700;margin-left:8px">-0.9</span>
       <span style="color:var(--mt);font-size:10px;margin-left:auto">Ukraine reports intensified Russian missile strikes on energy infrastructure</span>
     </div></div>
-  </div>
+  </div></div>
 </div>
 <!-- GLOSSARY PANEL -->
 <div class="pn" id="p-glossary">
@@ -678,6 +694,8 @@ function showPanel(id) {
   if (id === 'share' && !window._shareLoaded) loadShare();
   if (id === 'countries' && !window._ctLoaded) loadCountries();
   if (id === 'schedules' && !window._schLoaded) loadSchedules();
+  if (id === 'knowledge' && !window._knLoaded) loadKnowledge();
+  if (id === 'relations' && !window._relLoaded) loadRelations();
 }
 
 // Start on world
@@ -965,6 +983,15 @@ function loadShare() {
                 <div class="bar-pct">${s.シェア}%</div>
               </div>`).join('')}
             <div style="font-size:10.5px;color:var(--mt);margin-top:6px">出典: ${item.出典||'—'} ${item.備考?'| '+item.備考:''}</div>
+            ${(item.要因分析||[]).length ? `
+              <details style="margin-top:10px">
+                <summary style="font-size:11.5px;color:var(--ac);cursor:pointer;user-select:none">要因分析 ▼</summary>
+                ${(item.要因分析||[]).map(f=>`
+                  <div style="margin-top:8px;padding:8px 10px;background:var(--ac)10;border-left:2px solid var(--ac);border-radius:2px">
+                    <div style="font-size:11.5px;font-weight:700;color:var(--ac2);margin-bottom:4px">${f.国}</div>
+                    ${(f.要因||[]).map(r=>`<div style="font-size:11px;color:var(--mt);padding:2px 0;padding-left:10px;position:relative">・${r}</div>`).join('')}
+                  </div>`).join('')}
+              </details>` : ''}
           </div>`).join('');
       container.appendChild(div);
     });
@@ -1051,12 +1078,107 @@ function showCountry(code) {
         </div>
       </div>
       ${c.概要 ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);font-size:13px;color:var(--mt);line-height:1.7">${c.概要}</div>` : ''}
-    </div>`;
+      ${c.政治体制 ? `<div style="margin-top:10px;font-size:12px;color:var(--ac2)">政治体制: ${c.政治体制}</div>` : ''}
+    </div>
+    ${c.主要産業||c.リスク要因||c.強み ? `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      ${c.主要産業 ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--mt);margin-bottom:8px">主要産業</div>${(c.主要産業||[]).map(x=>`<span style="display:inline-block;background:var(--ac)22;color:var(--ac2);padding:2px 8px;border-radius:3px;margin:2px;font-size:12px">${x}</span>`).join('')}</div>` : ''}
+      ${c.主要貿易相手国 ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--mt);margin-bottom:8px">主要貿易相手国</div><div style="font-size:12px;line-height:1.8">${(c.主要貿易相手国||[]).map(x=>`<div>${x}</div>`).join('')}</div></div>` : ''}
+      ${c.主要輸出品 ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--mt);margin-bottom:8px">主要輸出品</div><div style="font-size:12px;line-height:1.8">${(c.主要輸出品||[]).map(x=>`<div>${x}</div>`).join('')}</div></div>` : ''}
+      ${c.主要輸入品 ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--mt);margin-bottom:8px">主要輸入品</div><div style="font-size:12px;line-height:1.8">${(c.主要輸入品||[]).map(x=>`<div>${x}</div>`).join('')}</div></div>` : ''}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      ${c.リスク要因 ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--r);margin-bottom:8px">リスク要因</div>${(c.リスク要因||[]).map(x=>`<span style="display:inline-block;background:var(--r)22;color:var(--r);padding:2px 8px;border-radius:3px;margin:2px;font-size:12px">${x}</span>`).join('')}</div>` : ''}
+      ${c.強み ? `<div class="cd"><div style="font-size:11px;font-weight:700;color:var(--g);margin-bottom:8px">強み</div>${(c.強み||[]).map(x=>`<span style="display:inline-block;background:var(--g)22;color:var(--g);padding:2px 8px;border-radius:3px;margin:2px;font-size:12px">${x}</span>`).join('')}</div>` : ''}
+    </div>` : ''}`;
 }
 function showCountryList() {
   document.getElementById('country-list-view').style.display = '';
   document.getElementById('country-detail').classList.remove('active');
   document.getElementById('country-detail-content').innerHTML = '';
+}
+
+// ===== KNOWLEDGE =====
+function loadKnowledge() {
+  window._knLoaded = true;
+  fetch('data/countries.json').then(r=>r.json()).then(d => {
+    const kData = (d.国一覧||[]).filter(c => c.政治体制).sort((a,b)=>(b.GDP兆ドル||0)-(a.GDP兆ドル||0));
+    document.getElementById('kn-count').textContent = `${kData.length}カ国`;
+    renderKnowledge(kData);
+    document.getElementById('kn-search').addEventListener('input', () => {
+      const q = document.getElementById('kn-search').value.toLowerCase();
+      renderKnowledge(kData.filter(c => !q || c.名前.includes(q) || (c.英語名||'').toLowerCase().includes(q)));
+    });
+  }).catch(()=>{ document.getElementById('kn-list').innerHTML='<div style="color:var(--r);padding:20px">データ読み込みエラー</div>'; });
+}
+function renderKnowledge(items) {
+  document.getElementById('kn-count').textContent = `${items.length}カ国`;
+  document.getElementById('kn-list').innerHTML = items.map(c => `
+    <div class="cd" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span style="font-size:36px;line-height:1">${c.旗||'🏳'}</span>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:700">${c.名前} <span style="font-size:11px;color:var(--mt);font-weight:400">${c.英語名||''}</span></div>
+          <div style="font-size:11.5px;color:var(--ac);margin-top:2px">${c.政治体制||''}</div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--mt)">GDP $${c.GDP兆ドル||'—'}T<br>${c.人口||'—'}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:12px">
+        ${c.主要産業 ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">主要産業</div>${(c.主要産業||[]).slice(0,4).map(x=>`<span style="display:inline-block;background:var(--ac)22;color:var(--ac2);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${x}</span>`).join('')}</div>` : ''}
+        ${c.主要貿易相手国 ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">主要貿易相手国</div><div style="color:var(--tx)">${(c.主要貿易相手国||[]).slice(0,3).join(' · ')}</div></div>` : ''}
+      </div>
+      ${c.リスク要因 ? `<div style="margin-bottom:6px"><div style="font-size:10px;color:var(--mt);margin-bottom:3px">地政学的課題</div>${(c.リスク要因||[]).map(r=>`<span style="display:inline-block;background:var(--r)22;color:var(--r);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${r}</span>`).join('')}</div>` : ''}
+      ${c.強み ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">強み</div>${(c.強み||[]).map(s=>`<span style="display:inline-block;background:var(--g)22;color:var(--g);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${s}</span>`).join('')}</div>` : ''}
+    </div>`).join('');
+}
+
+// ===== RELATIONS =====
+function loadRelations() {
+  window._relLoaded = true;
+  fetch('data/international_relations.json').then(r=>r.json()).then(d => {
+    window._relData = d;
+    renderRelations('bilateral','');
+    document.getElementById('rel-type').addEventListener('change', ()=>renderRelations(document.getElementById('rel-type').value, document.getElementById('rel-search').value.toLowerCase()));
+    document.getElementById('rel-search').addEventListener('input', ()=>renderRelations(document.getElementById('rel-type').value, document.getElementById('rel-search').value.toLowerCase()));
+  }).catch(()=>{ document.getElementById('rel-list').innerHTML='<div style="color:var(--r);padding:20px">データ読み込みエラー</div>'; });
+}
+function renderRelations(type, q) {
+  const d = window._relData; if(!d) return;
+  const IC = {5:'var(--r)',4:'var(--o)',3:'var(--y)',2:'var(--g)',1:'var(--mt)'};
+  if (type === 'bilateral') {
+    const items = (d.二国間関係||[]).filter(r=>!q||r.国A.includes(q)||r.国B.includes(q)||(r.関係種別||'').includes(q));
+    document.getElementById('rel-count').textContent = `${items.length}件`;
+    document.getElementById('rel-list').innerHTML = items.map(r=>`
+      <div class="cd" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:700">${r.国A}</span>
+          <span style="color:var(--mt)">↔</span>
+          <span style="font-size:13px;font-weight:700">${r.国B}</span>
+          <span style="background:${IC[r.重要度]||'var(--mt)'}22;color:${IC[r.重要度]||'var(--mt)'};padding:2px 9px;border-radius:3px;font-size:11px;font-weight:600">${r.関係種別||''}</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--mt)">${'★'.repeat(r.重要度||0)}</span>
+        </div>
+        <div style="font-size:12px;color:var(--mt);line-height:1.65;margin-bottom:8px">${r.背景||''}</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px">
+          ${(r.主要摩擦点||[]).length?`<div><div style="font-size:10px;color:var(--r);margin-bottom:3px">摩擦点</div>${r.主要摩擦点.map(x=>`<span style="background:var(--r)22;color:var(--r);padding:1px 6px;border-radius:3px;font-size:11px;margin:2px">${x}</span>`).join('')}</div>`:''}
+          ${(r.協力領域||[]).length?`<div><div style="font-size:10px;color:var(--g);margin-bottom:3px">協力</div>${r.協力領域.map(x=>`<span style="background:var(--g)22;color:var(--g);padding:1px 6px;border-radius:3px;font-size:11px;margin:2px">${x}</span>`).join('')}</div>`:''}
+        </div>
+        ${r.最新動向?`<div style="padding:7px 10px;background:var(--s2);border-left:3px solid var(--ac);font-size:11.5px;color:var(--ac2)">${r.最新動向}</div>`:''}
+      </div>`).join('');
+  } else {
+    const items = (d.多国間枠組み||[]).filter(r=>!q||r.名称.includes(q)||(r.略称||'').includes(q));
+    document.getElementById('rel-count').textContent = `${items.length}件`;
+    document.getElementById('rel-list').innerHTML = items.map(r=>`
+      <div class="cd" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+          <span style="font-size:15px;font-weight:800;color:var(--ac)">${r.略称||r.名称}</span>
+          <span style="font-size:12px;color:var(--mt)">${r.名称}</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--mt)">設立 ${r.設立||'—'} | ${r.加盟国数||'—'}カ国・機関 | ${r.本部||'—'}</span>
+        </div>
+        <div style="font-size:12px;color:var(--ac2);margin-bottom:6px;font-weight:600">${r.目的||''}</div>
+        <div style="font-size:12px;color:var(--mt);line-height:1.65;margin-bottom:8px">${r.現状||''}</div>
+        ${(r.課題||[]).length?`<div>${r.課題.map(x=>`<span style="background:var(--y)22;color:var(--y);padding:1px 6px;border-radius:3px;font-size:11px;margin:2px">${x}</span>`).join('')}</div>`:''}
+      </div>`).join('');
+  }
 }
 
 // ===== FINANCIALS =====

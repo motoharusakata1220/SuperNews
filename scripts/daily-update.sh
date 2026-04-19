@@ -1,64 +1,86 @@
 #!/bin/bash
-# daily-update.sh — 毎日JST 0:00に実行: 情報収集 → ダッシュボード再生成 → git commit
+# daily-update.sh — 日次データ更新バッチ
+# 実行内容:
+#   1. 各国発表 RSS 収集 → docs/data/country_announcements/
+#   2. EDINET 決算スケジュール更新（APIキー不要モード）
+#   3. 全カテゴリ出力 → docs/data/all.json に集約
+#   4. ニュースにサブカテゴリータグを付与
+#   5. docs/data/ の変更を git commit
+#
+# Remote Trigger での使用:
+#   bash scripts/daily-update.sh
+# ローカル実行:
+#   bash scripts/daily-update.sh --no-commit
+
 set -euo pipefail
 
-ROOT="/workspaces/SuperNews"
-TIMESTAMP=$(TZ=Asia/Tokyo date '+%Y-%m-%d')
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TIMESTAMP=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST')
+DATE=$(TZ=Asia/Tokyo date '+%Y-%m-%d')
+NO_COMMIT="${1:-}"
 
 echo "=== SuperNews 日次更新 ($TIMESTAMP) ==="
+echo "ROOT: $ROOT"
 
-# Step 1: 全カテゴリ情報収集
-echo "[Step 1] 情報収集..."
-bash "$ROOT/scripts/collect-all.sh"
-
-# Step 2: 各カテゴリの収集スクリプトを実行（存在する場合）
-echo "[Step 2] カテゴリ別収集..."
-for dir in "$ROOT"/世界情勢 "$ROOT"/経済指標 "$ROOT"/企業情報 "$ROOT"/投資 "$ROOT"/背景知識; do
-  if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-    echo "  → $(basename "$dir") を処理中..."
-    cd "$dir"
-    npm run collect 2>/dev/null || true
-  fi
-done
-
-# Step 3: 関係性分析を再実行
-echo "[Step 3] 関係性分析..."
-cd "$ROOT/src/relations"
-npm run analyze 2>/dev/null || echo "  → 関係性分析スキップ"
-
-# Step 4: ダッシュボード用データ再収集
-echo "[Step 4] ダッシュボードデータ更新..."
-bash "$ROOT/scripts/collect-all.sh"
-
-# Step 5: ダッシュボードHTML再生成
-echo "[Step 5] ダッシュボード生成..."
-node "$ROOT/scripts/generate-dashboard.js"
-
-# Step 6: ローカルコミット
-echo "[Step 5] ローカルコミット..."
 cd "$ROOT"
-git add output/ 世界情勢/output/ 経済指標/output/ 背景知識/output/ 投資/summaries.json 投資/channels.json 2>/dev/null || true
-git add output/企業情報/ output/関係性.json output/動画/ 2>/dev/null || true
 
-# 変更がある場合のみコミット
+# Step 1: 各国発表 RSS 収集
+echo ""
+echo "[1/4] 各国発表 RSS 収集..."
+python3 "$ROOT/scripts/collect_country_announcements.py" --all 2>&1 | tail -5 || echo "  → RSS収集でエラー発生（スキップ）"
+
+# Step 2: EDINET 決算スケジュール更新（スケジュールのみ・APIキー不要）
+echo ""
+echo "[2/4] EDINET 決算スケジュール更新..."
+if [ -n "${EDINET_API_KEY:-}" ]; then
+  python3 "$ROOT/scripts/fetch_edinet_financials.py" --today 2>&1 | tail -5 || echo "  → EDINETエラー（スキップ）"
+else
+  echo "  → EDINET_API_KEY 未設定のためスキップ"
+fi
+
+# Step 3: 全カテゴリ集約 → docs/data/all.json
+echo ""
+echo "[3/4] データ集約 (aggregate.sh)..."
+bash "$ROOT/scripts/aggregate.sh" 2>&1 | tail -5
+
+# Step 4: サブカテゴリータグ付与
+echo ""
+echo "[4/4] サブカテゴリータグ付与..."
+python3 "$ROOT/scripts/tag_news_subcategory.py" 2>&1 | tail -3
+
+# Step 5: git commit（--no-commit フラグがなければ実行）
+if [ "$NO_COMMIT" = "--no-commit" ]; then
+  echo ""
+  echo "=== --no-commit モード: コミットをスキップ ==="
+  exit 0
+fi
+
+echo ""
+echo "[5/5] git commit..."
+git add \
+  docs/data/all.json \
+  docs/data/relations.json \
+  docs/data/country_announcements/ \
+  docs/data/financials/ \
+  2>/dev/null || true
+
 if ! git diff --cached --quiet 2>/dev/null; then
   git commit -m "$(cat <<EOF
-docs: 日次データ更新 ($TIMESTAMP)
+docs: 日次データ更新 ($DATE)
 
-- 世界情勢ニュース更新
-- 経済指標データ更新
-- 企業情報・書類更新
-- 投資チャンネル・動画更新
-- 関係性分析更新
-- ダッシュボードデータ更新
+- 各国発表 RSS 収集
+- データ集約 (all.json)
+- サブカテゴリータグ付与
 
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 EOF
 )"
   echo "  → コミット完了"
+  echo ""
+  echo "  GitHub Pages に反映するには: git push origin main"
 else
   echo "  → 変更なし、コミットスキップ"
 fi
 
 echo ""
-echo "=== 日次更新完了 ==="
+echo "=== 日次更新完了 ($TIMESTAMP) ==="

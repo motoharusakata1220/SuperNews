@@ -62,14 +62,15 @@
 | 機能 | データ | 備考 |
 |------|--------|------|
 | 世界情勢ニュース | `all.json` 43記事 | サブカテゴリータグ付き |
-| 経済指標 | HTML内埋め込み 350項目 | — |
+| 経済指標 | `indicators.json` 88項目 | 9カテゴリー（物価・金利・雇用・株式・為替等） |
 | 投資 | 12チャンネル・7本動画 | — |
-| 背景知識 | 15カ国 | — |
-| 国際関係 | 15件 | — |
+| 背景知識 | `knowledge.json` 47トピック | HTML埋め込み（JSON化未完）|
+| 国際関係 | `international_relations.json` | 二国間15件・多国間枠組み15件 |
 | 上場企業一覧 | `companies.json` 3,745社 | lazy load |
-| シェア・統計 | `market_share.json` | 半導体7品目 |
+| 企業プロファイル | `companies_profile.json` 80社 | 日本主要企業・14フィールド |
+| シェア・統計 | `market_share.json` | 14カテゴリー・59製品 |
 | 用語集 | `glossary.json` 780語 | 14カテゴリー・lazy load |
-| 世界の国々 | `countries.json` 196カ国 | 詳細ビュー付き・lazy load |
+| 世界の国々 | `countries.json` 196カ国 | 107カ国に詳細フィールド追加 |
 | 決算書 | `financials/{コード}.json` | EDINET取得・コード検索 |
 | 決算スケジュール | `financials/schedules.json` | 提出日・種別フィルター |
 | 各国発表 | `country_announcements/` | RSS収集・国選択 |
@@ -77,8 +78,9 @@
 ### 追加予定機能
 | 機能 | データソース | 優先度 |
 |------|-------------|--------|
-| ニュースのサブカテゴリーフィルター | `all.json` の `サブカテゴリー` フィールド | 高 |
-| シェア・統計の全14カテゴリー化 | `market_share.json` ローテーション | 高 |
+| 背景知識のJSON化・ダッシュボード連携 | `knowledge.json` リファクタリング | 高 |
+| 国際関係パネルのJSON駆動化 | `international_relations.json` | 高 |
+| 企業プロファイルとcompanies.jsonの連携表示 | `companies_profile.json` | 中 |
 | 各国発表の収集対象拡大 | RSS整備（現在7カ国/機関） | 中 |
 | 動画自動生成 | Claude Code + 外部ツール | 低 |
 
@@ -123,7 +125,9 @@ docs/data/
 ├── countries.json                # 世界196カ国（ISO2コード・旗・GDP・人口・加盟組織・概要）
 ├── glossary.json                 # 用語集780語（14カテゴリー）
 ├── market_share.json             # シェア・統計（半導体7品目・ローテーション管理）
-├── indicators.json               # 経済指標350項目
+├── indicators.json               # 経済指標88項目（9カテゴリー）
+├── international_relations.json  # 国際関係（二国間15件・多国間15件）
+├── companies_profile.json        # 主要企業プロファイル（80社・14フィールド）
 ├── earnings.json                 # 決算データ（別系統）
 ├── country_announcements/        # 各国公式発表（RSSから収集）
 │   ├── index.json                # 収集サマリー
@@ -173,6 +177,19 @@ scripts/
 - [ ] ニュースのサブカテゴリーフィルターUIが未実装（タグは付与済み）
 - [ ] 各国発表RSS: 日本（官邸・外務省・財務省）が403/404でデータ0件
 - [ ] EDINETキーが未設定のため決算書データが空
+
+---
+
+## 情報収集計画
+
+詳細は [`COLLECTION_PLAN.md`](COLLECTION_PLAN.md) を参照。
+
+| 現状 | 目標 | 充足率 |
+|------|------|--------|
+| market_share: 62品目 | 210品目 | 30% |
+| market_share 要因分析: 1品目 | 全品目 | 2% |
+| companies_profile: 86社 | 300社 | 29% |
+| countries 詳細: 107/196カ国 | 196カ国 | 55% |
 
 ---
 
