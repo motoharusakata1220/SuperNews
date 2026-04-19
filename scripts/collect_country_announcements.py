@@ -30,15 +30,16 @@ COUNTRY_SOURCES = {
     "JP": {
         "name": "日本",
         "sources": [
-            {"label": "NHKニュース", "url": "https://www3.nhk.or.jp/rss/news/cat0.xml"},
-            {"label": "WTO(日本関連)", "url": "https://www.wto.org/rss/news_e.rss"},
+            {"label": "NHK政治", "url": "https://www3.nhk.or.jp/rss/news/cat4.xml"},
+            {"label": "NHK経済", "url": "https://www3.nhk.or.jp/rss/news/cat5.xml"},
         ]
     },
     "US": {
         "name": "アメリカ合衆国",
         "sources": [
-            {"label": "GOV.UK(参考)", "url": "https://www.gov.uk/search/news-and-communications.atom"},
-            {"label": "UN News(米関連)", "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml"},
+            {"label": "FRB（連邦準備制度）", "url": "https://www.federalreserve.gov/feeds/press_all.xml"},
+            {"label": "State Department", "url": "https://www.state.gov/rss-feeds/press-releases/"},
+            {"label": "US Congress", "url": "https://www.congress.gov/rss/most-viewed-bills.xml"},
         ]
     },
     "GB": {
@@ -46,6 +47,13 @@ COUNTRY_SOURCES = {
         "sources": [
             {"label": "GOV.UK Policy", "url": "https://www.gov.uk/search/policy-papers-and-consultations.atom"},
             {"label": "GOV.UK News", "url": "https://www.gov.uk/search/news-and-communications.atom"},
+        ]
+    },
+    "EU": {
+        "name": "欧州連合",
+        "sources": [
+            {"label": "EU Parliament", "url": "https://www.europarl.europa.eu/rss/doc/top-stories/en.xml"},
+            {"label": "ECB", "url": "https://www.ecb.europa.eu/rss/press.html"},
         ]
     },
     "RU": {

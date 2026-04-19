@@ -202,6 +202,9 @@ select.sb-input{cursor:pointer}
 
 /* ===== GLOSSARY ===== */
 .gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.cat-btn{background:var(--s2);border:1px solid var(--bd);color:var(--mt);padding:4px 12px;border-radius:20px;font-size:11.5px;cursor:pointer;transition:.15s;white-space:nowrap}
+.cat-btn:hover{border-color:var(--ac);color:var(--tx)}
+.cat-btn.active{background:var(--ac);border-color:var(--ac);color:#fff}
 .gl-card{
   background:var(--s2);border:1px solid var(--bd);border-radius:7px;
   padding:12px 14px;transition:.12s;
@@ -239,6 +242,85 @@ select.sb-input{cursor:pointer}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+
+/* ===== ACCORDION ===== */
+.acc-item { border-bottom: 1px solid var(--bd); }
+.acc-hd {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 4px; cursor: pointer; user-select: none;
+  font-size: 13px; font-weight: 600; color: var(--tx);
+  transition: .15s;
+}
+.acc-hd:hover { color: var(--ac2); }
+.acc-hd .acc-arrow { margin-left: auto; color: var(--mt); font-size: 10px; transition: .2s; }
+.acc-hd.open .acc-arrow { transform: rotate(180deg); color: var(--ac); }
+.acc-bd { display: none; padding: 0 4px 14px; font-size: 12.5px; color: var(--mt); line-height: 1.8; }
+.acc-bd.open { display: block; }
+
+/* ===== BROWSER LAYOUT (カテゴリサイドバー + カードグリッド) ===== */
+.browser-layout { display:flex; height:calc(100vh - var(--hd) - 56px); gap:0; overflow:hidden; }
+.browser-cats {
+  width:158px; min-width:158px; flex-shrink:0;
+  border-right:1px solid var(--bd); overflow-y:auto; padding:6px 0;
+  background:var(--s);
+}
+.browser-cat-sec {
+  padding:10px 12px 3px; font-size:9.5px; font-weight:700;
+  letter-spacing:.08em; color:var(--mt); text-transform:uppercase;
+}
+.browser-cat-item {
+  display:flex; align-items:center; gap:7px; padding:6px 10px;
+  font-size:11.5px; color:var(--mt); cursor:pointer;
+  border-radius:4px; margin:1px 4px; transition:.12s;
+}
+.browser-cat-item:hover { background:var(--s2); color:var(--tx); }
+.browser-cat-item.active { background:var(--s2); color:var(--ac); font-weight:600; }
+.browser-cat-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.browser-content { flex:1; overflow-y:auto; padding:14px; }
+
+/* ===== CARD GRID ===== */
+.card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media(max-width:1100px){ .card-grid{ grid-template-columns:repeat(2,1fr); } }
+.bc {
+  background:var(--s); border:1px solid var(--bd); border-radius:8px;
+  overflow:hidden; cursor:pointer; transition:.15s;
+  display:flex; flex-direction:column;
+}
+.bc:hover { border-color:var(--bd2); transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,.3); }
+.bc-top {
+  height:72px; display:flex; align-items:center; justify-content:center;
+  font-size:26px; flex-shrink:0; position:relative;
+}
+.bc-level {
+  position:absolute; top:8px; left:8px;
+  font-size:9.5px; font-weight:700; padding:2px 6px; border-radius:3px;
+  background:rgba(0,0,0,.45); color:#fff; letter-spacing:.04em;
+}
+.bc-body { padding:10px 12px 12px; flex:1; }
+.bc-title { font-size:12.5px; font-weight:700; color:var(--tx); margin-bottom:4px; line-height:1.4; }
+.bc-desc { font-size:11px; color:var(--mt); line-height:1.6; }
+.bc-tags { margin-top:8px; display:flex; flex-wrap:wrap; gap:3px; }
+.bc-tag { font-size:10px; padding:1px 6px; border-radius:3px; background:var(--s2); color:var(--mt); }
+
+/* ===== INDUSTRY MAP ===== */
+.imap-overview {
+  background:linear-gradient(135deg,var(--s),var(--s2));
+  border:1px solid var(--bd2); border-radius:10px;
+  padding:18px 20px; margin-bottom:14px;
+}
+.imap-chain {
+  display:flex; gap:0; margin:14px 0; border-radius:6px; overflow:hidden; border:1px solid var(--bd);
+}
+.imap-chain-col {
+  flex:1; padding:12px 10px; background:var(--s);
+  border-right:1px solid var(--bd);
+}
+.imap-chain-col:last-child { border-right:none; }
+.imap-chain-hd { font-size:10px; font-weight:700; color:var(--mt); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+.imap-chain-item { font-size:11px; color:var(--ac2); padding:3px 0; border-bottom:1px solid var(--bd); }
+.imap-chain-item:last-child { border-bottom:none; }
+.imap-player { display:inline-flex; align-items:center; gap:4px; background:var(--s2); border:1px solid var(--bd2); border-radius:4px; padding:3px 8px; margin:3px; font-size:11.5px; font-weight:600; cursor:pointer; }
+.imap-player:hover { border-color:var(--ac); color:var(--ac); }
 </style>
 </head>
 <body>
@@ -257,6 +339,8 @@ select.sb-input{cursor:pointer}
 </div>
 
 <div id="sb">
+  <div class="ni" id="ni-home" onclick="showPanel('home')" style="margin-bottom:6px;border-radius:6px"><span class="ni-icon">🏠</span>ホーム・使い方</div>
+  <div class="ni" id="ni-themes" onclick="showPanel('themes')"><span class="ni-icon">🗺</span>テーマブラウザ</div>
   <div class="ns">ニュース・情報</div>
   <div class="ni" id="ni-world" onclick="showPanel('world')"><span class="ni-icon">📰</span>世界情勢<span class="ni-badge" id="badge-world">173</span></div>
   <div class="ni" id="ni-countries" onclick="showPanel('countries')"><span class="ni-icon">🌍</span>世界の国々<span class="ni-badge">195</span></div>
@@ -282,6 +366,97 @@ select.sb-input{cursor:pointer}
 <div id="main">
 <input type="text" id="g-search" class="sb-input" style="position:fixed;top:44px;left:200px;right:0;border-radius:0;border-left:none;border-top:none;border-right:none;border-bottom:1px solid var(--bd);z-index:90;background:var(--s);padding:8px 16px;font-size:12.5px;height:36px;color:var(--mt)" placeholder="🔍  全体検索（記事・指標・企業名・用語）...">
 <div style="height:36px"></div>
+
+<!-- HOME PANEL -->
+<div class="pn" id="p-home">
+  <div style="max-width:900px">
+    <div style="font-size:22px;font-weight:700;margin-bottom:4px">SuperNews とは</div>
+    <div style="color:var(--mt);font-size:13px;margin-bottom:24px">世界情勢・経済・産業を横断的に学ぶための情報ダッシュボード。ニュースの裏にある構造や数字を把握するために設計されています。</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('world')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📰 世界情勢</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">収集した世界ニュースを一覧表示。カテゴリー・サブカテゴリーで絞り込めます。<br><span style="color:var(--ac)">→ 今何が起きているかを把握する</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('countries')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">🌍 世界の国々</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">196カ国のGDP・人口・政治体制・加盟機関などを収録。国名で検索できます。<br><span style="color:var(--ac)">→ 特定の国の基本情報を調べる</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('announcements')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📢 各国発表</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">各国政府・国際機関の公式発表をRSSで収集。メディアが介在しない一次情報です。<br><span style="color:var(--ac)">→ 政府・中央銀行の公式見解を読む</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('economy')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📊 経済指標</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">物価・金利・雇用・為替・株価など88の経済指標を収録。数値でマクロを把握します。<br><span style="color:var(--ac)">→ 景気・インフレの現状を数字で見る</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('share')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📈 シェア・統計</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">半導体・エネルギー・農業など14カテゴリーの世界市場シェアをバーチャートで表示。<br><span style="color:var(--ac)">→ どの国・企業が世界を支配しているか</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('companies')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">🏢 上場企業</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">JPX上場3,745社を業種・市場で検索。証券コードから決算書にアクセスできます。<br><span style="color:var(--ac)">→ 日本企業を調べる</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('glossary')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📖 用語集</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">14カテゴリー780語の専門用語を収録。ニュースを読む際に知らない言葉が出たらここで調べます。<br><span style="color:var(--ac)">→ 用語の意味を調べる</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('knowledge')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">🧠 背景知識</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">ニュースの背後にある構造・歴史・予測を4階層で整理。用語の一歩先の「なぜ」を理解します。<br><span style="color:var(--ac)">→ 出来事の構造・原因を深掘りする</span></div>
+      </div>
+
+      <div class="cd" style="cursor:pointer" onclick="showPanel('relations')">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">🔗 国際関係</div>
+        <div style="color:var(--mt);font-size:12px;line-height:1.7">二国間関係・多国間枠組みをまとめた地政学データ。同盟・対立・貿易関係を把握します。<br><span style="color:var(--ac)">→ 国同士の関係・勢力図を把握する</span></div>
+      </div>
+
+    </div>
+
+    <div class="cd" style="margin-top:16px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">ダッシュボードの基本ロジック</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;color:var(--mt);line-height:1.8">
+        <div>
+          <div style="color:var(--tx);font-weight:600;margin-bottom:4px">情報の流れ</div>
+          ニュース（何が起きた）<br>
+          　↓<br>
+          シェア・統計（数字の実態）<br>
+          　↓<br>
+          背景知識（なぜそうなったか）<br>
+          　↓<br>
+          国際関係（誰が絡んでいるか）
+        </div>
+        <div>
+          <div style="color:var(--tx);font-weight:600;margin-bottom:4px">データの更新方法</div>
+          • ニュース・各国発表：RSSで自動収集<br>
+          • 経済指標：公開APIから取得<br>
+          • シェア・統計：手動調査・追加<br>
+          • 用語集・背景知識：このチャットで追加<br>
+          • 上場企業：JPX公開データ
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pn" id="p-themes" style="padding:0">
+  <div class="browser-layout" style="height:calc(100vh - var(--hd))">
+    <div class="browser-cats" id="th-sidebar" style="width:180px;min-width:180px"></div>
+    <div class="browser-content" id="th-content" style="padding:16px">
+      <div style="color:var(--mt);padding:40px;text-align:center;font-size:13px">左のカテゴリーからテーマを選択してください</div>
+    </div>
+  </div>
+</div>
+
 <div class="pn active" id="p-world">
   <div class="filter-row">
     <input type="text" id="w-search" class="sb-input" style="flex:1;max-width:320px" placeholder="🔍 記事を検索...">
@@ -342,15 +517,18 @@ select.sb-input{cursor:pointer}
       <div class="ar-m">2026-03-25</div>
     </div></div>
   </div>
-<div class="pn" id="p-knowledge">
-  <div class="filter-row" style="flex-wrap:wrap;gap:6px">
+<div class="pn" id="p-knowledge" style="padding:0">
+  <div class="filter-row" style="flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid var(--bd);background:var(--s)">
     <div id="kn-breadcrumb" style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--mt);flex:1;min-width:200px">
-      <span id="kn-bc-cat" style="cursor:pointer;color:var(--ac)" onclick="knNav('cat')">全カテゴリー</span>
+      <span style="cursor:pointer;color:var(--ac)" onclick="knNav('cat')">全カテゴリー</span>
     </div>
-    <input type="text" id="kn-search" class="sb-input" style="width:200px" placeholder="キーワード検索...">
+    <input type="text" id="kn-search" class="sb-input" style="width:180px" placeholder="キーワード検索...">
     <span id="kn-count" style="color:var(--mt);font-size:12px"></span>
   </div>
-  <div id="kn-list" style="max-height:calc(100vh - 150px);overflow-y:auto"><div class="loading">読み込み中...</div></div>
+  <div class="browser-layout">
+    <div class="browser-cats" id="kn-cat-sidebar"><div class="loading" style="padding:14px;font-size:11px">読み込み中...</div></div>
+    <div class="browser-content" id="kn-list"><div class="loading">読み込み中...</div></div>
+  </div>
   <div style="display:none"><!-- old hardcoded -->
     <div class="cc">
       <div class="cc-code">AUS <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・連邦議会制（英連邦王国、二院制、二大政党制が基本</span></div>
@@ -443,7 +621,6 @@ select.sb-input{cursor:pointer}
       <ul style="padding-left:14px;margin-top:6px"><li style="font-size:11px;color:var(--mt)">米中覇権競争（技術・貿易・台湾問題）</li><li style="font-size:11px;color:var(--mt)">ロシアとの関係悪化（ウクライナ支援）</li><li style="font-size:11px;color:var(--mt)">イラン核問題</li><li style="font-size:11px;color:var(--mt)">国内政治の分極化とトランプ政権による多国間主義離脱</li><li style="font-size:11px;color:var(--mt)">中東情勢（イスラエル・パレスチナ問題）</li></ul>
     </div></div>
   </div>
-</div>
 <div class="pn" id="p-relations">
   <div class="filter-row">
     <select id="rel-type" class="sb-input" style="width:160px">
@@ -550,15 +727,14 @@ select.sb-input{cursor:pointer}
       <span style="color:var(--mt);font-size:10px;margin-left:auto">Ukraine reports intensified Russian missile strikes on energy infrastructure</span>
     </div></div>
   </div></div>
-</div>
 <!-- GLOSSARY PANEL -->
 <div class="pn" id="p-glossary">
   <div class="filter-row">
     <input type="text" id="gl-search" class="sb-input" style="flex:1;max-width:320px" placeholder="🔍 用語・読み・説明で検索...">
-    <select id="gl-cat" class="sb-input" style="width:200px">
-      <option value="">すべてのカテゴリー</option>
-    </select>
     <span id="gl-count" style="color:var(--mt);font-size:12px;margin-left:4px"></span>
+  </div>
+  <div id="gl-cat-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+    <button class="cat-btn active" data-cat="" onclick="glSelectCat(this,'')">すべて</button>
   </div>
   <div id="gl-container"><div class="loading">読み込み中...</div></div>
 </div>
@@ -588,6 +764,7 @@ select.sb-input{cursor:pointer}
 
 <!-- SHARE PANEL -->
 <div class="pn" id="p-share">
+  <div id="share-cat-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
   <div id="share-container"><div class="loading">読み込み中...</div></div>
 </div>
 
@@ -619,7 +796,6 @@ select.sb-input{cursor:pointer}
     <div id="country-detail-content"></div>
   </div>
 </div>
-</div>
 
 <!-- ANNOUNCEMENTS PANEL -->
 <div class="pn" id="p-announcements">
@@ -632,6 +808,7 @@ select.sb-input{cursor:pointer}
       <option value="RU">🇷🇺 ロシア</option>
       <option value="IN">🇮🇳 インド</option>
       <option value="UN">🇺🇳 国際連合</option>
+      <option value="EU">🇪🇺 EU</option>
       <option value="WTO">🌐 WTO</option>
     </select>
     <span id="ann-count" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
@@ -678,10 +855,11 @@ select.sb-input{cursor:pointer}
     </div>
   </div>
 </div>
+</div>
 
 <script>
 // ===== PANEL NAVIGATION =====
-const ALL_PANELS = ['world','economy','invest','knowledge','relations','glossary','companies','share','countries','financials','schedules','announcements'];
+const ALL_PANELS = ['home','themes','world','economy','invest','knowledge','relations','glossary','companies','share','countries','financials','schedules','announcements'];
 
 function showPanel(id) {
   ALL_PANELS.forEach(p => {
@@ -690,6 +868,7 @@ function showPanel(id) {
     if (el) el.classList.toggle('active', p === id);
     if (ni) ni.classList.toggle('active', p === id);
   });
+  if (id === 'themes' && !window._thLoaded) loadThemes();
   if (id === 'world' && !window._wLoaded) loadWorld();
   if (id === 'economy' && !window._ecLoaded) loadEconomy();
   if (id === 'glossary' && !window._glLoaded) loadGlossary();
@@ -699,6 +878,14 @@ function showPanel(id) {
   if (id === 'schedules' && !window._schLoaded) loadSchedules();
   if (id === 'knowledge' && !window._knLoaded) loadKnowledge();
   if (id === 'relations' && !window._relLoaded) loadRelations();
+  if (id === 'announcements' && !window._annLoaded) { window._annLoaded = true; document.getElementById('ann-country').value='JP'; document.getElementById('ann-country').dispatchEvent(new Event('change')); }
+}
+
+function toggleAcc(hd) {
+  const bd = hd.nextElementSibling;
+  const isOpen = hd.classList.contains('open');
+  hd.classList.toggle('open', !isOpen);
+  bd.classList.toggle('open', !isOpen);
 }
 
 // Start on world
@@ -716,6 +903,309 @@ function subTab(btn, group) {
     if (i === idx) p.classList.add('active');
     else p.classList.remove('active');
   });
+}
+
+// ===== THEME BROWSER =====
+const THEME_TREE = [
+  { cat:'半導体・電子部品', icon:'💾', color:'var(--ac)', subs:[
+    { name:'シリコンウエハー', kw:['シリコン','ウエハ','信越化学','SUMCO','wafer'] },
+    { name:'フォトレジスト', kw:['フォトレジスト','photoresist','JSR','東京応化','信越化学'] },
+    { name:'EUV・露光装置', kw:['EUV','ASML','露光','リソグラフィ','DUV'] },
+    { name:'ファウンドリ', kw:['TSMC','ファウンドリ','Samsung Foundry','Intel Foundry','SMIC','foundry'] },
+    { name:'DRAM・HBM', kw:['DRAM','HBM','Micron','SK Hynix','SK hynix','メモリ'] },
+    { name:'NAND・フラッシュ', kw:['NAND','フラッシュ','キオクシア','Western Digital'] },
+    { name:'パワー半導体', kw:['SiC','GaN','パワー半導体','ローム','富士電機'] },
+    { name:'CPU・GPU設計', kw:['NVIDIA','AMD','Intel','Qualcomm','ARM','Apple Silicon','GPU','CPU','Arm'] },
+    { name:'製造装置', kw:['東京エレクトロン','TEL','Lam Research','Applied Materials','アドバンテスト','Teradyne'] },
+    { name:'特殊ガス・材料', kw:['特殊ガス','ガリウム','ゲルマニウム','レアアース','フォトマスク','CMP'] },
+    { name:'半導体パッケージ', kw:['パッケージ','CoWoS','HBM','インターポーザ','チップレット','ASE'] },
+  ]},
+  { cat:'AI・テクノロジー', icon:'🤖', color:'var(--cy)', subs:[
+    { name:'AIモデル・LLM', kw:['OpenAI','Anthropic','Google','ChatGPT','LLM','生成AI','GPT','Claude','Gemini'] },
+    { name:'AIインフラ・データセンター', kw:['データセンター','クラウド','AWS','Azure','GCP','GPU','H100'] },
+    { name:'量子コンピュータ', kw:['量子','量子コンピュータ','Quantum','IBM Q','Google Quantum'] },
+    { name:'通信・5G/6G', kw:['5G','6G','Huawei','Ericsson','Nokia','通信','基地局'] },
+    { name:'宇宙・衛星', kw:['SpaceX','宇宙','衛星','ロケット','JAXA','Starlink','打ち上げ'] },
+    { name:'ロボット・自動化', kw:['ロボット','自動化','ファナック','安川電機','Boston Dynamics','RPA'] },
+    { name:'サイバーセキュリティ', kw:['サイバー','セキュリティ','ハッキング','ランサム','Palo Alto','CrowdStrike'] },
+    { name:'AR/VR・メタバース', kw:['AR','VR','メタバース','Meta Quest','Apple Vision','ヘッドセット'] },
+  ]},
+  { cat:'自動車・モビリティ', icon:'🚗', color:'var(--g)', subs:[
+    { name:'EV・電気自動車', kw:['EV','電気自動車','BYD','Tesla','テスラ','電動化'] },
+    { name:'バッテリー', kw:['バッテリー','電池','リチウムイオン','LFP','CATL','パナソニック','全固体'] },
+    { name:'自動運転・ADAS', kw:['自動運転','Waymo','LIDAR','ADAS','コネクテッド'] },
+    { name:'トヨタ・日系メーカー', kw:['トヨタ','ホンダ','日産','三菱','スバル','マツダ','スズキ'] },
+    { name:'VW・欧州メーカー', kw:['VW','フォルクスワーゲン','BMW','Mercedes','Stellantis','Renault'] },
+    { name:'タイヤ・部品メーカー', kw:['タイヤ','Bosch','Denso','デンソー','ZF','ブリヂストン','Michelin'] },
+    { name:'EV充電・インフラ', kw:['充電','充電インフラ','急速充電','V2G','EV充電'] },
+  ]},
+  { cat:'エネルギー', icon:'⚡', color:'var(--y)', subs:[
+    { name:'原油・石油', kw:['原油','OPEC','WTI','Brent','石油','SPR','製油所','タンカー'] },
+    { name:'天然ガス・LNG', kw:['LNG','天然ガス','ガス','TTF','JKM','ノルドストリーム','パイプライン'] },
+    { name:'水素・アンモニア', kw:['水素','アンモニア','グリーン水素','ブルー水素','水素製造'] },
+    { name:'太陽光発電', kw:['太陽光','ソーラー','パネル','PV','光起電力'] },
+    { name:'風力発電', kw:['風力','洋上風力','陸上風力','Wind'] },
+    { name:'原子力・SMR', kw:['原子力','核','SMR','ウラン','廃炉','原発','核融合'] },
+    { name:'石炭', kw:['石炭','石炭火力','褐炭','coal'] },
+    { name:'ヘリウム', kw:['ヘリウム','helium'] },
+    { name:'リチウム・レアメタル', kw:['リチウム','コバルト','ニッケル','マンガン','レアメタル','鉱物'] },
+    { name:'送電網・蓄電池', kw:['送電','スマートグリッド','蓄電','BESS','揚水','電力網'] },
+  ]},
+  { cat:'製薬・ヘルスケア', icon:'💊', color:'var(--pk)', subs:[
+    { name:'新薬・パイプライン', kw:['新薬','パイプライン','治験','臨床試験','承認','FDA'] },
+    { name:'バイオ医薬品', kw:['バイオ','抗体','核酸','mRNA','細胞療法','CAR-T'] },
+    { name:'ワクチン', kw:['ワクチン','Pfizer','MSD','GSK','ファイザー'] },
+    { name:'医療機器', kw:['医療機器','Medtronic','Abbott','Siemens','フィリップス'] },
+    { name:'医薬品原料（API）', kw:['API','医薬品原料','中国依存','インド','後発医薬品','ジェネリック'] },
+  ]},
+  { cat:'農業・食料', icon:'🌾', color:'var(--g)', subs:[
+    { name:'小麦', kw:['小麦','wheat','グルテン','パン','穀物'] },
+    { name:'大豆', kw:['大豆','soybean','ブラジル','アルゼンチン','セラード'] },
+    { name:'トウモロコシ', kw:['トウモロコシ','corn','バイオ燃料','エタノール'] },
+    { name:'コメ', kw:['コメ','米','rice','インド','タイ','ベトナム'] },
+    { name:'コーヒー・カカオ', kw:['コーヒー','カカオ','コートジボワール','ガーナ','チョコ'] },
+    { name:'食肉・畜産', kw:['牛肉','豚肉','鶏肉','畜産','food','食肉'] },
+    { name:'水産物', kw:['水産','魚','漁業','サーモン','ノルウェー'] },
+    { name:'農薬・肥料', kw:['農薬','肥料','窒素','カリウム','リン'] },
+  ]},
+  { cat:'金融市場', icon:'📈', color:'var(--b)', subs:[
+    { name:'株式・指数', kw:['S&P','Nasdaq','日経','TOPIX','ダウ','株式'] },
+    { name:'為替・ドル円', kw:['ドル円','為替','FX','円安','円高','ユーロ'] },
+    { name:'米国債・金利', kw:['米国債','金利','FRB','Fed','利上げ','利下げ','FOMC'] },
+    { name:'コモディティ', kw:['金','原油','コモディティ','commodity','銅','鉄鉱石'] },
+    { name:'暗号資産', kw:['Bitcoin','ビットコイン','仮想通貨','暗号資産','Ethereum','crypto'] },
+    { name:'日銀・金融政策', kw:['日銀','BOJ','植田','金融政策','YCC','国債買い入れ'] },
+    { name:'プライベートエクイティ', kw:['PE','M&A','買収','LBO','ファンド','投資銀行'] },
+  ]},
+  { cat:'物流・サプライチェーン', icon:'🚢', color:'var(--cy)', subs:[
+    { name:'海上輸送・コンテナ', kw:['コンテナ','海運','Maersk','COSCO','運賃','船'] },
+    { name:'航空貨物', kw:['航空貨物','air freight','FedEx','UPS','エアカーゴ'] },
+    { name:'港湾・物流インフラ', kw:['港湾','港','物流センター','倉庫','物流インフラ'] },
+    { name:'EC・ラストマイル', kw:['EC','Amazon','楽天','ラストマイル','宅配','配送'] },
+  ]},
+  { cat:'マクロ経済', icon:'🏛', color:'var(--mt)', subs:[
+    { name:'GDP・経済成長', kw:['GDP','成長率','景気','リセッション','recession'] },
+    { name:'物価・インフレ', kw:['CPI','PCE','インフレ','物価','デフレ','コアCPI'] },
+    { name:'雇用・労働市場', kw:['雇用','失業率','labor','求人','賃金','NFP'] },
+    { name:'財政・国債', kw:['財政','国債','赤字','債務','財政出動','バジェット'] },
+    { name:'貿易・関税', kw:['貿易','関税','tariff','WTO','輸出','輸入','貿易赤字'] },
+  ]},
+  { cat:'地政学・安全保障', icon:'🌐', color:'var(--r)', subs:[
+    { name:'米中対立', kw:['米中','decoupling','デカップリング','tech war','半導体規制'] },
+    { name:'ウクライナ・ロシア', kw:['ウクライナ','ロシア','Ukraine','Russia','NATO','戦争'] },
+    { name:'中東・イスラエル', kw:['中東','イスラエル','ガザ','Iran','サウジ','ホルムズ'] },
+    { name:'台湾問題', kw:['台湾','台湾海峡','TSMC','有事','Taiwan'] },
+    { name:'北朝鮮', kw:['北朝鮮','Kim','ミサイル','核','ICBM'] },
+    { name:'輸出規制・制裁', kw:['輸出規制','制裁','sanctions','Entity List','OFAC'] },
+  ]},
+  { cat:'外交・国際関係', icon:'🤝', color:'var(--ac2)', subs:[
+    { name:'G7・G20', kw:['G7','G20','サミット','先進国','議長国'] },
+    { name:'NATO・安全保障同盟', kw:['NATO','同盟','AUKUS','Quad','クワッド','防衛'] },
+    { name:'ASEAN・アジア', kw:['ASEAN','RCEP','CPTPP','東南アジア','インド太平洋'] },
+    { name:'貿易交渉・FTA', kw:['FTA','EPA','貿易協定','USMCA','NAFTA','WTO'] },
+  ]},
+  { cat:'規制・法制度', icon:'⚖', color:'var(--y)', subs:[
+    { name:'AI規制', kw:['AI Act','AI規制','アルゴリズム','倫理','バイアス'] },
+    { name:'データ保護・プライバシー', kw:['GDPR','個人情報','プライバシー','データ保護','Cookie'] },
+    { name:'炭素税・排出規制', kw:['炭素税','排出権','ETS','CBAM','脱炭素','カーボン'] },
+    { name:'独占禁止・競争法', kw:['独禁法','反トラスト','antitrust','競争法','GAFA規制'] },
+  ]},
+  { cat:'国内政治・社会', icon:'🗳', color:'var(--g)', subs:[
+    { name:'日本政治', kw:['自民党','岸田','石破','日本政治','衆議院','参議院','選挙'] },
+    { name:'少子化・人口', kw:['少子化','出生率','人口減少','移民','外国人労働'] },
+    { name:'社会保障・医療', kw:['年金','社会保障','医療費','介護','健康保険'] },
+  ]},
+  { cat:'企業動向', icon:'🏢', color:'var(--ac)', subs:[
+    { name:'M&A・買収', kw:['M&A','買収','合併','TOB','merger','acquisition'] },
+    { name:'IPO・新規上場', kw:['IPO','新規上場','上場','株式公開'] },
+    { name:'リストラ・人員削減', kw:['リストラ','人員削減','レイオフ','layoff','早期退職'] },
+    { name:'ESG・SDGs', kw:['ESG','SDGs','サステナブル','脱炭素','ダイバーシティ'] },
+  ]},
+];
+
+// テーマブラウザ初期化
+window._thData = { news:[], share:{}, glossary:{}, knowledge:[] };
+window._thLoaded = false;
+
+function loadThemes() {
+  if (window._thLoaded) return;
+  window._thLoaded = true;
+  // 全データを並行フェッチ
+  Promise.allSettled([
+    fetch('data/all.json').then(r=>r.json()),
+    fetch('data/market_share.json').then(r=>r.json()),
+    fetch('data/glossary.json').then(r=>r.json()),
+    fetch('data/knowledge.json').then(r=>r.json()),
+  ]).then(([news, share, glossary, knowledge]) => {
+    if (news.status==='fulfilled') window._thData.news = news.value.情報 || [];
+    if (share.status==='fulfilled') window._thData.share = share.value.データ || {};
+    if (glossary.status==='fulfilled') window._thData.glossary = glossary.value || {};
+    if (knowledge.status==='fulfilled') window._thData.knowledge = knowledge.value.エントリ || [];
+    thRenderSidebar();
+  });
+  thRenderSidebar(); // 先にサイドバーだけ表示
+}
+
+function thRenderSidebar(selectedCat, selectedSub) {
+  const sidebar = document.getElementById('th-sidebar');
+  if (!sidebar) return;
+  let html = '';
+  THEME_TREE.forEach(cat => {
+    html += `<div class="browser-cat-sec">${cat.icon} ${cat.cat}</div>`;
+    cat.subs.forEach(sub => {
+      const isActive = selectedCat===cat.cat && selectedSub===sub.name;
+      html += `<div class="browser-cat-item ${isActive?'active':''}" onclick="thShowSub('${cat.cat.replace(/'/g,"\\'")}','${sub.name.replace(/'/g,"\\'")}')">
+        <span class="browser-cat-dot" style="background:${cat.color}"></span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">${sub.name}</span>
+      </div>`;
+    });
+  });
+  sidebar.innerHTML = html;
+}
+
+function thShowSub(catName, subName) {
+  // サイドバー更新
+  thRenderSidebar(catName, subName);
+  const catDef = THEME_TREE.find(c=>c.cat===catName);
+  const subDef = catDef?.subs.find(s=>s.name===subName);
+  if (!subDef) return;
+  const kw = subDef.kw;
+  const d = window._thData;
+  const content = document.getElementById('th-content');
+
+  // キーワードマッチング関数
+  const match = (text) => kw.some(k => (text||'').toLowerCase().includes(k.toLowerCase()));
+
+  // ニュース
+  const news = d.news.filter(a => match(a.タイトル)||match(a.背景)||match(a.最新)||(a.タグ||[]).some(t=>match(t))||(a.サブカテゴリー||'').includes(subName)||match(a.サブカテゴリー));
+
+  // シェア・統計
+  const shareItems = [];
+  Object.entries(d.share).forEach(([cat, items]) => {
+    (items||[]).forEach(item => {
+      if (match(item.製品カテゴリー||'') || match(cat)) shareItems.push({cat, ...item});
+    });
+  });
+
+  // 用語集
+  const glossTerms = [];
+  Object.entries(d.glossary).forEach(([cat, terms]) => {
+    (terms||[]).forEach(t => {
+      if (match(t.用語||'') || match(t.説明||'') || match(t.英語||'')) glossTerms.push({cat, ...t});
+    });
+  });
+
+  // 背景知識
+  const knItems = d.knowledge.filter(e => match(e.タイトル)||match(e.概要)||match(e.現状)||e.カテゴリー===catName);
+
+  const BAR_COLORS = ['var(--ac)','var(--g)','var(--y)','var(--pk)','var(--cy)','var(--o)','var(--r)'];
+
+  content.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bd)">
+      <span style="font-size:26px">${catDef.icon}</span>
+      <div>
+        <div style="font-size:10px;color:var(--mt)">${catName}</div>
+        <div style="font-size:17px;font-weight:800;color:var(--tx)">${subName}</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <span style="background:var(--s2);color:var(--mt);padding:3px 8px;border-radius:4px;font-size:10.5px">ニュース ${news.length}件</span>
+        <span style="background:var(--s2);color:var(--mt);padding:3px 8px;border-radius:4px;font-size:10.5px">統計 ${shareItems.length}件</span>
+        <span style="background:var(--s2);color:var(--mt);padding:3px 8px;border-radius:4px;font-size:10.5px">用語 ${glossTerms.length}語</span>
+        <span style="background:var(--s2);color:var(--mt);padding:3px 8px;border-radius:4px;font-size:10.5px">知識 ${knItems.length}件</span>
+      </div>
+    </div>
+
+    <!-- ニュース block -->
+    <div class="cd" style="margin-bottom:10px">
+      <div class="acc-hd" onclick="toggleAcc(this)" style="padding:0 0 0 0">
+        <span style="font-size:13px">📰</span>
+        <span style="font-weight:700">関連ニュース</span>
+        <span style="background:var(--ac)22;color:var(--ac2);font-size:10px;padding:1px 6px;border-radius:3px">${news.length}件</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-bd open">
+        ${news.length ? news.slice(0,6).map(a=>`
+          <div style="padding:8px 0;border-bottom:1px solid var(--bd)">
+            <div style="font-size:12.5px;font-weight:600;color:var(--tx);margin-bottom:3px">${a.タイトル||''}</div>
+            <div style="font-size:11px;color:var(--mt);line-height:1.6">${(a.最新||a.背景||'').slice(0,120)}${(a.最新||a.背景||'').length>120?'…':''}</div>
+            <div style="display:flex;gap:4px;margin-top:4px;align-items:center">
+              ${(a.タグ||[]).slice(0,3).map(t=>`<span style="background:var(--s2);color:var(--mt);font-size:10px;padding:1px 5px;border-radius:3px">${t}</span>`).join('')}
+              <span style="margin-left:auto;font-size:10px;color:var(--mt)">${a.収集日||''}</span>
+            </div>
+          </div>`).join('') : '<div style="color:var(--mt);padding:12px 0;font-size:12px">データなし（収集対象外または未収集）</div>'}
+      </div>
+    </div>
+
+    <!-- シェア・統計 block -->
+    <div class="cd" style="margin-bottom:10px">
+      <div class="acc-hd" onclick="toggleAcc(this)">
+        <span style="font-size:13px">📊</span>
+        <span style="font-weight:700">シェア・統計</span>
+        <span style="background:var(--g)22;color:var(--g);font-size:10px;padding:1px 6px;border-radius:3px">${shareItems.length}品目</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-bd open">
+        ${shareItems.length ? shareItems.slice(0,4).map(item=>`
+          <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bd)">
+            <div style="font-size:12px;font-weight:700;color:var(--ac2);margin-bottom:6px">${item.製品カテゴリー||''}</div>
+            ${(item.シェアデータ||[]).map((s,i)=>`
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <div style="width:90px;font-size:11px;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.企業名}</div>
+                <div style="flex:1;background:var(--s2);border-radius:2px;height:6px">
+                  <div style="width:${Math.min(s.シェア||0,100)}%;height:100%;background:${BAR_COLORS[i%BAR_COLORS.length]};border-radius:2px"></div>
+                </div>
+                <div style="width:38px;text-align:right;font-size:11px;font-weight:700;font-family:var(--mono)">${s.シェア}%</div>
+              </div>`).join('')}
+            <div style="font-size:10px;color:var(--mt);margin-top:4px">出典: ${item.出典||'—'}</div>
+          </div>`).join('') : '<div style="color:var(--mt);padding:12px 0;font-size:12px">データなし</div>'}
+      </div>
+    </div>
+
+    <!-- 用語集 block -->
+    <div class="cd" style="margin-bottom:10px">
+      <div class="acc-hd" onclick="toggleAcc(this)">
+        <span style="font-size:13px">📚</span>
+        <span style="font-weight:700">用語集</span>
+        <span style="background:var(--pk)22;color:var(--pk);font-size:10px;padding:1px 6px;border-radius:3px">${glossTerms.length}語</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-bd">
+        ${glossTerms.length ? glossTerms.slice(0,10).map(t=>`
+          <div class="acc-item">
+            <div class="acc-hd" onclick="toggleAcc(this)" style="padding:7px 0">
+              <span style="font-size:12.5px;font-weight:700;color:var(--ac2)">${t.用語||''}</span>
+              ${t.英語?`<span style="font-size:10px;color:var(--mt);font-family:var(--mono);background:var(--s2);padding:1px 5px;border-radius:3px">${t.英語}</span>`:''}
+              <span class="acc-arrow">▼</span>
+            </div>
+            <div class="acc-bd" style="color:var(--mt);font-size:11.5px;line-height:1.7;padding:0 0 8px">${t.説明||''}</div>
+          </div>`).join('') : '<div style="color:var(--mt);padding:12px 0;font-size:12px">データなし</div>'}
+      </div>
+    </div>
+
+    <!-- 背景知識 block -->
+    <div class="cd" style="margin-bottom:10px">
+      <div class="acc-hd" onclick="toggleAcc(this)">
+        <span style="font-size:13px">🧠</span>
+        <span style="font-weight:700">背景知識</span>
+        <span style="background:var(--cy)22;color:var(--cy);font-size:10px;padding:1px 6px;border-radius:3px">${knItems.length}件</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-bd">
+        ${knItems.length ? knItems.slice(0,6).map(e=>`
+          <div class="acc-item">
+            <div class="acc-hd" onclick="toggleAcc(this)" style="padding:7px 0">
+              <span style="background:${e.level==='要素'?'var(--ac)':e.level==='中要素'?'var(--g)':'var(--o)'}22;color:${e.level==='要素'?'var(--ac2)':e.level==='中要素'?'var(--g)':'var(--o)'};font-size:9px;padding:1px 5px;border-radius:3px">${e.level||''}</span>
+              <span style="font-size:12.5px;font-weight:700;color:var(--tx)">${e.タイトル||''}</span>
+              <span class="acc-arrow">▼</span>
+            </div>
+            <div class="acc-bd" style="font-size:11.5px;color:var(--mt);line-height:1.7;padding:0 0 8px">
+              ${e.概要||''}
+              ${e.現状?`<div style="margin-top:6px;padding:6px 8px;background:var(--s2);border-radius:4px;font-size:11px">${e.現状.slice(0,150)}…</div>`:''}
+            </div>
+          </div>`).join('') : '<div style="color:var(--mt);padding:12px 0;font-size:12px">データなし</div>'}
+      </div>
+    </div>
+  `;
 }
 
 // ===== TICKER =====
@@ -773,20 +1263,23 @@ function renderWorld() {
     (!sub || a.サブカテゴリー === sub)
   );
   document.getElementById('w-count').textContent = `${rows.length}件`;
-  document.getElementById('w-list').innerHTML = rows.map(a => `
-    <div class="ar" style="padding:14px 16px;border-bottom:1px solid var(--bd)">
-      <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px">
-        <span style="background:var(--s2);color:var(--ac);font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap">${a.カテゴリ||''}</span>
-        ${a.サブカテゴリー ? `<span style="background:var(--s2);color:var(--g);font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap">${a.サブカテゴリー}</span>` : ''}
-        <span style="color:var(--mt);font-size:10.5px;margin-left:auto;white-space:nowrap">${a.収集日||''}</span>
-      </div>
-      <div style="font-size:13.5px;font-weight:700;margin-bottom:6px;line-height:1.5">${a.タイトル||''}</div>
-      ${a.最新 ? `<div style="font-size:12px;color:var(--mt);line-height:1.7;margin-bottom:6px">${a.最新.slice(0,300)}${a.最新.length>300?'…':''}</div>` : ''}
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
+  document.getElementById('w-list').innerHTML = rows.map((a, idx) => `
+  <div class="acc-item">
+    <div class="acc-hd" onclick="toggleAcc(this)" id="acc-w-${idx}">
+      <span style="background:var(--s2);color:var(--ac);font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0">${a.カテゴリ||''}</span>
+      ${a.サブカテゴリー ? `<span style="background:var(--s2);color:var(--g);font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0">${a.サブカテゴリー}</span>` : ''}
+      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.タイトル||''}</span>
+      <span style="color:var(--mt);font-size:10.5px;white-space:nowrap;flex-shrink:0">${a.収集日||''}</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-bd">
+      ${a.最新 ? `<div style="margin-bottom:8px">${a.最新}</div>` : ''}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
         ${(a.タグ||[]).slice(0,4).map(t => `<span style="background:var(--s2);color:var(--mt);font-size:10px;padding:1px 6px;border-radius:3px">${t}</span>`).join('')}
         ${a.情報源 ? `<a href="${a.情報源}" target="_blank" style="color:var(--ac);font-size:10px;margin-left:auto">ソース↗</a>` : ''}
       </div>
-    </div>`).join('');
+    </div>
+  </div>`).join('');
 }
 
 ['w-search','w-cat','w-sub'].forEach(id => {
@@ -829,25 +1322,36 @@ function renderEconomy(items) {
   document.getElementById('ec-count').textContent = `${items.length}件`;
   const byCategory = {};
   items.forEach(x => { (byCategory[x.カテゴリ||'その他'] ||= []).push(x); });
-  document.getElementById('ec-list').innerHTML = Object.entries(byCategory).map(([cat, list]) => `
-    <div style="margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--ac);padding:8px 14px;background:var(--s2);border-bottom:1px solid var(--bd)">${cat}</div>
-      ${list.map(x => {
+  const cats = Object.keys(byCategory);
+  document.getElementById('ec-list').innerHTML = cats.map(cat => {
+    const catItems = byCategory[cat];
+    if (!catItems.length) return '';
+    return `
+    <div style="margin-bottom:8px">
+      <div style="font-size:11px;font-weight:700;color:var(--mt);padding:6px 4px;border-bottom:1px solid var(--bd);margin-bottom:2px">${cat} <span style="color:var(--ac)">${catItems.length}件</span></div>
+      ${catItems.map(x => {
         const up = x.トレンド === '上昇' || x.トレンド === '改善';
         const dn = x.トレンド === '低下' || x.トレンド === '悪化' || x.トレンド === '鈍化';
-        const vc = up ? 'var(--g)' : dn ? 'var(--r)' : 'var(--fg)';
-        return `<div style="display:grid;grid-template-columns:1fr 110px 110px 120px 80px;padding:9px 14px;border-bottom:1px solid var(--bd);font-size:12px;gap:8px;align-items:center">
-          <div>
-            <div style="font-weight:600">${x.名称}</div>
-            ${x.備考 ? `<div style="font-size:10.5px;color:var(--mt);margin-top:1px">${x.備考}</div>` : ''}
+        const vc = up ? 'var(--g)' : dn ? 'var(--r)' : 'var(--mt)';
+        return `
+        <div class="acc-item">
+          <div class="acc-hd" onclick="toggleAcc(this)">
+            <span style="flex:1">${x.名称||''}</span>
+            <span style="color:${vc};font-weight:700;margin-right:8px;font-size:12px">${x.最新値!=null?x.最新値:'—'}</span>
+            <span class="acc-arrow">▼</span>
           </div>
-          <div style="font-size:15px;font-weight:700;color:${vc};text-align:right">${x.最新値||'—'}</div>
-          <div style="color:var(--mt);text-align:right">前回: ${x.前回||'—'}</div>
-          <div style="color:var(--mt);text-align:right">次回: ${x.次回予定||'—'}</div>
-          <div style="text-align:right">${x.URL ? `<a href="${x.URL}" target="_blank" style="color:var(--ac);font-size:10px">${x.ソース||'ソース'}↗</a>` : `<span style="color:var(--mt);font-size:10px">${x.ソース||''}</span>`}</div>
+          <div class="acc-bd">
+            ${x.備考 ? `<div style="margin-bottom:6px">${x.備考}</div>` : ''}
+            <div style="display:flex;gap:16px;font-size:12px;flex-wrap:wrap">
+              ${x.前回!=null ? `<span>前回: <b>${x.前回}</b></span>` : ''}
+              ${x.次回予定 ? `<span>次回: <b>${x.次回予定}</b></span>` : ''}
+              ${x.ソース ? (x.URL ? `<span>出典: <a href="${x.URL}" target="_blank" style="color:var(--ac)">${x.ソース}↗</a></span>` : `<span>出典: ${x.ソース}</span>`) : ''}
+            </div>
+          </div>
         </div>`;
       }).join('')}
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ===== GLOBAL SEARCH =====
@@ -870,21 +1374,31 @@ function loadGlossary() {
     const cats = Object.keys(_glData);
     const sel = document.getElementById('gl-cat');
     cats.forEach(c => {
-      const o = document.createElement('option');
-      o.value = c; o.textContent = c; sel.appendChild(o);
+      const btn = document.createElement('button');
+      btn.className = 'cat-btn';
+      btn.dataset.cat = c;
+      btn.textContent = c;
+      btn.onclick = () => glSelectCat(btn, c);
+      document.getElementById('gl-cat-btns').appendChild(btn);
     });
     renderGlossary();
   }).catch(() => {
     document.getElementById('gl-container').innerHTML = '<div class="loading" style="color:var(--r)">データ読み込みエラー</div>';
   });
 }
+let _glCat = '';
+function glSelectCat(btn, cat) {
+  _glCat = cat;
+  document.querySelectorAll('#gl-cat-btns .cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGlossary();
+}
 function renderGlossary() {
   const q = (document.getElementById('gl-search')?.value || '').toLowerCase();
-  const cat = document.getElementById('gl-cat')?.value || '';
   const container = document.getElementById('gl-container');
   let total = 0;
   container.innerHTML = '';
-  const cats = cat ? [cat] : Object.keys(_glData);
+  const cats = _glCat ? [_glCat] : Object.keys(_glData);
   cats.forEach(c => {
     const terms = (_glData[c] || []).filter(t =>
       !q || t.用語.toLowerCase().includes(q) ||
@@ -896,20 +1410,22 @@ function renderGlossary() {
     total += terms.length;
     const wrap = document.createElement('div');
     wrap.style.marginBottom = '16px';
-    wrap.innerHTML = `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mt);margin-bottom:8px;padding:6px 0;border-bottom:1px solid var(--bd)">${c} <span style="color:var(--ac)">${terms.length}語</span></div>` +
-      `<div class="gl-grid">` +
-      terms.map(t => `<div class="gl-card">
-        <div class="gl-term">${t.用語}</div>
-        <div class="gl-read">${t.読み || ''}</div>
-        <div class="gl-desc">${t.説明 || ''}</div>
-        ${t.英語 ? `<span class="gl-en">${t.英語}</span>` : ''}
-      </div>`).join('') + `</div>`;
+    wrap.innerHTML = `<div style="font-size:11px;font-weight:700;letter-spacing:.07em;color:var(--mt);margin-bottom:4px;padding:6px 0;border-bottom:1px solid var(--bd)">${c} <span style="color:var(--ac)">${terms.length}語</span></div>` +
+      terms.map((t, idx) => `
+    <div class="acc-item">
+      <div class="acc-hd" onclick="toggleAcc(this)">
+        <span style="font-size:13.5px;font-weight:700;color:var(--ac2)">${t.用語}</span>
+        ${t.読み ? `<span style="font-size:10.5px;color:var(--mt)">${t.読み}</span>` : ''}
+        ${t.英語 ? `<span style="font-size:10px;color:var(--mt);background:var(--s);padding:1px 6px;border-radius:3px;font-family:var(--mono)">${t.英語}</span>` : ''}
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-bd">${t.説明||''}</div>
+    </div>`).join('');
     container.appendChild(wrap);
   });
   document.getElementById('gl-count').textContent = total + '語';
 }
 document.getElementById('gl-search').addEventListener('input', renderGlossary);
-document.getElementById('gl-cat').addEventListener('change', renderGlossary);
 
 // ===== COMPANIES =====
 let _allCo = [];
@@ -964,6 +1480,19 @@ function loadShare() {
     const data = d.データ || {};
     const cats = Object.keys(data);
     const container = document.getElementById('share-container');
+    // カテゴリーボタン生成
+    const btnWrap = document.getElementById('share-cat-btns');
+    btnWrap.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.className = 'cat-btn active'; allBtn.textContent = 'すべて';
+    allBtn.onclick = () => { btnWrap.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); allBtn.classList.add('active'); container.querySelectorAll('.share-section').forEach(s=>s.style.display=''); };
+    btnWrap.appendChild(allBtn);
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-btn'; btn.textContent = cat;
+      btn.onclick = () => { btnWrap.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); container.querySelectorAll('.share-section').forEach(s=>s.style.display = s.dataset.cat===cat?'':'none'); };
+      btnWrap.appendChild(btn);
+    });
     if (!cats.length) {
       container.innerHTML = '<div class="cd" style="text-align:center;padding:40px;color:var(--mt)"><div style="font-size:28px;margin-bottom:8px">📊</div><div>調査データが蓄積されていません</div><div style="font-size:11.5px;margin-top:6px">毎日1カテゴリーずつ調査が追加されます</div><div style="margin-top:8px;color:var(--ac);font-size:12px">次回調査: ' + (d.調査ローテーション?.次回調査カテゴリー||'—') + '</div></div>';
       return;
@@ -972,7 +1501,7 @@ function loadShare() {
     cats.forEach(cat => {
       const items = data[cat] || [];
       const div = document.createElement('div');
-      div.className = 'cd';
+      div.className = 'cd share-section'; div.dataset.cat = cat;
       const BAR_COLORS = ['var(--ac)','var(--g)','var(--y)','var(--pk)','var(--cy)','var(--o)','var(--r)'];
       div.innerHTML = `<h2>${cat} <span style="font-size:11px;color:var(--mt);font-weight:400">調査日: ${d.調査日時?.[cat]||'—'}</span></h2>` +
         items.map(item => `
@@ -1101,29 +1630,89 @@ function showCountryList() {
   document.getElementById('country-detail-content').innerHTML = '';
 }
 
-// ===== KNOWLEDGE（4階層ナビゲーター）=====
-// 状態管理
-window._kn = { data: [], stack: [] }; // stack: [{level, id, title}]
+// ===== KNOWLEDGE（業界地図ブラウザ）=====
+window._kn = { data: [], cat: '' };
 
 const KN_CAT_COLORS = ['var(--ac)','var(--g)','var(--o)','var(--pk)','var(--cy)','var(--r)','var(--y)','var(--b)'];
+const KN_CAT_ICONS = {
+  '半導体・電子部品':'💾','AI・テクノロジー':'🤖','自動車・モビリティ':'🚗',
+  'エネルギー':'⚡','製薬・ヘルスケア':'💊','農業・食料':'🌾',
+  '金融市場':'📈','物流・サプライチェーン':'🚢','マクロ経済':'🏛',
+  '地政学・安全保障':'🌐','外交・国際関係':'🤝','規制・法制度':'⚖',
+  '国内政治・社会':'🗳','企業動向':'🏢'
+};
+const KN_CAT_GROUPS = [
+  { label:'テクノロジー', cats:['半導体・電子部品','AI・テクノロジー','自動車・モビリティ','エネルギー'] },
+  { label:'産業・ビジネス', cats:['製薬・ヘルスケア','農業・食料','金融市場','物流・サプライチェーン','企業動向'] },
+  { label:'マクロ・地政学', cats:['マクロ経済','地政学・安全保障','外交・国際関係','規制・法制度','国内政治・社会'] },
+];
 
 function loadKnowledge() {
   window._knLoaded = true;
   fetch('data/knowledge.json').then(r=>r.json()).then(d => {
     window._kn.data = d.エントリ || [];
     document.getElementById('kn-search').addEventListener('input', () => knRender());
-    knNav('cat');
+    knRenderSidebar();
+    knRender();
   }).catch(()=>{
     document.getElementById('kn-list').innerHTML='<div style="color:var(--r);padding:20px">knowledge.json を読み込めませんでした</div>';
   });
 }
 
+function knRenderSidebar() {
+  const kn = window._kn;
+  const allCats = [...new Set(kn.data.map(e => e.カテゴリー))].filter(Boolean);
+  const current = kn.cat;
+  const sidebar = document.getElementById('kn-cat-sidebar');
+
+  let html = `<div class="browser-cat-item ${!current?'active':''}" onclick="knSelectCat('')">
+    <span style="font-size:11px">◆</span> すべて
+  </div>`;
+
+  KN_CAT_GROUPS.forEach(grp => {
+    const groupCats = grp.cats.filter(c => allCats.includes(c));
+    if (!groupCats.length) return;
+    html += `<div class="browser-cat-sec">${grp.label}</div>`;
+    groupCats.forEach(cat => {
+      const idx = allCats.indexOf(cat);
+      const col = KN_CAT_COLORS[idx % KN_CAT_COLORS.length];
+      const icon = KN_CAT_ICONS[cat] || '▪';
+      html += `<div class="browser-cat-item ${current===cat?'active':''}" onclick="knSelectCat('${cat}')">
+        <span class="browser-cat-dot" style="background:${col}"></span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</span>
+      </div>`;
+    });
+  });
+
+  // グループ未分類のカテゴリー
+  const grouped = KN_CAT_GROUPS.flatMap(g=>g.cats);
+  const orphans = allCats.filter(c => !grouped.includes(c));
+  if (orphans.length) {
+    html += `<div class="browser-cat-sec">その他</div>`;
+    orphans.forEach(cat => {
+      const idx = allCats.indexOf(cat);
+      const col = KN_CAT_COLORS[idx % KN_CAT_COLORS.length];
+      html += `<div class="browser-cat-item ${current===cat?'active':''}" onclick="knSelectCat('${cat}')">
+        <span class="browser-cat-dot" style="background:${col}"></span>
+        <span>${cat}</span>
+      </div>`;
+    });
+  }
+  sidebar.innerHTML = html;
+}
+
+function knSelectCat(cat) {
+  window._kn.cat = cat;
+  window._kn.stack = cat ? [{ level:'要素', id:cat, title:cat }] : [];
+  knRenderSidebar();
+  knRender();
+}
+
 function knNav(level, id, title) {
   const kn = window._kn;
   if (level === 'cat') {
-    kn.stack = [];
+    kn.stack = kn.cat ? [{ level:'要素', id:kn.cat, title:kn.cat }] : [];
   } else {
-    // stackを該当レベルまでトリミング or 追加
     const levelOrder = ['cat','要素','中要素','事象'];
     const idx = levelOrder.indexOf(level);
     kn.stack = kn.stack.slice(0, idx - 1);
@@ -1136,9 +1725,11 @@ function knRender() {
   const kn = window._kn;
   const q = (document.getElementById('kn-search').value || '').toLowerCase();
   const stack = kn.stack;
+  const list = document.getElementById('kn-list');
 
   // パンくずリスト更新
-  let bc = `<span style="cursor:pointer;color:var(--ac)" onclick="knNav('cat')">全カテゴリー</span>`;
+  let bc = `<span style="cursor:pointer;color:var(--ac)" onclick="knSelectCat('')">全カテゴリー</span>`;
+  if (kn.cat && !stack.length) bc += ` <span style="color:var(--mt)">›</span> <span style="color:var(--tx)">${kn.cat}</span>`;
   stack.forEach((s, i) => {
     bc += `<span style="color:var(--mt)"> › </span>`;
     const isLast = i === stack.length - 1;
@@ -1148,64 +1739,127 @@ function knRender() {
   });
   document.getElementById('kn-breadcrumb').innerHTML = bc;
 
-  const list = document.getElementById('kn-list');
-
-  // カテゴリー一覧（トップ）
-  if (!stack.length) {
-    const cats = [...new Set(kn.data.map(e => e.カテゴリー))].filter(Boolean);
-    const filtered = q ? cats.filter(c => c.toLowerCase().includes(q)) : cats;
+  // カテゴリー未選択 → 全カテゴリーをカードグリッドで表示
+  if (!kn.cat && !stack.length) {
+    const allCats = [...new Set(kn.data.map(e => e.カテゴリー))].filter(Boolean);
+    const filtered = q ? allCats.filter(c => c.toLowerCase().includes(q)) : allCats;
     document.getElementById('kn-count').textContent = `${filtered.length}カテゴリー`;
-    list.innerHTML = filtered.map((cat, i) => {
+    list.innerHTML = `<div class="card-grid">${filtered.map((cat, i) => {
       const items = kn.data.filter(e => e.カテゴリー === cat && e.level === '要素');
-      const col = KN_CAT_COLORS[i % KN_CAT_COLORS.length];
-      return `<div class="cd" style="margin-bottom:8px;cursor:pointer;border-left:3px solid ${col}" onclick="knNavCat('${cat}')">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="font-size:14px;font-weight:700;color:${col}">${cat}</div>
-          <div style="font-size:11px;color:var(--mt)">${items.length}要素 ›</div>
+      const col = KN_CAT_COLORS[allCats.indexOf(cat) % KN_CAT_COLORS.length];
+      const icon = KN_CAT_ICONS[cat] || '📌';
+      return `<div class="bc" onclick="knSelectCat('${cat}')">
+        <div class="bc-top" style="background:${col}22">
+          <span>${icon}</span>
         </div>
-        <div style="font-size:11.5px;color:var(--mt);margin-top:4px">${items.slice(0,4).map(e=>e.タイトル).join(' · ')}${items.length>4?' …':''}</div>
+        <div class="bc-body">
+          <div class="bc-title">${cat}</div>
+          <div class="bc-desc">${items.length}要素 · ${kn.data.filter(e=>e.カテゴリー===cat).length}エントリ</div>
+          <div class="bc-tags">${items.slice(0,3).map(e=>`<span class="bc-tag">${e.タイトル.slice(0,12)}</span>`).join('')}</div>
+        </div>
       </div>`;
-    }).join('');
+    }).join('')}</div>`;
     return;
   }
 
-  const current = stack[stack.length - 1];
+  // カテゴリー選択済み・スタックなし → 業界地図ビュー
+  if (kn.cat && !stack.length) {
+    const cat = kn.cat;
+    const allCats = [...new Set(kn.data.map(e => e.カテゴリー))].filter(Boolean);
+    const col = KN_CAT_COLORS[allCats.indexOf(cat) % KN_CAT_COLORS.length];
+    const icon = KN_CAT_ICONS[cat] || '📌';
+    const elements = kn.data.filter(e => e.カテゴリー === cat && e.level === '要素');
+    const midItems = kn.data.filter(e => e.カテゴリー === cat && e.level === '中要素');
+    const events = kn.data.filter(e => e.カテゴリー === cat && e.level === '事象');
+    const filtered = q ? elements.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : elements;
+    document.getElementById('kn-count').textContent = `${filtered.length}要素`;
 
-  // 要素一覧
-  if (current.level === '要素') {
-    const items = kn.data.filter(e => e.カテゴリー === current.id && e.level === '要素');
-    const filtered = q ? items.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : items;
-    document.getElementById('kn-count').textContent = `${filtered.length}件`;
-    list.innerHTML = filtered.map(e => knCardElement(e)).join('');
+    // 業界地図ヘッダー
+    const overview = elements[0];
+    list.innerHTML = `
+      <div class="imap-overview">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <span style="font-size:32px">${icon}</span>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:${col}">${cat}</div>
+            <div style="font-size:11.5px;color:var(--mt);margin-top:2px">${elements.length}要素 · ${midItems.length}中要素 · ${events.length}事象</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <span style="background:${col}22;color:${col};padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600">業界地図</span>
+          </div>
+        </div>
+        ${overview?.概要 ? `<div style="font-size:12.5px;color:var(--mt);line-height:1.7;border-top:1px solid var(--bd);padding-top:10px">${overview.概要.slice(0,200)}${overview.概要.length>200?'…':''}</div>` : ''}
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--mt);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">構成要素 — クリックで詳細</div>
+      <div class="card-grid">${filtered.map((e, i) => {
+        const children = kn.data.filter(c => c.parent_id === e.id);
+        const lvlColors = {要素:col, 中要素:'var(--g)', 事象:'var(--o)'};
+        return `<div class="bc" onclick="knNav('中要素','${e.id}','${e.タイトル}')">
+          <div class="bc-top" style="background:${col}18">
+            <span class="bc-level">要素</span>
+            <span style="font-size:20px;font-weight:800;color:${col};opacity:.6">${String(i+1).padStart(2,'0')}</span>
+          </div>
+          <div class="bc-body">
+            <div class="bc-title">${e.タイトル}</div>
+            <div class="bc-desc">${(e.概要||'').slice(0,80)}${(e.概要||'').length>80?'…':''}</div>
+            ${children.length ? `<div class="bc-tags">${children.slice(0,2).map(c=>`<span class="bc-tag">${c.タイトル.slice(0,12)}</span>`).join('')}${children.length>2?`<span class="bc-tag">+${children.length-2}</span>`:''}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('')}</div>`;
     return;
   }
 
-  // 中要素一覧
-  if (current.level === '中要素') {
-    const parent = kn.data.find(e => e.id === current.id);
-    const children = kn.data.filter(e => e.parent_id === current.id && e.level === '中要素');
+  // 要素内 → 中要素カードグリッド
+  if (stack.length && stack[stack.length-1].level === '中要素') {
+    const cur = stack[stack.length-1];
+    const parent = kn.data.find(e => e.id === cur.id);
+    const children = kn.data.filter(e => e.parent_id === cur.id && e.level === '中要素');
     const filtered = q ? children.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : children;
     document.getElementById('kn-count').textContent = `${filtered.length}件`;
-    if (parent) list.innerHTML = knCardDetail(parent, false) + filtered.map(e => knCardMid(e)).join('');
-    else list.innerHTML = filtered.map(e => knCardMid(e)).join('');
+    list.innerHTML = (parent ? knCardDetail(parent, false) : '') +
+      (filtered.length ? `<div style="font-size:11px;font-weight:700;color:var(--mt);letter-spacing:.07em;text-transform:uppercase;margin:10px 0 8px">中要素</div>
+      <div class="card-grid">${filtered.map(e => {
+        const evts = kn.data.filter(c => c.parent_id === e.id && c.level === '事象');
+        return `<div class="bc" onclick="knNav('事象','${e.id}','${e.タイトル}')">
+          <div class="bc-top" style="background:var(--g)15">
+            <span class="bc-level" style="background:rgba(34,211,160,.3)">中要素</span>
+            <span style="font-size:16px;color:var(--g);opacity:.5">◎</span>
+          </div>
+          <div class="bc-body">
+            <div class="bc-title">${e.タイトル}</div>
+            <div class="bc-desc">${(e.概要||'').slice(0,80)}…</div>
+            ${evts.length ? `<div class="bc-tags"><span class="bc-tag">事象 ${evts.length}件</span></div>` : ''}
+          </div>
+        </div>`;
+      }).join('')}</div>` : '<div style="color:var(--mt);padding:20px">中要素データなし</div>');
     return;
   }
 
-  // 事象一覧 or 詳細
-  if (current.level === '事象') {
-    const parent = kn.data.find(e => e.id === current.id);
-    const children = kn.data.filter(e => e.parent_id === current.id && e.level === '事象');
+  // 事象レベル
+  if (stack.length && stack[stack.length-1].level === '事象') {
+    const cur = stack[stack.length-1];
+    const parent = kn.data.find(e => e.id === cur.id);
+    const children = kn.data.filter(e => e.parent_id === cur.id && e.level === '事象');
     const filtered = q ? children.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : children;
     document.getElementById('kn-count').textContent = filtered.length ? `${filtered.length}事象` : '詳細';
-    if (parent) list.innerHTML = knCardDetail(parent, true) + filtered.map(e => knCardEvent(e)).join('');
-    else list.innerHTML = '';
+    list.innerHTML = (parent ? knCardDetail(parent, true) : '') +
+      (filtered.length ? `<div style="font-size:11px;font-weight:700;color:var(--mt);letter-spacing:.07em;text-transform:uppercase;margin:10px 0 8px">関連事象</div>
+      <div class="card-grid">${filtered.map(e => `<div class="bc" onclick="knShowDetail('${e.id}')">
+        <div class="bc-top" style="background:var(--o)15">
+          <span class="bc-level" style="background:rgba(245,158,11,.3)">事象</span>
+          <span style="font-size:16px;color:var(--o);opacity:.5">◈</span>
+        </div>
+        <div class="bc-body">
+          <div class="bc-title">${e.タイトル}</div>
+          <div class="bc-desc">${(e.概要||'').slice(0,80)}…</div>
+        </div>
+      </div>`).join('')}</div>` : '');
     return;
   }
 }
 
 function knNavCat(cat) {
-  window._kn.stack = [{ level: '要素', id: cat, title: cat }];
-  knRender();
+  knSelectCat(cat);
 }
 
 function knCardElement(e) {
