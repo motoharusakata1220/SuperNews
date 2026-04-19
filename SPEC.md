@@ -58,37 +58,43 @@
 
 ## ダッシュボード機能一覧
 
-### 現行機能
-| 機能 | データ | 状態 |
+### 稼働中の機能
+| 機能 | データ | 備考 |
 |------|--------|------|
-| 世界情勢ニュース | HTML内埋め込み 173記事 | 稼働中・要改修 |
-| 経済指標 | HTML内埋め込み 350項目 | 稼働中 |
-| 投資 | 12チャンネル・7本動画 | 稼働中 |
-| 背景知識 | 15カ国 | 稼働中 |
-| 国際関係 | 15件 | 稼働中 |
-| 上場企業一覧 | `companies.json` 3,745社 | 稼働中 |
-| シェア・統計 | `market_share.json` | 稼働中（半導体のみ） |
-| 用語集 | `glossary.json` 780語 | 稼働中 |
+| 世界情勢ニュース | `all.json` 43記事 | サブカテゴリータグ付き |
+| 経済指標 | HTML内埋め込み 350項目 | — |
+| 投資 | 12チャンネル・7本動画 | — |
+| 背景知識 | 15カ国 | — |
+| 国際関係 | 15件 | — |
+| 上場企業一覧 | `companies.json` 3,745社 | lazy load |
+| シェア・統計 | `market_share.json` | 半導体7品目 |
+| 用語集 | `glossary.json` 780語 | 14カテゴリー・lazy load |
+| 世界の国々 | `countries.json` 196カ国 | 詳細ビュー付き・lazy load |
+| 決算書 | `financials/{コード}.json` | EDINET取得・コード検索 |
+| 決算スケジュール | `financials/schedules.json` | 提出日・種別フィルター |
+| 各国発表 | `country_announcements/` | RSS収集・国選択 |
 
 ### 追加予定機能
 | 機能 | データソース | 優先度 |
 |------|-------------|--------|
-| 世界195カ国ページ | `countries.json`（新規作成） | 高 |
-| 決算書（B/S・P/L・CF） | EDINET API（無料・公式） | 高 |
-| 決算発表スケジュール | EDINET API | 高 |
-| ニュースの細粒度カテゴリー | サブカテゴリー軸で再分類 | 高 |
+| ニュースのサブカテゴリーフィルター | `all.json` の `サブカテゴリー` フィールド | 高 |
+| シェア・統計の全14カテゴリー化 | `market_share.json` ローテーション | 高 |
+| 各国発表の収集対象拡大 | RSS整備（現在7カ国/機関） | 中 |
+| 動画自動生成 | Claude Code + 外部ツール | 低 |
 
 ---
 
 ## UIデザイン方針
 
 - **スタイル**: Bloomberg / TradingView ライクなモダンダーク
-- **ヘッダー**: 為替・株価ティッカーが横に自動スクロール
-- **サイドバー構成**:
+- **カラーパレット**: `--bg:#070710` / `--ac:#3b82f6` / `--g:#22d3a0` / `--r:#f25c6e`
+- **ヘッダー**: 為替・株価ティッカーが横に自動スクロール（CSSアニメーション）
+- **サイドバー構成**（左固定 220px）:
   ```
   📰 ニュース・情報
      ├ 世界情勢
-     └ 世界の国々 (195カ国)
+     ├ 世界の国々 (196カ国)
+     └ 各国発表
 
   📊 マーケット・経済
      ├ 経済指標
@@ -105,8 +111,6 @@
      ├ 背景知識
      └ 国際関係
   ```
-- **ナビゲーション**: 左サイドバー固定 + 上部ティッカーバー
-- **カラーパレット**: ダーク背景 + ブルーアクセント
 
 ---
 
@@ -114,13 +118,39 @@
 
 ```
 docs/data/
-├── companies.json       # JPX上場3,745社
-├── glossary.json        # 用語集780語（14カテゴリー）
-├── market_share.json    # シェア・統計（カテゴリーローテーション）
-├── countries.json       # 世界195カ国（新規作成予定）
-└── financials/          # 決算書データ（EDINET取得・新規作成予定）
-    ├── schedules.json   # 決算発表スケジュール
-    └── {証券コード}.json # 各社決算書
+├── all.json                      # ニュース記事（43件・サブカテゴリー付き）
+├── companies.json                # JPX上場3,745社
+├── countries.json                # 世界196カ国（ISO2コード・旗・GDP・人口・加盟組織・概要）
+├── glossary.json                 # 用語集780語（14カテゴリー）
+├── market_share.json             # シェア・統計（半導体7品目・ローテーション管理）
+├── indicators.json               # 経済指標350項目
+├── earnings.json                 # 決算データ（別系統）
+├── country_announcements/        # 各国公式発表（RSSから収集）
+│   ├── index.json                # 収集サマリー
+│   ├── JP.json                   # 日本（NHK等）
+│   ├── UN.json                   # 国際連合
+│   └── {コード}.json             # 各国
+└── financials/                   # 決算書データ（EDINET取得）
+    ├── schedules.json            # 決算発表スケジュール
+    └── {証券コード}.json         # 各社 B/S・P/L・CF
+```
+
+---
+
+## スクリプト一覧
+
+```
+scripts/
+├── fetch_edinet_financials.py    # EDINET API で決算書取得（EDINET_API_KEY 必要）
+│   # 使い方: python3 scripts/fetch_edinet_financials.py --code 7203
+│   # キー取得: https://disclosure2dl.edinet-fsa.go.jp/
+├── tag_news_subcategory.py       # all.json にサブカテゴリータグを付与
+│   # 使い方: python3 scripts/tag_news_subcategory.py
+├── collect_country_announcements.py  # 各国公式RSSから発表を収集
+│   # 使い方: python3 scripts/collect_country_announcements.py [--country JP]
+├── daily-update.sh               # 日次更新バッチ
+├── aggregate.sh                  # データ集約
+└── deploy.sh                     # GitHub Pages デプロイ補助
 ```
 
 ---
@@ -129,15 +159,20 @@ docs/data/
 
 - **フロントエンド**: バニラHTML/CSS/JavaScript（フレームワークなし）
 - **データ取得**: Python スクリプト（`scripts/` フォルダ）
-- **スケジューリング**: Claude Code Remote Trigger（予定）
+- **スケジューリング**: Claude Code Remote Trigger（設定済み・要確認）
 - **ホスティング**: GitHub Pages（`/docs` フォルダ）
-- **外部API**: EDINET API（決算書・無料）
+- **外部API**:
+  - EDINET API（決算書・無料・要APIキー登録）
+  - 各国政府・国際機関 RSS（無料・無認証）
 
 ---
 
-## 既知のバグ
+## 既知のバグ・課題
 
-- [ ] サブタブのボタンを押しても情報が表示されない（`subTab()` 関数のロジック不備）
+- [x] ~~subTabボタンが機能しない~~ → `classList.add/remove` に修正済み
+- [ ] ニュースのサブカテゴリーフィルターUIが未実装（タグは付与済み）
+- [ ] 各国発表RSS: 日本（官邸・外務省・財務省）が403/404でデータ0件
+- [ ] EDINETキーが未設定のため決算書データが空
 
 ---
 
@@ -145,4 +180,5 @@ docs/data/
 
 - GitHub push は坂田さんの明示的な許可が必要
 - API コストは発生させない（Claude Code を24時間稼働で代替）
-- プロジェクト仕様の変更は必ずこのファイル（`SPEC.md`）に反映する
+- **機能追加・変更のたびに必ずこのファイル（`SPEC.md`）を更新する**
+- 新機能はダッシュボード機能一覧・データファイル構成・スクリプト一覧の3箇所を更新
