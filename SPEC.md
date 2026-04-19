@@ -64,7 +64,7 @@
 | 世界情勢ニュース | `all.json` 43記事 | サブカテゴリータグ付き |
 | 経済指標 | `indicators.json` 88項目 | 9カテゴリー（物価・金利・雇用・株式・為替等） |
 | 投資 | 12チャンネル・7本動画 | — |
-| 背景知識 | `knowledge.json` 47トピック | HTML埋め込み（JSON化未完）|
+| 背景知識 | `knowledge.json` 4階層設計 | カテゴリー→要素→中要素→事象のナビゲーター |
 | 国際関係 | `international_relations.json` | 二国間15件・多国間枠組み15件 |
 | 上場企業一覧 | `companies.json` 3,745社 | lazy load |
 | 企業プロファイル | `companies_profile.json` 80社 | 日本主要企業・14フィールド |

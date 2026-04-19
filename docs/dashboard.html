@@ -343,11 +343,14 @@ select.sb-input{cursor:pointer}
     </div></div>
   </div>
 <div class="pn" id="p-knowledge">
-  <div class="filter-row">
-    <input type="text" id="kn-search" class="sb-input" style="flex:1;max-width:300px" placeholder="🔍 国名で検索...">
-    <span id="kn-count" style="color:var(--mt);font-size:12px;margin-left:8px"></span>
+  <div class="filter-row" style="flex-wrap:wrap;gap:6px">
+    <div id="kn-breadcrumb" style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--mt);flex:1;min-width:200px">
+      <span id="kn-bc-cat" style="cursor:pointer;color:var(--ac)" onclick="knNav('cat')">全カテゴリー</span>
+    </div>
+    <input type="text" id="kn-search" class="sb-input" style="width:200px" placeholder="キーワード検索...">
+    <span id="kn-count" style="color:var(--mt);font-size:12px"></span>
   </div>
-  <div id="kn-list" style="max-height:calc(100vh - 140px);overflow-y:auto"><div class="loading">読み込み中...</div></div>
+  <div id="kn-list" style="max-height:calc(100vh - 150px);overflow-y:auto"><div class="loading">読み込み中...</div></div>
   <div style="display:none"><!-- old hardcoded -->
     <div class="cc">
       <div class="cc-code">AUS <span style="font-size:13px;font-weight:400;color:var(--mt)">立憲君主制・連邦議会制（英連邦王国、二院制、二大政党制が基本</span></div>
@@ -1098,38 +1101,175 @@ function showCountryList() {
   document.getElementById('country-detail-content').innerHTML = '';
 }
 
-// ===== KNOWLEDGE =====
+// ===== KNOWLEDGE（4階層ナビゲーター）=====
+// 状態管理
+window._kn = { data: [], stack: [] }; // stack: [{level, id, title}]
+
+const KN_CAT_COLORS = ['var(--ac)','var(--g)','var(--o)','var(--pk)','var(--cy)','var(--r)','var(--y)','var(--b)'];
+
 function loadKnowledge() {
   window._knLoaded = true;
-  fetch('data/countries.json').then(r=>r.json()).then(d => {
-    const kData = (d.国一覧||[]).filter(c => c.政治体制).sort((a,b)=>(b.GDP兆ドル||0)-(a.GDP兆ドル||0));
-    document.getElementById('kn-count').textContent = `${kData.length}カ国`;
-    renderKnowledge(kData);
-    document.getElementById('kn-search').addEventListener('input', () => {
-      const q = document.getElementById('kn-search').value.toLowerCase();
-      renderKnowledge(kData.filter(c => !q || c.名前.includes(q) || (c.英語名||'').toLowerCase().includes(q)));
-    });
-  }).catch(()=>{ document.getElementById('kn-list').innerHTML='<div style="color:var(--r);padding:20px">データ読み込みエラー</div>'; });
+  fetch('data/knowledge.json').then(r=>r.json()).then(d => {
+    window._kn.data = d.エントリ || [];
+    document.getElementById('kn-search').addEventListener('input', () => knRender());
+    knNav('cat');
+  }).catch(()=>{
+    document.getElementById('kn-list').innerHTML='<div style="color:var(--r);padding:20px">knowledge.json を読み込めませんでした</div>';
+  });
 }
-function renderKnowledge(items) {
-  document.getElementById('kn-count').textContent = `${items.length}カ国`;
-  document.getElementById('kn-list').innerHTML = items.map(c => `
-    <div class="cd" style="margin-bottom:10px">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
-        <span style="font-size:36px;line-height:1">${c.旗||'🏳'}</span>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:700">${c.名前} <span style="font-size:11px;color:var(--mt);font-weight:400">${c.英語名||''}</span></div>
-          <div style="font-size:11.5px;color:var(--ac);margin-top:2px">${c.政治体制||''}</div>
+
+function knNav(level, id, title) {
+  const kn = window._kn;
+  if (level === 'cat') {
+    kn.stack = [];
+  } else {
+    // stackを該当レベルまでトリミング or 追加
+    const levelOrder = ['cat','要素','中要素','事象'];
+    const idx = levelOrder.indexOf(level);
+    kn.stack = kn.stack.slice(0, idx - 1);
+    kn.stack.push({ level, id, title });
+  }
+  knRender();
+}
+
+function knRender() {
+  const kn = window._kn;
+  const q = (document.getElementById('kn-search').value || '').toLowerCase();
+  const stack = kn.stack;
+
+  // パンくずリスト更新
+  let bc = `<span style="cursor:pointer;color:var(--ac)" onclick="knNav('cat')">全カテゴリー</span>`;
+  stack.forEach((s, i) => {
+    bc += `<span style="color:var(--mt)"> › </span>`;
+    const isLast = i === stack.length - 1;
+    bc += isLast
+      ? `<span style="color:var(--tx)">${s.title}</span>`
+      : `<span style="cursor:pointer;color:var(--ac)" onclick="knNav('${s.level}','${s.id}','${s.title}')">${s.title}</span>`;
+  });
+  document.getElementById('kn-breadcrumb').innerHTML = bc;
+
+  const list = document.getElementById('kn-list');
+
+  // カテゴリー一覧（トップ）
+  if (!stack.length) {
+    const cats = [...new Set(kn.data.map(e => e.カテゴリー))].filter(Boolean);
+    const filtered = q ? cats.filter(c => c.toLowerCase().includes(q)) : cats;
+    document.getElementById('kn-count').textContent = `${filtered.length}カテゴリー`;
+    list.innerHTML = filtered.map((cat, i) => {
+      const items = kn.data.filter(e => e.カテゴリー === cat && e.level === '要素');
+      const col = KN_CAT_COLORS[i % KN_CAT_COLORS.length];
+      return `<div class="cd" style="margin-bottom:8px;cursor:pointer;border-left:3px solid ${col}" onclick="knNavCat('${cat}')">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:14px;font-weight:700;color:${col}">${cat}</div>
+          <div style="font-size:11px;color:var(--mt)">${items.length}要素 ›</div>
         </div>
-        <div style="text-align:right;font-size:11px;color:var(--mt)">GDP $${c.GDP兆ドル||'—'}T<br>${c.人口||'—'}</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:12px">
-        ${c.主要産業 ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">主要産業</div>${(c.主要産業||[]).slice(0,4).map(x=>`<span style="display:inline-block;background:var(--ac)22;color:var(--ac2);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${x}</span>`).join('')}</div>` : ''}
-        ${c.主要貿易相手国 ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">主要貿易相手国</div><div style="color:var(--tx)">${(c.主要貿易相手国||[]).slice(0,3).join(' · ')}</div></div>` : ''}
-      </div>
-      ${c.リスク要因 ? `<div style="margin-bottom:6px"><div style="font-size:10px;color:var(--mt);margin-bottom:3px">地政学的課題</div>${(c.リスク要因||[]).map(r=>`<span style="display:inline-block;background:var(--r)22;color:var(--r);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${r}</span>`).join('')}</div>` : ''}
-      ${c.強み ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:3px">強み</div>${(c.強み||[]).map(s=>`<span style="display:inline-block;background:var(--g)22;color:var(--g);padding:1px 6px;border-radius:3px;margin:2px;font-size:11px">${s}</span>`).join('')}</div>` : ''}
-    </div>`).join('');
+        <div style="font-size:11.5px;color:var(--mt);margin-top:4px">${items.slice(0,4).map(e=>e.タイトル).join(' · ')}${items.length>4?' …':''}</div>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  const current = stack[stack.length - 1];
+
+  // 要素一覧
+  if (current.level === '要素') {
+    const items = kn.data.filter(e => e.カテゴリー === current.id && e.level === '要素');
+    const filtered = q ? items.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : items;
+    document.getElementById('kn-count').textContent = `${filtered.length}件`;
+    list.innerHTML = filtered.map(e => knCardElement(e)).join('');
+    return;
+  }
+
+  // 中要素一覧
+  if (current.level === '中要素') {
+    const parent = kn.data.find(e => e.id === current.id);
+    const children = kn.data.filter(e => e.parent_id === current.id && e.level === '中要素');
+    const filtered = q ? children.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : children;
+    document.getElementById('kn-count').textContent = `${filtered.length}件`;
+    if (parent) list.innerHTML = knCardDetail(parent, false) + filtered.map(e => knCardMid(e)).join('');
+    else list.innerHTML = filtered.map(e => knCardMid(e)).join('');
+    return;
+  }
+
+  // 事象一覧 or 詳細
+  if (current.level === '事象') {
+    const parent = kn.data.find(e => e.id === current.id);
+    const children = kn.data.filter(e => e.parent_id === current.id && e.level === '事象');
+    const filtered = q ? children.filter(e => e.タイトル.toLowerCase().includes(q) || (e.概要||'').toLowerCase().includes(q)) : children;
+    document.getElementById('kn-count').textContent = filtered.length ? `${filtered.length}事象` : '詳細';
+    if (parent) list.innerHTML = knCardDetail(parent, true) + filtered.map(e => knCardEvent(e)).join('');
+    else list.innerHTML = '';
+    return;
+  }
+}
+
+function knNavCat(cat) {
+  window._kn.stack = [{ level: '要素', id: cat, title: cat }];
+  knRender();
+}
+
+function knCardElement(e) {
+  const hasChildren = window._kn.data.some(c => c.parent_id === e.id);
+  return `<div class="cd" style="margin-bottom:8px;cursor:pointer" onclick="knNav('中要素','${e.id}','${e.タイトル}')">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-size:13px;font-weight:700;color:var(--ac2)">${e.タイトル}</div>
+      <div style="font-size:11px;color:var(--mt)">${hasChildren ? '詳細 ›' : '›'}</div>
+    </div>
+    <div style="font-size:11.5px;color:var(--mt);line-height:1.6">${(e.概要||'').slice(0,120)}${(e.概要||'').length>120?'…':''}</div>
+    ${(e.構造要因||[]).length ? `<div style="margin-top:6px">${e.構造要因.slice(0,2).map(f=>`<span style="display:inline-block;background:var(--ac)15;color:var(--ac2);padding:1px 7px;border-radius:3px;margin:2px;font-size:11px">${f.slice(0,30)}</span>`).join('')}</div>` : ''}
+  </div>`;
+}
+
+function knCardMid(e) {
+  const hasChildren = window._kn.data.some(c => c.parent_id === e.id);
+  return `<div class="cd" style="margin-bottom:8px;cursor:pointer" onclick="knNav('事象','${e.id}','${e.タイトル}')">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-size:13px;font-weight:700;color:var(--g)">${e.タイトル}</div>
+      <div style="font-size:11px;color:var(--mt)">${hasChildren ? '事象 ›' : '詳細 ›'}</div>
+    </div>
+    <div style="font-size:11.5px;color:var(--mt);line-height:1.6">${(e.概要||'').slice(0,150)}…</div>
+  </div>`;
+}
+
+function knCardEvent(e) {
+  return `<div class="cd" style="margin-bottom:8px;cursor:pointer" onclick="knShowDetail('${e.id}')">
+    <div style="font-size:13px;font-weight:700;color:var(--o);margin-bottom:4px">${e.タイトル}</div>
+    <div style="font-size:11.5px;color:var(--mt);line-height:1.6">${(e.概要||'').slice(0,150)}</div>
+  </div>`;
+}
+
+function knCardDetail(e, full) {
+  if (!full) return `<div class="cd" style="margin-bottom:12px;border-left:3px solid var(--ac)">
+    <div style="font-size:15px;font-weight:800;color:var(--ac2);margin-bottom:6px">${e.タイトル}</div>
+    <div style="font-size:12px;color:var(--mt);line-height:1.7">${e.概要||''}</div>
+  </div>`;
+
+  const hist = e.歴史 ? Object.entries(e.歴史).map(([k,v])=>`<div style="margin-bottom:6px"><span style="color:var(--ac);font-weight:600;font-size:11px">${k}</span> <span style="color:var(--mt);font-size:11.5px">${v}</span></div>`).join('') : '';
+  const pred = e.予測 ? `
+    ${e.予測.公的機関?.length ? `<div style="margin-top:8px"><div style="font-size:10px;color:var(--mt);margin-bottom:4px">公的機関の見通し</div>${e.予測.公的機関.map(p=>`<div style="padding:4px 8px;background:var(--s2);border-radius:3px;margin-bottom:3px;font-size:11.5px"><span style="color:var(--ac2)">${p.出典}</span> <span style="color:var(--mt)">${p.内容}</span></div>`).join('')}</div>` : ''}
+    ${e.予測.推論 ? `<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div style="padding:6px 9px;background:var(--g)18;border-radius:3px"><div style="font-size:10px;color:var(--g);margin-bottom:2px">楽観シナリオ</div><div style="font-size:11px;color:var(--mt)">${e.予測.推論.楽観||''}</div></div>
+      <div style="padding:6px 9px;background:var(--r)18;border-radius:3px"><div style="font-size:10px;color:var(--r);margin-bottom:2px">悲観シナリオ</div><div style="font-size:11px;color:var(--mt)">${e.予測.推論.悲観||''}</div></div>
+    </div>` : ''}` : '';
+
+  return `<div class="cd" style="margin-bottom:12px">
+    <div style="font-size:15px;font-weight:800;color:var(--ac2);margin-bottom:8px">${e.タイトル}</div>
+    <div style="font-size:12px;color:var(--mt);line-height:1.7;margin-bottom:10px">${e.概要||''}</div>
+    ${hist ? `<div style="margin-bottom:10px"><div style="font-size:10px;color:var(--mt);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">歴史</div>${hist}</div>` : ''}
+    ${e.現状 ? `<div style="margin-bottom:10px"><div style="font-size:10px;color:var(--mt);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">現状</div><div style="font-size:12px;color:var(--tx);line-height:1.7">${e.現状}</div></div>` : ''}
+    ${(e.構造要因||[]).length ? `<div style="margin-bottom:10px"><div style="font-size:10px;color:var(--mt);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">構造要因</div>${e.構造要因.map((f,i)=>`<div style="padding:4px 0;border-bottom:1px solid var(--bd);font-size:11.5px;color:var(--tx)"><span style="color:var(--ac2);margin-right:6px">${i+1}</span>${f}</div>`).join('')}</div>` : ''}
+    ${(e['課題・リスク']||[]).length ? `<div style="margin-bottom:10px"><div style="font-size:10px;color:var(--r);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">課題・リスク</div>${e['課題・リスク'].map(f=>`<div style="padding:3px 7px;background:var(--r)15;border-radius:3px;margin:2px;font-size:11.5px;color:var(--tx);display:inline-block">${f}</div>`).join('')}</div>` : ''}
+    ${pred ? `<div><div style="font-size:10px;color:var(--mt);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">予測・展望</div>${pred}</div>` : ''}
+  </div>`;
+}
+
+function knShowDetail(id) {
+  const e = window._kn.data.find(x => x.id === id);
+  if (!e) return;
+  window._kn.stack.push({ level: '事象詳細', id, title: e.タイトル });
+  document.getElementById('kn-breadcrumb').innerHTML += `<span style="color:var(--mt)"> › </span><span style="color:var(--tx)">${e.タイトル}</span>`;
+  document.getElementById('kn-count').textContent = '詳細';
+  document.getElementById('kn-list').innerHTML = knCardDetail(e, true);
 }
 
 // ===== RELATIONS =====
