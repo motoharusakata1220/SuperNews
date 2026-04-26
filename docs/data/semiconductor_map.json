@@ -1,0 +1,288 @@
+{
+  "meta": {
+    "title": "半導体業界マップ 2026年版",
+    "generated": "2026-04-26",
+    "method": "マルチエージェント並列調査（firecrawl / Apify RAG）"
+  },
+  "market_overview": {
+    "total_2024": { "value": 627, "unit": "十億ドル", "yoy": "+19%" },
+    "total_2025": { "value": 697, "unit": "十億ドル", "yoy": "+11%" },
+    "target_2030": { "value": 1000, "unit": "十億ドル", "note": "AIスーパーサイクルで2年前倒し" },
+    "target_2040": { "value": 2000, "unit": "十億ドル" }
+  },
+  "value_chain": [
+    {
+      "layer": "L1",
+      "name": "原材料・素材",
+      "position": "川上",
+      "categories": [
+        {
+          "name": "シリコンウェハー",
+          "market_size_2025_bn": 14.5,
+          "cagr_pct": 6,
+          "concentration": "上位5社で85%",
+          "top_players": [
+            { "name": "信越化学工業", "country": "JP", "rank": 1, "note": "300mm最大シェア。2025年に1,500億円投資" },
+            { "name": "SUMCO", "country": "JP", "rank": 2, "note": "2024年業績不振（DRAM調整）" },
+            { "name": "GlobalWafers", "country": "TW", "rank": 3 },
+            { "name": "Siltronic", "country": "DE", "rank": 4 },
+            { "name": "SK Siltron", "country": "KR", "rank": 5 }
+          ],
+          "swot": {
+            "strengths": ["信越+SUMCO2社で世界過半数を供給", "結晶引き上げ技術の数十年蓄積", "長期契約（車載）で安定収益"],
+            "weaknesses": ["DRAMサイクル変動への高い感応度", "300mm工場建設コスト10億ドル超の固定費"],
+            "opportunities": ["AI/HBM/車載の構造的需要増", "2nm/3nm専用ウェハーの高単価化", "各国CHIPS補助獲得機会"],
+            "threats": ["中国NSIG・中環半導体の低価格攻勢", "Kr/Xe不足による顧客ファブ操業制限"]
+          }
+        },
+        {
+          "name": "フォトレジスト",
+          "market_concentration": "日本4社で世界70〜80%超",
+          "top_players": [
+            { "name": "JSR（産業革新投資機構傘下）", "country": "JP", "note": "EUVレジスト量産。2023年国有化" },
+            { "name": "東京応化工業（TOK）", "country": "JP" },
+            { "name": "信越化学", "country": "JP" },
+            { "name": "住友化学", "country": "JP" },
+            { "name": "Merck", "country": "DE", "note": "EUV材料開発に積極投資" }
+          ],
+          "swot": {
+            "strengths": ["EUVレジストで日本4社が世界独占的シェア", "TSMC・Intelとの長年の共同開発", "JSR国有化でバックアップ強化"],
+            "weaknesses": ["EUV開発費が数百億円単位", "シングルソースリスク（工場事故時の代替困難）"],
+            "opportunities": ["High-NA EUV向け次世代レジスト市場", "経済安全保障重要物資指定による補助"],
+            "threats": ["Merck・DuPontの大型投資", "韓国・中国の国産化推進", "技術者流出リスク"]
+          }
+        },
+        {
+          "name": "特殊ガス・化学品",
+          "key_risk": "クリプトン（Kr）・キセノン（Xe）はウクライナ産45〜54%依存",
+          "geopolitical_risks": [
+            "Kr/Xe: 世界生産の45〜54%がウクライナ産。代替コスト30〜50%増",
+            "ガリウム・ゲルマニウム: 中国が世界生産の80%超を占有。2023年8月に輸出規制発動"
+          ],
+          "swot": {
+            "strengths": ["日・米・欧の高純度技術が参入障壁", "Linde・Air Productsの全球物流インフラ"],
+            "weaknesses": ["Kr/Xe依存が未解消", "新規参入に5〜10年", "電力コスト感応度高"],
+            "opportunities": ["国内ガス生産設備投資拡大", "リサイクルガス技術高度化"],
+            "threats": ["地政学衝突によるウクライナ産ガス突発途絶", "中国輸出規制の連鎖拡大", "SF₆等のGHG規制強化"]
+          }
+        }
+      ]
+    },
+    {
+      "layer": "L2",
+      "name": "製造装置（SME）",
+      "position": "川上〜中流",
+      "market_size_2025_bn": 120,
+      "cagr_pct": 7,
+      "top_players": [
+        { "name": "ASML", "country": "NL", "specialty": "EUV露光装置（世界独占）", "market_share_pct": 25 },
+        { "name": "Applied Materials", "country": "US", "specialty": "CVD・エッチング・CMP" },
+        { "name": "Tokyo Electron（TEL）", "country": "JP", "specialty": "CVD・ALD・洗浄" },
+        { "name": "Lam Research", "country": "US", "specialty": "エッチング・CVD（メモリ向け）" },
+        { "name": "KLA", "country": "US", "specialty": "検査・計測（プロセス制御）" },
+        { "name": "Advantest", "country": "JP", "specialty": "テスト装置（HBM/DRAM）" },
+        { "name": "Teradyne", "country": "US", "specialty": "SoCテスト" }
+      ],
+      "concentration": "上位4社（ASML・AMAT・TEL・Lam）で世界60%",
+      "export_control_impact": "中国のSME輸入が2022年比32.5%以上減少",
+      "next_gen": "High-NA EUV（NA=0.55）開発中。Hyper-NA EUV（NA=0.75）は2030年頃",
+      "swot": {
+        "strengths": ["ASMLのEUV独占", "AMAT/TEL/Lamの3社寡占", "先端ノードへの不可欠性"],
+        "weaknesses": ["対中規制で中国売上が圧迫", "中国が規制施行前に駆け込み備蓄を実施"],
+        "opportunities": ["AI向け先端プロセス投資の継続拡大", "各国Fab建設ラッシュ"],
+        "threats": ["中国NAURA・AMECの国産化推進", "輸出規制の対象拡大リスク"]
+      }
+    },
+    {
+      "layer": "L3",
+      "name": "EDA・IPコア・チップ設計基盤",
+      "position": "中流",
+      "segments": [
+        {
+          "name": "EDAツール",
+          "market_size_2024_bn": 13,
+          "concentration": "上位4社で90%",
+          "top_players": [
+            { "name": "Synopsys", "country": "US", "note": "Ansys買収で拡大" },
+            { "name": "Cadence", "country": "US", "note": "ARM Artisan IP事業を買収" },
+            { "name": "Siemens EDA", "country": "DE" }
+          ]
+        },
+        {
+          "name": "IPコア",
+          "market_size_2024_bn": 7.49,
+          "market_size_2032_bn": 14.19,
+          "cagr_pct": 8.32,
+          "top_players": [
+            { "name": "Arm（SoftBank傘下）", "country": "GB", "note": "プロセッサIPで圧倒的独占。150億デバイス超" },
+            { "name": "Synopsys", "country": "US", "note": "インターフェース・セキュリティIP" },
+            { "name": "CEVA", "country": "US", "note": "AI/IoT向けNPU IP。200億デバイス超" },
+            { "name": "RISC-V（オープン）", "note": "100億個超出荷予測（2025年）。中国・アカデミアで急普及" }
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "L4",
+      "name": "チップ設計（ファブレス）",
+      "position": "中流",
+      "top_players": [
+        { "name": "NVIDIA", "country": "US", "category": "AI GPU", "ai_accelerator_share_pct": 85.2, "quarterly_revenue_bn": 33.8 },
+        { "name": "Broadcom", "country": "US", "category": "AI ASIC", "ai_accelerator_share_pct": 10.3 },
+        { "name": "AMD", "country": "US", "category": "CPU/GPU", "ai_accelerator_share_pct": 1.8 },
+        { "name": "Marvell", "country": "US", "category": "AI ASIC", "ai_accelerator_share_pct": 2.1 },
+        { "name": "Qualcomm", "country": "US", "category": "モバイルSoC", "note": "Snapdragon。5G・自動車" },
+        { "name": "Apple", "country": "US", "category": "モバイルSoC", "note": "A18/M4。NPU統合でデバイス上AI" },
+        { "name": "MediaTek", "country": "TW", "category": "モバイルSoC", "note": "新興国・アジア市場" }
+      ]
+    },
+    {
+      "layer": "L5",
+      "name": "ファウンドリ・IDM",
+      "position": "中流",
+      "market_size_2025_bn": 150.76,
+      "cagr_pct": 5.89,
+      "pure_play_growth_2025": "+26%前年比",
+      "market_share": [
+        { "name": "TSMC", "country": "TW", "share_q4_2025_pct": 72, "note": "競合の4倍の成長率（36% vs 8%）。2nm量産2025年開始" },
+        { "name": "Samsung Foundry", "country": "KR", "share_q4_2025_pct": 7, "note": "2019年: 16% → 7%に低下。歩留まり問題" },
+        { "name": "SMIC", "country": "CN", "share_q4_2025_pct": 5.3, "note": "Q4 2025に過去最高更新。China-for-China需要" },
+        { "name": "GlobalFoundries", "country": "US", "share_q4_2025_pct": 4, "note": "成熟ノード特化。自動車・航空宇宙向け" },
+        { "name": "UMC", "country": "TW", "share_q4_2025_pct": 4, "note": "28nm〜90nm帯で安定" }
+      ],
+      "process_roadmap": {
+        "TSMC": { "current": "3nm（N3）", "next": "2nm（N2）量産2025年", "transistor_density_3nm": "1.97億/mm²" },
+        "Samsung": { "current": "3GAE", "next": "SF2（遅延中）", "transistor_density_3nm": "1.50億/mm²" },
+        "Intel": { "current": "Intel 3", "next": "Intel 18A（GAA+バックサイド電力供給）" }
+      },
+      "japan": {
+        "rapidus": { "founded": 2022, "target_node": "2nm以下", "mass_production_target": 2027, "location": "北海道千歳市", "government_support_jpy_tn": 3.5 }
+      },
+      "swot": {
+        "strengths": ["AI GPU・ASIC向け先端ノードの構造的需要", "TSMCの圧倒的エコシステム", "成熟プロセスの安定需要"],
+        "weaknesses": ["建設コスト200〜300億ドル超", "地理集中（台湾に60%以上）"],
+        "opportunities": ["EV・ADAS向け車載半導体急拡大", "各国補助金を活用した地理的多様化", "SiC・GaN市場展開"],
+        "threats": ["台湾有事リスク", "SMIC等のダンピング圧力", "技術開発コスト際限なし上昇"]
+      }
+    },
+    {
+      "layer": "L6",
+      "name": "後工程・パッケージング（OSAT）",
+      "position": "川下寄り中流",
+      "market_size_2025_bn": 33.5,
+      "market_size_2035_bn": 95.3,
+      "cagr_pct": 11,
+      "top_players": [
+        { "name": "ASE Technology", "country": "TW", "share_pct": 26.5, "note": "市場リーダー。SiP・fan-out・2.5D/3D" },
+        { "name": "TSMC（CoWoS内製）", "country": "TW", "note": "CoWoS・InFO・SoIC" },
+        { "name": "Amkor Technology", "country": "US", "note": "アリゾナに20億ドル投資" },
+        { "name": "JCET Group", "country": "CN", "note": "コスト競争力の高い中国系OSAT" },
+        { "name": "Intel（EMIB/Foveros）", "country": "US" }
+      ],
+      "top5_share_pct": 74.9,
+      "advanced_packaging": [
+        { "tech": "CoWoS（2.5D）", "status": "量産中", "adopters": ["NVIDIA H100/B200", "AMD MI300X"], "supply_constraint": "NVIDIAが2026〜2027年分の50%超を予約" },
+        { "tech": "SoIC（3D）", "status": "量産中", "note": "ハイブリッドボンディングによる高密度3D積層" },
+        { "tech": "HBM統合", "status": "急拡大", "growth_2024": "+200%前年比", "growth_2025_forecast": "+70%" },
+        { "tech": "Chiplet", "status": "普及中", "adopters": ["AMD", "Intel"] },
+        { "tech": "CPO（Co-Packaged Optics）", "status": "商業化初期", "market_2030_bn": 5.4, "cagr_pct": 121 }
+      ],
+      "swot": {
+        "strengths": ["ASE・Amkor・JCETの規模の経済", "グローバル製造ネットワーク"],
+        "weaknesses": ["先端Fabへの重いCapEx", "コンシューマー軟調時に利益率圧迫"],
+        "opportunities": ["AI向け先端パッケージング需要急拡大", "CPO商業化", "CHIPS法補助"],
+        "threats": ["TSMCの内製化による顧客流出", "Samsungの積極参入", "中国系OSATの価格攻勢"]
+      }
+    },
+    {
+      "layer": "L7",
+      "name": "エンドマーケット",
+      "position": "川下",
+      "segments": [
+        { "name": "AI・データセンター", "size_2025_bn": 156, "size_2030_bn": 361, "cagr_pct": 18, "priority": "最重要成長市場" },
+        { "name": "スマートフォン", "size_2025_bn": 149, "size_2030_bn": 192, "cagr_pct": 5 },
+        { "name": "PC", "size_2025_bn": 92, "size_2030_bn": 112, "cagr_pct": 4 },
+        { "name": "自動車", "size_2025_bn": 51, "size_2034_bn": 102, "cagr_pct": 8 },
+        { "name": "EV向けパワーデバイス", "cagr_pct": 30, "note": "SiC・GaN中心" },
+        { "name": "産業電子", "size_2025_bn": 84, "size_2030_bn": 120, "cagr_pct": 7 },
+        { "name": "通信・テレコム", "size_2025_bn": 53, "size_2030_bn": 70, "cagr_pct": 6 },
+        { "name": "セルラーIoT", "size_2024_bn": 12.7, "size_2032_bn": 78.7, "cagr_pct": 25.5 },
+        { "name": "HBM（メモリ）", "cagr_pct": 34, "note": "2024年+200%成長、2025年+70%継続予測" }
+      ],
+      "ai_accelerator_share": [
+        { "vendor": "NVIDIA", "share_pct": 85.2, "quarterly_revenue_bn": 33.8 },
+        { "vendor": "Broadcom", "share_pct": 10.3, "quarterly_revenue_bn": 4.1 },
+        { "vendor": "Marvell", "share_pct": 2.1, "quarterly_revenue_bn": 0.85 },
+        { "vendor": "AMD", "share_pct": 1.8, "quarterly_revenue_bn": 0.72 }
+      ],
+      "swot": {
+        "strengths": ["AI需要によるデータセンター投資サイクルの長期化", "EVのOEM調達増加", "エンタープライズAI累計投資4兆ドル予測"],
+        "weaknesses": ["スマホ・PCのCAGR 4〜5%と成熟", "産業・自動車の在庫調整遅延", "DeepSeekによるGPU需要抑制リスク"],
+        "opportunities": ["エッジAI（2026〜2027年端末更新）", "ロボティクス・Physical AI（2030年以降）", "ソブリンAI投資"],
+        "threats": ["米中貿易摩擦", "中国YMTCのメモリ価格下落リスク", "データセンターの電力消費急増（2026年: 1,000 TWh超）"]
+      }
+    }
+  ],
+  "external_environment": {
+    "geopolitics": {
+      "us_export_controls": {
+        "legal_basis": "ECRA（2018年）/ EAR",
+        "key_milestones": [
+          { "date": "2022-10", "action": "先端AIチップ・SMEへの包括規制。U.S. Persons Rule発動" },
+          { "date": "2023-10", "action": "規制拡充。NVIDIAのH800等の抜け穴を閉鎖" },
+          { "date": "2024-12", "action": "140社をエンティティリストに追加。FDPR劇的拡大。HBMを規制対象化" },
+          { "date": "2025-01", "action": "AI拡散フレームワーク。AIモデルの重みを規制対象に（ECCN 4E091）" }
+        ],
+        "china_sme_import_decline_pct": 32.5,
+        "deepseek_threat": "H800（規制前備蓄チップ）で最先端AIモデルを構築。Nasdaq 3.1%下落を引き起こし規制実効性に疑問"
+      },
+      "policy_by_country": [
+        { "region": "米国", "policy": "CHIPS・科学法（2022年）", "budget_bn": 52.7, "tax_credit": "製造投資に25%" },
+        { "region": "EU", "policy": "EU Chips Act（2023年）", "budget_bn_eur": 43, "target": "2030年に世界シェア10%→20%" },
+        { "region": "日本", "policy": "経産省補助・Rapidus", "tsmc_jasm_jpy_bn": 476, "rapidus_jpy_tn": 3.5 },
+        { "region": "中国", "policy": "半導体自給自足戦略", "note": "SMIC・Huawei・YMTC等への国家支援。RISC-V採用加速" }
+      ],
+      "trump_tariff_impact": "半導体は完成まで70回以上国境越え。関税の累積効果が競争力を直撃。同盟国との輸出規制協調を弱体化させるリスク"
+    },
+    "opportunities": [
+      "AI需要による市場拡大（2030年に1兆ドル）",
+      "リショアリング・フレンドショアリングによる製造装置・材料の新規需要",
+      "インド・東南アジア・中東向けデータセンター需要増大",
+      "同盟国間の輸出規制協調深化",
+      "エッジAIチップの大量普及"
+    ],
+    "threats": [
+      "規制の「穴」と迂回リスク（DeepSeekが旧世代チップで最先端AI達成）",
+      "中国技術的自立の加速（SMIC 7nm相当量産）",
+      "中国の重要鉱物対抗規制（Ga・Ge輸出規制）",
+      "同盟国協調の限界（日本・オランダ規制は米国より3〜6ヶ月遅れ）",
+      "台湾有事リスク（先端ロジックチップ供給の壊滅リスク）",
+      "人材不足によるFab建設遅延",
+      "トランプ関税の累積コスト上昇",
+      "自然災害による超高純度石英等の供給途絶（ハリケーン・ヘレン事例）"
+    ]
+  },
+  "japan_position": {
+    "strengths": [
+      { "layer": "L1 ウェハー", "companies": ["信越化学工業", "SUMCO"], "position": "世界1位・2位。世界の過半数を供給" },
+      { "layer": "L1 フォトレジスト", "companies": ["JSR", "東京応化工業", "信越化学"], "position": "EUVレジストで世界70〜80%超" },
+      { "layer": "L1 フォトマスクブランクス", "companies": ["Hoya"], "position": "世界首位（EUV対応）" },
+      { "layer": "L2 製造装置", "companies": ["Tokyo Electron（TEL）", "Advantest"], "position": "CVD/ALD/洗浄でアジア系最大手。テスト装置で世界有力" },
+      { "layer": "L5 ファウンドリ", "companies": ["Rapidus"], "position": "2nm量産を2027年目標（政府支援3.5兆円）" }
+    ],
+    "weakness": "川下のチップ設計・ファブレスでは出遅れ。Rapidusが唯一の挽回策だが技術・人材・コストの壁が高い"
+  },
+  "sources": [
+    "Counterpoint Research（ファウンドリシェア, 2026年3月）",
+    "Straits Research / Grand View Research / ResearchAndMarkets（各層市場規模）",
+    "Tom's Hardware（TSMCアナリシス, 2026年4月）",
+    "Yole Group / SEMI 3D & Systems Summit 2025（パッケージング）",
+    "CSIS（米輸出規制分析, 2025年3月）",
+    "Brookings Institution（米中技術競争, 2024年7月）",
+    "Deloitte「2025 Global Semiconductor Industry Outlook」",
+    "IDC（AIアクセラレーター市場シェア）",
+    "Digitimes（CoWoS供給制約, 2026年1月）",
+    "Credence Research（IPコア市場）",
+    "Mordor Intelligence / 360 Research Reports（シリコンウェハー）"
+  ]
+}
