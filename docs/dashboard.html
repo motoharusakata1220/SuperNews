@@ -1703,7 +1703,7 @@ function knRenderSidebar() {
 
 function knSelectCat(cat) {
   window._kn.cat = cat;
-  window._kn.stack = cat ? [{ level:'要素', id:cat, title:cat }] : [];
+  window._kn.stack = [];
   knRenderSidebar();
   knRender();
 }
